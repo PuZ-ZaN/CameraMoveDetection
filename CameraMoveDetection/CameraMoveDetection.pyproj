@@ -11,6 +11,7 @@
     <OutputPath>.</OutputPath>
     <Name>CameraMoveDetection</Name>
     <RootNamespace>CameraMoveDetection</RootNamespace>
+    <InterpreterId>MSBuild|.env|$(MSBuildProjectFullPath)</InterpreterId>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
     <DebugSymbols>true</DebugSymbols>
@@ -22,6 +23,40 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="CameraMoveDetection.py" />
+    <Compile Include="MaybeUsefulCodeSamples\CameraMovingDetection.py" />
+    <Compile Include="MaybeUsefulCodeSamples\phaseCorrelateBtw2pngs.py" />
+    <Compile Include="MaybeUsefulCodeSamples\cv2phaseShiftStaticEtalon.py" />
+    <Compile Include="MaybeUsefulCodeSamples\DynamicPlot.py" />
+    <Compile Include="MaybeUsefulCodeSamples\readFrFast.py" />
+    <Compile Include="MaybeUsefulCodeSamples\readVideo.py" />
+    <Compile Include="MaybeUsefulCodeSamples\scikit_phase_correlation.py" />
+  </ItemGroup>
+  <ItemGroup>
+    <Interpreter Include=".env\">
+      <Id>.env</Id>
+      <Version>3.7</Version>
+      <Description>.env (Python 3.7 (64-bit))</Description>
+      <InterpreterPath>Scripts\python.exe</InterpreterPath>
+      <WindowsInterpreterPath>Scripts\pythonw.exe</WindowsInterpreterPath>
+      <PathEnvironmentVariable>PYTHONPATH</PathEnvironmentVariable>
+      <Architecture>X64</Architecture>
+    </Interpreter>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="datasets\cyber.mp4" />
+    <Content Include="datasets\download.jpg" />
+    <Content Include="datasets\g.mp4" />
+    <Content Include="datasets\se1.mp4" />
+    <Content Include="datasets\se2.mp4" />
+    <Content Include="datasets\se3.mp4" />
+    <Content Include="datasets\seVidTest.mp4" />
+    <Content Include="datasets\xNFfw.png" />
+    <Content Include="datasets\xNFfw1.png" />
+    <Content Include="requirements.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="MaybeUsefulCodeSamples\" />
+    <Folder Include="datasets\" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\Python Tools\Microsoft.PythonTools.targets" />
   <!-- Uncomment the CoreCompile target to enable the Build command in
