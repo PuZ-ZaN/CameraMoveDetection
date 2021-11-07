@@ -23,10 +23,16 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="CameraMoveDetection.py" />
+    <Compile Include="Config.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="History.py">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="MaybeUsefulCodeSamples\CameraMovingDetection.py" />
     <Compile Include="MaybeUsefulCodeSamples\phaseCorrelateBtw2pngs.py" />
     <Compile Include="MaybeUsefulCodeSamples\cv2phaseShiftStaticEtalon.py" />
-    <Compile Include="MaybeUsefulCodeSamples\DynamicPlot.py" />
+    <Compile Include="DynamicPlot.py" />
     <Compile Include="MaybeUsefulCodeSamples\readFrFast.py" />
     <Compile Include="MaybeUsefulCodeSamples\readVideo.py" />
     <Compile Include="MaybeUsefulCodeSamples\scikit_phase_correlation.py" />
@@ -43,6 +49,9 @@
     </Interpreter>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="config.xml">
+      <SubType>Code</SubType>
+    </Content>
     <Content Include="datasets\cyber.mp4" />
     <Content Include="datasets\download.jpg" />
     <Content Include="datasets\g.mp4" />

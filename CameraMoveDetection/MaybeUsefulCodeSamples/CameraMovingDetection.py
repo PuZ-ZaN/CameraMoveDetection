@@ -6,7 +6,7 @@ import matplotlib.pyplot as plt
 import imutils
 import time
 import cv2
-from DynamicPlot import DynamicPlot
+#from DynamicPlot import DynamicPlot
 
 def turpleRound(turple):
 	res = []
@@ -31,7 +31,6 @@ def main():
 	etalonChangeEveryNFps=500
 	filename = "datasets/g.mp4"
 
-
 	fvs = FileVideoStream(filename).start()
 	time.sleep(1.0)
 	prev_gray = takeFirstFrameAsEtalon(filename)
@@ -41,8 +40,6 @@ def main():
 	secs_counter=0
 	while fvs.more():
 		try:
-			
-			
 			frame = fvs.read()#grab the frame from the threaded video file stream
 			imGray = cv2.cvtColor(frame.astype('float32'), cv2.COLOR_BGR2GRAY)#convert it to grayscale (while still retaining 3 channels)
 			pEtalon = cv2.phaseCorrelate(imGray, prev_gray)
