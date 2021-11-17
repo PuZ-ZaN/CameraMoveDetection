@@ -34,6 +34,7 @@ def takeFirstFrameAsEtalon(filename):
 
 def main():
 	#skipframes = 50000
+	print(cv2.getBuildInformation())
 	config = Config()
 	print("Settings:")
 	print(config.__dict__)
@@ -80,7 +81,7 @@ def main():
 			fpsCounter+=1
 			if fpsCounter % config.etalonChangeEveryNFps == 0:
 				prev_gray = imGray
-				
+			
 			dynamicGraph.addPoint(fpsCounter / 3,pStaticAvg,pEtalonAvg)
 
 			#cv2.putText(frame, "phaseCorrelateEtalon:
@@ -95,14 +96,14 @@ def main():
 				prev_time = thisTime
 				elapsedSecs = round(1 / diffTime,2)
 				#interface functionality
-				colorMoving = (0, 255, 0)
-				colorMoved = (0, 255, 0)
-				IsMoving = vectorPEtalon > config.isMovingBorder
-				IsMoved = vectorPStatic > config.isMovedBorder
-				if(IsMoving):
-					colorMoving = (0, 0, 255)
-				if(IsMoved):
-					colorMoved = (0, 0, 255)
+				#colorMoving = (0, 255, 0)
+				#colorMoved = (0, 255, 0)
+				#IsMoving = vectorPEtalon > config.isMovingBorder
+				#IsMoved = vectorPStatic > config.isMovedBorder
+				#if(IsMoving):
+				#	colorMoving = (0, 0, 255)
+				#if(IsMoved):
+				#	colorMoved = (0, 0, 255)
 
 				#avgs colors
 				colorPEtalonAvg = (0, 255, 0)
@@ -115,11 +116,11 @@ def main():
 				cv2.putText(frame, "Fps: {}".format(elapsedSecs), (20, 20), cv2.FONT_HERSHEY_SIMPLEX, 0.6, (0, 255, 0), 2)
 				cv2.putText(frame, "secs_counter: {}s".format(round(secs_counter,1)), (20, 50), cv2.FONT_HERSHEY_SIMPLEX, 0.6, (0, 255, 0), 2)
 
-				cv2.putText(frame, "IsMoving: {}".format(IsMoving), (20, 70), cv2.FONT_HERSHEY_SIMPLEX, 0.6, colorMoving, 2)
+				#cv2.putText(frame, "IsMoving: {}".format(IsMoving), (20, 70), cv2.FONT_HERSHEY_SIMPLEX, 0.6, colorMoving, 2)
 				cv2.putText(frame, "IsMovingVecLen: {}".format(vectorPEtalon), (20, 90), cv2.FONT_HERSHEY_SIMPLEX, 0.6, (0, 255, 0), 2)
 				cv2.putText(frame, "IsMovingVecsAvg (pEtalonAvg): {}".format(pEtalonAvg), (20, 110), cv2.FONT_HERSHEY_SIMPLEX, 0.6, colorPEtalonAvg, 2)
 
-				cv2.putText(frame, "IsMoved: {}".format(IsMoved), (20, 130), cv2.FONT_HERSHEY_SIMPLEX, 0.6, colorMoved, 2)
+				#cv2.putText(frame, "IsMoved: {}".format(IsMoved), (20, 130), cv2.FONT_HERSHEY_SIMPLEX, 0.6, colorMoved, 2)
 				cv2.putText(frame, "IsMovedVecLen: {}".format(vectorPStatic), (20, 150), cv2.FONT_HERSHEY_SIMPLEX, 0.6, (0, 255, 0), 2)
 				cv2.putText(frame, "IsMovedVecsAvg (pStaticAvg): {}".format(pStaticAvg), (20, 170), cv2.FONT_HERSHEY_SIMPLEX, 0.6, colorPStaticAvg, 2)
 
@@ -131,8 +132,6 @@ def main():
 			key = cv2.waitKey(1)
 			if key == 27 or key == ord('q'):
 				print("exit..")
-				if(config.ShowVideo):
-					cv2.destroyWindow(config.NameVideoWindow)
 				break
 		except Exception as e:
 		#	raise e;
@@ -141,8 +140,9 @@ def main():
 			break
 	fvs.stop()
 	#input("Press ENTER key for closing windows")
-	cv2.destroyAllWindows()
-	
+	#cv2.destroyAllWindows()
+	if(config.ShowVideo):
+		cv2.destroyWindow(config.NameVideoWindow)
 
 if __name__ == '__main__':
 	main()

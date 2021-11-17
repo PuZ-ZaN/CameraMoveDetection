@@ -11,7 +11,7 @@ class DynamicPlot():
 	ax = None
 	figure = None
 
-	def __init__(self,ylabel='Vector Changes Lenght', xlabel='Frames',suptitle='Image Change Speed',cursor="-"):
+	def __init__(self,ylabel='Vector Changes Lenght', xlabel='Frames/3',suptitle='Image Change Speed',cursor="-"):
 		self.figure, self.ax = plt.subplots()
 		self.figure.suptitle(suptitle, fontsize=20)
 		plt.xlabel(xlabel, fontsize=18)
