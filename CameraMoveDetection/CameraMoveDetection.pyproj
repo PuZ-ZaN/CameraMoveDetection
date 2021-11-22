@@ -11,7 +11,8 @@
     <OutputPath>.</OutputPath>
     <Name>CameraMoveDetection</Name>
     <RootNamespace>CameraMoveDetection</RootNamespace>
-    <InterpreterId>MSBuild|.env|$(MSBuildProjectFullPath)</InterpreterId>
+    <InterpreterId>Global|ContinuumAnalytics|Anaconda38-64</InterpreterId>
+    <SuppressPackageInstallationPrompt>True</SuppressPackageInstallationPrompt>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
     <DebugSymbols>true</DebugSymbols>
@@ -66,6 +67,9 @@
   <ItemGroup>
     <Folder Include="MaybeUsefulCodeSamples\" />
     <Folder Include="datasets\" />
+  </ItemGroup>
+  <ItemGroup>
+    <InterpreterReference Include="Global|ContinuumAnalytics|Anaconda38-64" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\Python Tools\Microsoft.PythonTools.targets" />
   <!-- Uncomment the CoreCompile target to enable the Build command in

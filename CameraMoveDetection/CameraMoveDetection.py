@@ -10,12 +10,28 @@ from History import History
 from DynamicPlot import DynamicPlot
 from Config import Config
 
+#from scipy.fftpack import fftn, ifftn
 #from aioify import aioify
 #import asyncio
 
+#def phase_correlation(a, b):
+#	G_a = np.fft.fft2(a)
+#	G_b = np.fft.fft2(b)
+#	conj_b = np.ma.conjugate(G_b)
+#	R = G_a * conj_b
+#	R /= np.absolute(R)
+#	r = np.fft.ifft2(R).real
+#	(x,y) = np.unravel_index(r.argmax(), r.shape)
+#	return ((x,y),0)
+
+#def phase_correlation(a, b):
+#	r = (ifftn(fftn(a)*ifftn(a))).real
+#	(x,y) = np.unravel_index(r.argmax(), r.shape)
+#	return ((x,y),0) #результат всегда 0 почемуто
 def takeFirstFrameAsEtalon(filename):
 	cap = cv2.VideoCapture(filename)
-	#im = None #возможно это (и иф ниже) понадобится, если контент в cap окажется не изображением (я не знаю возможно ли это)
+	#im = None #возможно это (и иф ниже) понадобится, если контент в cap окажется
+	#не изображением (я не знаю возможно ли это)
 	#while im ==None:
 	ret, im = cap.read()
 		#if(im==None):
@@ -25,16 +41,9 @@ def takeFirstFrameAsEtalon(filename):
 	prev_gray = cv2.cvtColor(im, cv2.COLOR_BGR2GRAY)
 	return prev_gray
 
-#@aioify
-#def CalcPhaseCorrelate(img1,img2):
-#	return cv2.phaseCorrelate(img1,img2)
-
-#async def CalcAsync(img1,img2):
-#	return await CalcPhaseCorrelate(img1,img2)
-
 def main():
-	#skipframes = 50000
 	print(cv2.getBuildInformation())
+	print(np.show_config())
 	config = Config()
 	print("Settings:")
 	print(config.__dict__)
@@ -68,6 +77,9 @@ def main():
 			pEtalon = cv2.phaseCorrelate(imGray, prev_gray)
 			pStatic = cv2.phaseCorrelate(imGray,prevGrayStatic)
 
+			#pEtalon = phase_correlation(imGray, prev_gray)
+			#pStatic = phase_correlation(imGray,prevGrayStatic)
+			
 			vectorPEtalon = sqrt(pEtalon[0][0] ** 2 + pEtalon[0][1] ** 2)
 			vectorPStatic = sqrt(pStatic[0][0] ** 2 + pStatic[0][1] ** 2)
 
@@ -116,11 +128,13 @@ def main():
 				cv2.putText(frame, "Fps: {}".format(elapsedSecs), (20, 20), cv2.FONT_HERSHEY_SIMPLEX, 0.6, (0, 255, 0), 2)
 				cv2.putText(frame, "secs_counter: {}s".format(round(secs_counter,1)), (20, 50), cv2.FONT_HERSHEY_SIMPLEX, 0.6, (0, 255, 0), 2)
 
-				#cv2.putText(frame, "IsMoving: {}".format(IsMoving), (20, 70), cv2.FONT_HERSHEY_SIMPLEX, 0.6, colorMoving, 2)
+				#cv2.putText(frame, "IsMoving: {}".format(IsMoving), (20, 70),
+				#cv2.FONT_HERSHEY_SIMPLEX, 0.6, colorMoving, 2)
 				cv2.putText(frame, "IsMovingVecLen: {}".format(vectorPEtalon), (20, 90), cv2.FONT_HERSHEY_SIMPLEX, 0.6, (0, 255, 0), 2)
 				cv2.putText(frame, "IsMovingVecsAvg (pEtalonAvg): {}".format(pEtalonAvg), (20, 110), cv2.FONT_HERSHEY_SIMPLEX, 0.6, colorPEtalonAvg, 2)
 
-				#cv2.putText(frame, "IsMoved: {}".format(IsMoved), (20, 130), cv2.FONT_HERSHEY_SIMPLEX, 0.6, colorMoved, 2)
+				#cv2.putText(frame, "IsMoved: {}".format(IsMoved), (20, 130),
+				#cv2.FONT_HERSHEY_SIMPLEX, 0.6, colorMoved, 2)
 				cv2.putText(frame, "IsMovedVecLen: {}".format(vectorPStatic), (20, 150), cv2.FONT_HERSHEY_SIMPLEX, 0.6, (0, 255, 0), 2)
 				cv2.putText(frame, "IsMovedVecsAvg (pStaticAvg): {}".format(pStaticAvg), (20, 170), cv2.FONT_HERSHEY_SIMPLEX, 0.6, colorPStaticAvg, 2)
 
