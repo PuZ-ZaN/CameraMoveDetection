@@ -1,11 +1,82 @@
 <!DOCTYPE html>
+<html lang="ru">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="style.css" />
+    <script
+      src="https://code.jquery.com/jquery-3.6.0.js"
+      integrity="sha256-H+K7U5CnXl1h5ywQfKtSj8PCmoN9aaq30gDh27Xc0jk="
+      crossorigin="anonymous"
+    ></script>
+    <title>Camera Detection</title>
+  </head>
 
-<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
-<head>
-    <meta charset="utf-8" />
-    <title></title>
-</head>
-<body>
+  <body>
+    <div class="main-container">
+      <div class="sidebar-container">
+        <div class="settings-container">
+          <!-- Modal Buttons -->
+          <button class="modal-btn" id="settings">Settings</button>
+          <button class="modal-btn" id="add">Add Input</button>
+          <!-- Modals -->
+          <!-- Settings -->
+          <div id="settings" class="modal">
+            <div class="modal-content">Test Test</div>
+          </div>
 
-</body>
+          <!-- Add Input -->
+          <div id="add" class="modal">
+            <div class="modal-content">
+              <div class="input">
+                Name:
+                <input id="name" type="text" />
+                <br />
+                Source:
+                <input id="source" type="text" />
+                <br />
+                <button id="add-input">Add Input!</button>
+              </div>
+
+              <div class="example">
+                <div class="card" id="example-card">
+                  <div id="input-name" class="input-name">NO NAME</div>
+                  <video id="input-video" src="" preload="metadata"></video>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Cards -->
+        <div class="cards">
+
+          (% for i in someList %)
+
+          <div class="card">
+            <div class="input-name">Yard</div>
+            <video src="https://rr5---sn-f5f7kn7z.c.drive.google.com/videoplayback?expire=1638809338&ei=ugauYdKvMou2hwbbxZnoDg&ip=92.248.230.112&cp=QVRIWklfWFNRSVhPOjlmdmNMOWVwSkRyS19aWUpERXNsVURGZGJSNmdDcHU1LTZqZ3BpMzBHSWM&id=26617ac24934f8d6&itag=22&source=webdrive&requiressl=yes&mh=3w&mm=32&mn=sn-f5f7kn7z&ms=su&mv=u&mvi=5&pl=22&ttl=transient&susc=dr&driveid=19TmoFVU1rlNRTSSNFNg7FbDvLzGIIwtt&app=explorer&mime=video/mp4&vprv=1&prv=1&dur=374.491&lmt=1636381312124273&mt=1638794626&sparams=expire,ei,ip,cp,id,itag,source,requiressl,ttl,susc,driveid,app,mime,vprv,prv,dur,lmt&sig=AOq0QJ8wRAIgZDfVPDYqdiTW-LqDi6_zu9432C1_arRBbSQ6YueYxmMCIEkQaYOZtQI66zSwJLnrRPr_aX76OzyOzFjjA4aMVctt&lsparams=mh,mm,mn,ms,mv,mvi,pl&lsig=AG3C_xAwRAIgdoLlMFwgl3Ih5iShCKTgxCLc-NV_0zECqmTFQF3D8G4CIBNMiP2SLW2-lRb8abdXtqurJmyVFTW_hTgIrpefoR-b&cpn=FTz47VVcCN4yyJnt&c=WEB_EMBEDDED_PLAYER&cver=1.20211201.01.02" preload="metadata"></video>
+          </div>
+
+          <div class="card">
+            <div class="input-name">Tagil Center</div>
+            <video src="https://rr3---sn-f5f7lnel.c.drive.google.com/videoplayback?expire=1638809406&ei=_gauYfHhG7eqhwaVwK3QDA&ip=92.248.230.112&cp=QVRIWklfWFROR1hPOjlmdmNNNmNwSkRyS19aWkdCRXNsVURGZGNPNGdDcHU1LTZrZG5pMzBHSWM&id=2a9facc0c0ccdab0&itag=22&source=webdrive&requiressl=yes&mh=49&mm=32&mn=sn-f5f7lnel&ms=su&mv=u&mvi=3&pl=22&ttl=transient&susc=dr&driveid=1LAzOW51VpKKmtaABzWeFK9KoQW8Ddajv&app=explorer&mime=video/mp4&vprv=1&prv=1&dur=120.232&lmt=1636380277076160&mt=1638794626&sparams=expire,ei,ip,cp,id,itag,source,requiressl,ttl,susc,driveid,app,mime,vprv,prv,dur,lmt&sig=AOq0QJ8wRQIgTMqvP7rXS9bidoGKzB5qTqDx3TU5CftZlKoIaf2VOjgCIQD0hFJqS-lKzRjSgKlksXJDqFcpJAg2ix9yxpvp2DI27Q==&lsparams=mh,mm,mn,ms,mv,mvi,pl&lsig=AG3C_xAwRQIgUvhyTEVWcl00wh6yTZMCcM65pc70bja4Iclcv93Md2cCIQDVDs7QKfVB5PxBZBLlBjatJOOY2cB5gfr-U63LENKIrg==&cpn=ZKQiDhRm8-oOB5we&c=WEB_EMBEDDED_PLAYER&cver=1.20211201.01.02" preload="metadata"></video>
+          </div>
+
+          <div class="card">
+            <div class="input-name">{{i['name']}}</div>
+            <video src="{{i['src']}}" preload="metadata"></video>
+          </div>
+
+          (% endfor %)
+        </div>
+      </div>
+
+      <div class="video-container">
+        <video id="video-input" src="" muted></video>
+        <div class="input-info">NO INPUT</div>
+      </div>
+    </div>
+    <script src="script.js"></script>
+  </body>
 </html>

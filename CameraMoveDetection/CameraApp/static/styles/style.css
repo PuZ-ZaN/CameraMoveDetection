@@ -1,0 +1,259 @@
+@import url("https://fonts.googleapis.com/css2?family=Roboto:wght@500 &display=swap");
+
+/* ----------------------- Button Start -----------------------*/
+button {
+  appearance: none;
+  background-color: #222226;
+  border: 2px solid #1a1a1a;
+  border-radius: 15px;
+  box-sizing: border-box;
+  color: #ffffff;
+  cursor: pointer;
+  display: inline-block;
+  font-size: 16px;
+  line-height: normal;
+  margin: 0;
+  max-height: 40px;
+  min-width: 0;
+  outline: none;
+  padding: 5px 24px;
+  text-align: center;
+  text-decoration: none;
+  transition: all 300ms cubic-bezier(0.23, 1, 0.32, 1);
+  user-select: none;
+  -webkit-user-select: none;
+  touch-action: manipulation;
+  will-change: transform;
+}
+
+.lrg {
+  width: 100%;
+}
+
+button:disabled {
+  pointer-events: none;
+}
+
+button:hover {
+  transform: translateY(-2px);
+}
+/* ----------------------- Button End -----------------------*/
+
+body {
+  margin: 0;
+  padding: 0;
+  font-family: "Roboto", sans-serif;
+}
+
+*,
+*:after,
+*:before {
+  box-sizing: border-box;
+  padding: 0;
+  margin: 0;
+  /* для плавности */
+  transition: 0.5s ease-in-out;
+}
+
+/* ----------------------- Modal Start -----------------------*/
+
+.modal {
+  display: none;
+  position: fixed;
+  z-index: 1;
+
+  padding-top: 100px;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  overflow: auto;
+
+  background-color: rgb(0, 0, 0);
+  background-color: rgba(0, 0, 0, 0.4);
+}
+
+.modal-content {
+  border: 3px solid #1a1a1a;
+  border-radius: 8px;
+
+  background-color: #fefefe;
+  margin: auto;
+  padding: 20px;
+  width: 90%;
+  height: 90%;
+}
+
+.close-modal {
+  color: #1a1a1a;
+  float: right;
+  font-size: 28px;
+  font-weight: bold;
+}
+
+.close-modal:hover,
+.close-modal:focus {
+  color: #000;
+  text-decoration: none;
+  cursor: pointer;
+}
+/* ----------------------- Modal End -----------------------*/
+
+/* ----------------------- Main Start -----------------------*/
+
+.main-container {
+  border: 5px solid #1a1a1a;
+  border-radius: 8px;
+  height: 97vh;
+  /*подгонка под размер окна*/
+  margin: 10px;
+  display: grid;
+  grid-template-columns: auto 2fr;
+}
+
+/* ----------------------- Main End -----------------------*/
+
+/* ----------------------- Sidebar Start -----------------------*/
+
+.sidebar-container {
+  overflow-y: scroll;
+}
+
+.settings-container {
+  border-bottom: 5px solid #1a1a1a;
+  text-align: center;
+  padding: 5px;
+}
+
+.cards {
+  /* Grid */
+  display: grid;
+  grid-template-columns: repeat(2, auto);
+  gap: 10px;
+  /* Other */
+  text-align: center;
+  list-style-type: none;
+  margin: 5px;
+  padding: 0;
+}
+
+.card {
+  width: 250px;
+  height: 90%;
+}
+
+.input {
+  display: flex;
+  flex-direction: column;
+  margin: 0 auto;
+  width: 60%;
+  padding-bottom: 10px;
+  border-bottom: 3px solid #1a1a1a;
+}
+
+.input button{
+  width: 50%;
+  margin: 0 auto;
+}
+
+.example .card {
+  width: 45%;
+  margin: 0 auto;
+  margin-top: 10px;
+}
+
+.card:hover {
+  transform: translateY(-2px);
+}
+
+.card video {
+  object-fit: fill;
+  box-sizing: border-box;
+  border: 3px solid #1a1a1a;
+  border-radius: 15px;
+  /* фит видео в пределах дива */
+  width: 100%;
+  height: 100%;
+}
+
+.warning video {
+  border: 3px solid red;
+}
+
+@media (max-width: 1100px) {
+  .cards {
+    grid-template-columns: repeat(1, auto);
+  }
+}
+
+@media (max-width: 800px) {
+  .main-container {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+    border: 0;
+  }
+  .sidebar-container {
+    overflow-y: hidden;
+  }
+  .cards {
+    grid-template-columns: repeat(2, auto);
+  }
+}
+
+/* ----------------------- Sidebar End -----------------------*/
+
+/* ----------------------- Video Start -----------------------*/
+
+.video-container {
+  /* border: 5px solid black; */
+  width: 100%;
+  overflow-y: auto;
+}
+
+.video-container video {
+  /* исключение стилей для нормального отображения */
+  width: 100% !important;
+  height: auto !important;
+}
+
+.input-info {
+  font-size: larger;
+}
+/* ----------------------- Video End -----------------------*/
+
+/* ----------------------- Scrollbar Start -----------------------*/
+
+::-webkit-scrollbar {
+  width: 7px;
+  height: 7px;
+}
+
+::-webkit-scrollbar-button {
+  width: 0;
+  height: 0;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #222226;
+  border: 1px solid #1a1a1a;
+  border-radius: 50px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #444444;
+}
+
+::-webkit-scrollbar-track {
+  background: white;
+  border: 1px solid #1a1a1a;
+  border-radius: 50px;
+}
+
+::-webkit-scrollbar-corner {
+  background: transparent;
+}
+
+/* ----------------------- Scrollbar End -----------------------*/
