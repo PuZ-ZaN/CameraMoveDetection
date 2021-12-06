@@ -7,22 +7,9 @@ sensorArr=[]
 
 @app.route("/")
 def index():
-	return render_template('index.html',CameraList=[{'name':'awdawdawd','src':''},{'name':'awdawdawd','src':''},{'name':'awdawdawd','src':''},{'name':'awdawdawd','src':''},{'name':'awdawdawd','src':''},{'name':'awdawdawd','src':''},{'name':'awdawdawd','src':''},{'name':'awdawdawd','src':''},])
+	return render_template('index.html',CameraList=[{'name':'rtsp','src':'rtsp://wowzaec2demo.streamlock.net/vod/mp4:BigBuckBunny_115k.mp4'}])
 
-@app.route("/callback")
-def callback1(data):
-	sensorArr.append(data)
-	return 'echo!'
-
-@app.route("/sensor")
-def callback2():
-	return render_template('sensor.html',sensorTab=sensorArr) 
-
-@app.route("/add")
-def callback3():
-	return render_template('sensor.html',sensorTab=sensorArr) 
-
-@app.route("/delete<id>")
-def callback4(id):
-	sensorArr.remove(id)
-	return 'OK'
+@app.route("/addinput", methods=['POST'])
+def addInput():
+	name = request.form['name']
+	return name
