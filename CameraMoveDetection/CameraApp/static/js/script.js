@@ -5,8 +5,8 @@ function addinput() {
         data: $('form').serialize(),
         type: 'POST',
         success: function (response) {
-            var json = jQuery.parseJSON(response)
-            $('#len').html(json.len)
+            //var json = jQuery.parseJSON(response)
+            //$('#len').html(json.len)
             console.log(response);
         },
         error: function (error) {
