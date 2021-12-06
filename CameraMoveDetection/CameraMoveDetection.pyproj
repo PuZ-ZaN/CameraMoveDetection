@@ -54,6 +54,8 @@
     </Interpreter>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="CameraApp\static\js\script.js" />
+    <Content Include="CameraApp\static\styles\style.css" />
     <Content Include="CameraApp\templates\index.html" />
     <Content Include="config.xml">
       <SubType>Code</SubType>
@@ -70,6 +72,9 @@
     <Content Include="requirements.txt" />
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="CameraApp\static\" />
+    <Folder Include="CameraApp\static\js\" />
+    <Folder Include="CameraApp\static\styles\" />
     <Folder Include="CameraApp\templates\" />
     <Folder Include="datasets\" />
     <Folder Include="CameraApp\" />
