@@ -54,6 +54,7 @@
     </Interpreter>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="CameraApp\templates\index.html" />
     <Content Include="config.xml">
       <SubType>Code</SubType>
     </Content>
@@ -69,6 +70,7 @@
     <Content Include="requirements.txt" />
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="CameraApp\templates\" />
     <Folder Include="datasets\" />
     <Folder Include="CameraApp\" />
   </ItemGroup>
