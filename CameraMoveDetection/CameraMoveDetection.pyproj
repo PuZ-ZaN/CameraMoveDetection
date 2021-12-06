@@ -4,14 +4,14 @@
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>82fc2e20-980e-4250-8f10-16f495171b6b</ProjectGuid>
     <ProjectHome>.</ProjectHome>
-    <StartupFile>app\modules\MoveDetection\CameraMoveDetection.py</StartupFile>
+    <StartupFile>FlaskApp.py</StartupFile>
     <SearchPath>
     </SearchPath>
     <WorkingDirectory>.</WorkingDirectory>
     <OutputPath>.</OutputPath>
     <Name>CameraMoveDetection</Name>
     <RootNamespace>CameraMoveDetection</RootNamespace>
-    <InterpreterId>Global|ContinuumAnalytics|Anaconda38-64</InterpreterId>
+    <InterpreterId>MSBuild|.env|$(MSBuildProjectFullPath)</InterpreterId>
     <SuppressPackageInstallationPrompt>True</SuppressPackageInstallationPrompt>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
@@ -23,20 +23,20 @@
     <EnableUnmanagedDebugging>false</EnableUnmanagedDebugging>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="app\views.py">
+    <Compile Include="CameraApp\views.py">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="app\__init__.py">
+    <Compile Include="CameraApp\__init__.py">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="app\modules\MoveDetection\CameraMoveDetection.py" />
-    <Compile Include="app\modules\MoveDetection\Config.py">
+    <Compile Include="CameraApp\CameraMoveDetection.py" />
+    <Compile Include="CameraApp\Config.py">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="FlaskApp.py">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="app\modules\MoveDetection\History.py">
+    <Compile Include="CameraApp\History.py">
       <SubType>Code</SubType>
     </Compile>
   </ItemGroup>
@@ -67,10 +67,8 @@
     <Content Include="requirements.txt" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="app\modules\" />
     <Folder Include="datasets\" />
-    <Folder Include="app\modules\MoveDetection\" />
-    <Folder Include="app\" />
+    <Folder Include="CameraApp\" />
   </ItemGroup>
   <ItemGroup>
     <InterpreterReference Include="Global|ContinuumAnalytics|Anaconda38-64" />
