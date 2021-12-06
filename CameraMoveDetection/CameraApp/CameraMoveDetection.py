@@ -7,7 +7,7 @@ import requests								#call url when camera is moving(-ed)
 
 from .History import History
 
-def CalculatePhaseCorrelate(source = "", callbackUrl="/callback", isMovedBorder = 100, isMovingBorder = 100, etalonChangeEveryNFps = 500, etalonHistoryLen=50, staticHistoryLen=700):
+def CalculatePhaseCorrelate(source = "", callbackUrl="/callback", isMovedBorder = 100, isMovingBorder = 100, etalonChangeEveryNFps = 500, etalonHistoryLen=50, staticHistoryLen=700,framesBeforeTrigger=10):
 	fvs = FileVideoStream(source).start()
 	time.sleep(1.0)
 
@@ -26,11 +26,21 @@ def CalculatePhaseCorrelate(source = "", callbackUrl="/callback", isMovedBorder 
 	vectorPEtalon = None
 	vectorPStatic = None
 
+	prevFrames=[]
+	prefFramesCounter=0
+
 	while fvs.more() != None:
 		try:
 			frame = fvs.read()#grab the frame from the threaded video file stream
 			if(frame is None):
 				break
+
+			#save prev N frames
+			if prefFramesCounter<framesBeforeTrigger:
+				prevFrames[prefFramesCounter] = frame
+				prefFramesCounter+=1
+			else:
+				prefFramesCounter=0;
 
 			imGray = cv2.cvtColor(frame.astype('float32'), cv2.COLOR_BGR2GRAY)#convert it to grayscale (while still retaining 3 channels)
 
@@ -68,12 +78,16 @@ def CalculatePhaseCorrelate(source = "", callbackUrl="/callback", isMovedBorder 
 			IsMoved = pStaticAvg > isMovedBorder
 			
 			if (IsMoving or IsMover):
-				r = requests.post(callbackUrl,data={'elapsedSecs':elapsedSecs,'IsMoving':IsMoving,'IsMoved':IsMoved})#кадр еще
+				r = requests.post(callbackUrl,data={
+					'elapsedSecs':elapsedSecs,
+					'IsMoving':IsMoving,
+					'IsMoved':IsMoved,
+					'prevFrames' : prevFrames, 
+					'frame':frame
+					})#кадр еще
 
-			key = cv2.waitKey(1)
-			if key == 27 or key == ord('q'):
-				print("exit..")
-				break
+
+
 		except Exception as e:
 			print(e)
 			break
