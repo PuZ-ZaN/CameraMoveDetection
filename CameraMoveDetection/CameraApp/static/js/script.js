@@ -1,3 +1,20 @@
+function addinput() {
+    $.ajax({
+        type: "POST",
+        url: "/addinput",
+        data: $('form').serialize(),
+        type: 'POST',
+        success: function (response) {
+            var json = jQuery.parseJSON(response)
+            $('#len').html(json.len)
+            console.log(response);
+        },
+        error: function (error) {
+            console.log(error);
+        }
+    });
+}
+
 let cards = document.querySelectorAll('.card')
 let videoName = document.querySelector('.input-info')
 let videoInput = document.getElementById('video-input')
@@ -61,7 +78,7 @@ addButton.onclick = function () {
   clone.removeAttribute('id')
   clone.classList.add('test')
   document.querySelector('.cards').append(clone)
-
+  
   
   // //for click event to work
   // clone.addEventListener('click', Click, false)

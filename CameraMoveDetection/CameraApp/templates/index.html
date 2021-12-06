@@ -9,60 +9,62 @@
   </head>
 
   <body>
-    <div class="main-container">
-      <div class="sidebar-container">
-        <div class="settings-container">
-          <!-- Modal Buttons -->
-          <button class="modal-btn" id="settings">Settings</button>
-          <button class="modal-btn" id="add">Add Input</button>
-          <!-- Modals -->
-          <!-- Settings -->
-          <div id="settings" class="modal">
-            <div class="modal-content">Test Test</div>
-          </div>
+      <div class="main-container">
+          <div class="sidebar-container">
+              <div class="settings-container">
+                  <!-- Modal Buttons -->
+                  <button class="modal-btn" id="settings">Settings</button>
+                  <button class="modal-btn" id="add">Add Input</button>
+                  <!-- Modals -->
+                  <!-- Settings -->
+                  <div id="settings" class="modal">
+                      <div class="modal-content">Test Test</div>
+                  </div>
 
-          <!-- Add Input -->
-          <div id="add" class="modal">
-            <div class="modal-content">
-              <div class="input">
-                Name:
-                <input id="name" type="text" />
-                <br />
-                Source:
-                <input id="source" type="text" />
-                <br />
-                <button id="add-input">Add Input!</button>
+                  <!-- Add Input -->
+                  <div id="add" class="modal">
+                      <div class="modal-content">
+                          <div class="input">
+                              <form action="" method="post" name="form">
+                                  <label for="name">Введите имя:</label>
+                                  <input id="name" name="name" type="text">
+                                  <label for="source">Введите ссылку:</label>
+                                  <input id="source" name="source" type="text">
+                                  <input type="button" value="Отправить" onclick="addinput();">
+                              </form>
+
+                        
+                          </div>
+
+                          <div class="example">
+                              <div class="card" id="example-card">
+                                  <div id="input-name" class="input-name">NO NAME</div>
+                                  <video id="input-video" src="" preload="metadata"></video>
+                              </div>
+                          </div>
+                      </div>
+                  </div>
               </div>
 
-              <div class="example">
-                <div class="card" id="example-card">
-                  <div id="input-name" class="input-name">NO NAME</div>
-                  <video id="input-video" src="" preload="metadata"></video>
-                </div>
+              <!-- Cards -->
+              <div class="cards">
+
+                  {% for camera in CameraList %}
+
+                  <div class="card">
+                      <div class="input-name">{{ camera['name'] }}</div>
+                      <video src="{{ camera['src'] }}" preload="metadata"></video>
+                  </div>
+
+                  {% endfor %}
               </div>
-            </div>
-          </div>
-        </div>
-
-        <!-- Cards -->
-        <div class="cards">
-
-          {% for camera in CameraList %}
-
-          <div class="card">
-              <div class="input-name">{{ camera['name'] }}</div>
-            <video src="{{ camera['src'] }}" preload="metadata"></video>
           </div>
 
-          {% endfor %}
-        </div>
+          <div class="video-container">
+              <video id="video-input" src="" muted></video>
+              <div class="input-info">NO INPUT</div>
+          </div>
       </div>
-
-      <div class="video-container">
-        <video id="video-input" src="" muted></video>
-        <div class="input-info">NO INPUT</div>
-      </div>
-    </div>
-    <script src="{{ url_for('static',filename='js/script.js') }}"></script>
+      <script src="{{ url_for('static',filename='js/script.js') }}"></script>
   </body>
 </html>
