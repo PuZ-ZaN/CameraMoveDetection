@@ -7,7 +7,7 @@ sensorArr=[]
 
 @app.route("/")
 def index():
-	return render_template('index.html',sensorTab=sensorArr)
+	return render_template('index.html',CameraList=[{'name':'awdawdawd','src':''},{'name':'awdawdawd','src':''},{'name':'awdawdawd','src':''},{'name':'awdawdawd','src':''},{'name':'awdawdawd','src':''},{'name':'awdawdawd','src':''},{'name':'awdawdawd','src':''},{'name':'awdawdawd','src':''},])
 
 @app.route("/callback")
 def callback1(data):
