@@ -13,6 +13,8 @@
     <RootNamespace>CameraMoveDetection</RootNamespace>
     <InterpreterId>MSBuild|.env|$(MSBuildProjectFullPath)</InterpreterId>
     <SuppressPackageInstallationPrompt>True</SuppressPackageInstallationPrompt>
+    <LaunchProvider>Web launcher</LaunchProvider>
+    <WebBrowserUrl>localhost:5555</WebBrowserUrl>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
     <DebugSymbols>true</DebugSymbols>
