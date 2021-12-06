@@ -67,6 +67,7 @@
     <Content Include="requirements.txt" />
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="CameraApp\templates\" />
     <Folder Include="datasets\" />
     <Folder Include="CameraApp\" />
   </ItemGroup>
