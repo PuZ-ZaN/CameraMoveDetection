@@ -3,7 +3,6 @@ from flask import render_template
 from flask import request
 from CameraApp import app
 from . import CameraMoveDetection as CMD
-from .db.wrapper import DBApi
 
 sensorArr=[]
 
@@ -12,12 +11,10 @@ alarmlist = []
 
 @app.route("/")
 def index():
-	cameras = DBApi.selectAll()
-	return render_template('index.html',CameraList=cameras)
+	return render_template('index.html',CameraList=[{'name':'rtsp','src':'rtsp://wowzaec2demo.streamlock.net/vod/mp4:BigBuckBunny_115k.mp4'}])
 
 @app.route("/addinput", methods=['POST'])
 def addInput():
-	DBApi.insert(request.form['name'], request.form['source'])
 	return {request.form['name'] : request.form['source'] }
 
 @app.route("/runscript", methods=['POST'])#Игорь

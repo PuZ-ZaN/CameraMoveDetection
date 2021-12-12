@@ -25,12 +25,6 @@
     <EnableUnmanagedDebugging>false</EnableUnmanagedDebugging>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="CameraApp\db\database.py">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="CameraApp\db\wrapper.py">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Include="CameraApp\views.py">
       <SubType>Code</SubType>
     </Compile>
@@ -49,11 +43,12 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="CameraApp\db\CameraMoveDetection.mdf" />
-    <Content Include="CameraApp\db\CameraMoveDetection_log.ldf" />
     <Content Include="CameraApp\static\js\script.js" />
     <Content Include="CameraApp\static\styles\style.css" />
     <Content Include="CameraApp\templates\index.html" />
+    <Content Include="config.xml">
+      <SubType>Code</SubType>
+    </Content>
     <Content Include="datasets\cyber.mp4" />
     <Content Include="datasets\download.jpg" />
     <Content Include="datasets\g.mp4" />
@@ -66,7 +61,6 @@
     <Content Include="requirements.txt" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="CameraApp\db\" />
     <Folder Include="CameraApp\static\" />
     <Folder Include="CameraApp\static\js\" />
     <Folder Include="CameraApp\static\styles\" />
