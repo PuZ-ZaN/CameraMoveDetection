@@ -52,8 +52,8 @@
                   {% for camera in CameraList %}
 
                   <div class="card">
-                      <div class="input-name">{{ camera['name'] }}</div>
-                      <video src="{{ camera['src'] }}" preload="metadata"></video>
+                      <div class="input-name">{{ camera['Name'] }}</div>
+                      <video src="{{ camera['Url'] }}" preload="metadata"></video>
                   </div>
 
                   {% endfor %}
