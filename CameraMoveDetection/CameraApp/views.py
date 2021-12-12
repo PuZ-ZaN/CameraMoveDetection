@@ -4,10 +4,15 @@ from flask import request
 from CameraApp import app
 from . import CameraMoveDetection as CMD
 from .db.wrapper import DBApi
+from .SmartThreadPool import SmartThreadPool, CPUCountUnavaiableException, MaxThreadsCountReachedException
+
+OK = 'SERVER 200' #Я не уверен в том, что я делаю)
+FAILURE_INTERNAL = 'SERVER 500'
+FAILURE_PUBLIC = 'SERVER 413 UNABLE TO CREATE SERVER THREAD'
 
 sensorArr=[]
 
-ThreadsPool=[]
+ThreadsPool= SmartThreadPool()
 alarmlist = []
 
 @app.route("/")
@@ -24,11 +29,19 @@ def addInput():
 def runscript():
 	#Thread
 	#проверка ввреденных данных
-	CMD.CalculatePhaseCorrelate(source = request.form['source'],
-							 isMovedBorder = request.form['isMovedBorder'],
-							 isMovingBorder = request.form['isMovingBorder']
-							 )
+	#CMD.CalculatePhaseCorrelate(source = request.form['source'],
+	#						 isMovedBorder = request.form['isMovedBorder'],
+	#						 isMovingBorder = request.form['isMovingBorder']
+	#						 )
 	#return ok or not ok
+
+	try:
+		ThreadsPool.new_thread(CMD.CalculatePhaseCorrelate, source=request.form['source'], isMovedBorder = request.form['isMovedBorder'], isMovingBorder = request.form['isMovingBorder'])
+		return OK #
+	except MaxThreadsCountReachedException:
+		return FAILURE_PUBLIC
+	except:
+		return FAILURE_INTERNAL
 
 @app.route("/callback", methods=['POST'])
 def callback():

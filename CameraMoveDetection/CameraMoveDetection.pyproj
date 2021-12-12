@@ -31,6 +31,9 @@
     <Compile Include="CameraApp\db\wrapper.py">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="CameraApp\SmartThreadPool.py">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="CameraApp\views.py">
       <SubType>Code</SubType>
     </Compile>
