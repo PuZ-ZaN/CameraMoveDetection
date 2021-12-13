@@ -1,6 +1,6 @@
 from datetime import datetime
-from flask import render_template
-from flask import request
+import json
+from flask import render_template, request, Response
 from CameraApp import app
 from . import CameraMoveDetection as CMD
 from .db.wrapper import DBApi
@@ -27,23 +27,30 @@ def addInput():
 
 @app.route("/runscript", methods=['POST'])#Игорь
 def runscript():
-	#Thread
-	#проверка ввреденных данных
-	#CMD.CalculatePhaseCorrelate(source = request.form['source'],
-	#						 isMovedBorder = request.form['isMovedBorder'],
-	#						 isMovingBorder = request.form['isMovingBorder']
-	#						 )
-	#return ok or not ok
-
 	try:
-		ThreadsPool.new_thread(CMD.CalculatePhaseCorrelate, source=request.form['source'], isMovedBorder = request.form['isMovedBorder'], isMovingBorder = request.form['isMovingBorder'])
-		return OK #
-	except MaxThreadsCountReachedException:
-		return FAILURE_PUBLIC
-	except:
-		return FAILURE_INTERNAL
+		request_data = request.get_json()
+		print(request_data['name'])
+		return ThreadsPool.new_thread(CMD.CalculatePhaseCorrelate, name=request_data['name'], source=request_data['source'], isMovedBorder = request_data['isMovedBorder'], isMovingBorder = request_data['isMovingBorder'])
+	except MaxThreadsCountReachedException as err:
+		return str(err)
 
 @app.route("/callback", methods=['POST'])
 def callback():
-	pass
-	#alarmlist.append({request.name : request.timestamp})
+	request_data = request.get_json()
+	#if
+	#'name' : name,
+	#'timestamp': thisTime,
+	#'elapsedSecs':elapsedSecs,
+	#'IsMoving':IsMoving,
+	#'IsMoved':IsMoved,
+	#'prevFrames' : prevFrames, 
+	#'frame':frame
+	alarmlist.append({request_data['name'],request_data['timestamp'],request_data['elapsedSecs'],request_data['IsMoving'],request_data['IsMoved']})
+	return request_data['timestamp']#Response(json.dumps(),  mimetype='application/json')
+
+@app.route("/getAlarmList", methods=['POST'])
+def getAlarmList():
+	res=''
+	for i in alarmlist:
+		res+=str(i)+r"\n"
+	return res#Response(json.dumps(alarmlist),  mimetype='application/json')
