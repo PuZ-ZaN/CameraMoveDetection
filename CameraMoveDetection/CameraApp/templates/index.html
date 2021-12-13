@@ -10,11 +10,18 @@
 
   <body>
       <div class="main-container">
+
+        <div class="warnings-container">
+            <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
+            <a href="#" onclick="closeNav()">Some warning</a>
+            <a href="#" onclick="closeNav()">Another warning</a>
+          </div>
+
           <div class="sidebar-container">
               <div class="settings-container">
                   <!-- Modal Buttons -->
-                  <button class="modal-btn" id="settings">Settings</button>
                   <button class="modal-btn" id="add">Add Input</button>
+                  <button class="warnings-btn" onclick="openNav()">Open Warnings</button>
                   <!-- Modals -->
                   <!-- Settings -->
                   <div id="settings" class="modal">
@@ -24,16 +31,32 @@
                   <!-- Add Input -->
                   <div id="add" class="modal">
                       <div class="modal-content">
-                          <div class="input">
+                          <div class="add-form">
                               <form action="" method="post" name="form">
-                                  <label for="name">Введите имя:</label>
-                                  <input id="name" name="name" type="text">
-                                  <label for="source">Введите ссылку:</label>
-                                  <input id="source" name="source" type="text">
-                                  <input type="button" value="Отправить" onclick="addinput();">
-                              </form>
+                                  <p>
+                                    <label for="name">Введите имя:</label>
+                                    <input id="name" name="name" type="text">
+                                  </p>
 
-                        
+                                  <p>
+                                    <label for="source">Введите ссылку:</label>
+                                    <input id="source" name="source" type="text">
+                                  </p>
+
+                                  <p>
+                                    <label for="isMovedBorder">Введите значение границы (isMovedBorder):</label>
+                                    <input id="isMovedBorder" name="isMovedBorder" type="number">
+                                  </p>
+
+                                  <p>
+                                    <label for="isMovingBorder ">Введите значение границы (isMovingBorder):</label>
+                                    <input id="isMovingBorder" name="isMovingBorder" type="number">
+                                  </p>
+
+                                  <div class="add-btn">
+                                    <input type="button" value="Отправить" onclick="addinput();">
+                                  </div>
+                              </form>
                           </div>
 
                           <div class="example">
@@ -42,6 +65,7 @@
                                   <video id="input-video" src="" preload="metadata"></video>
                               </div>
                           </div>
+                          <span id="add" class="close-modal">&times;</span>
                       </div>
                   </div>
               </div>

@@ -1,18 +1,18 @@
 function addinput() {
-    $.ajax({
-        type: "POST",
-        url: "/addinput",
-        data: $('form').serialize(),
-        type: 'POST',
-        success: function (response) {
-            //var json = jQuery.parseJSON(response)
-            //$('#len').html(json.len)
-            console.log(response);
-        },
-        error: function (error) {
-            console.log(error);
-        }
-    });
+  $.ajax({
+    type: "POST",
+    url: "/addinput",
+    data: $('form').serialize(),
+    type: 'POST',
+    success: function (response) {
+      //var json = jQuery.parseJSON(response)
+      //$('#len').html(json.len)
+      console.log(response);
+    },
+    error: function (error) {
+      console.log(error);
+    }
+  });
 }
 
 let cards = document.querySelectorAll('.card')
@@ -27,7 +27,7 @@ for (let card of cards) {
     //input name
     videoName.textContent = card.textContent;
   }
-  }
+}
 
 // Input video src func
 var videoTags = document.getElementsByTagName('video')
@@ -41,13 +41,23 @@ for (let tag of videoTags) {
 
 
 //Modals
-let buttons = document.querySelectorAll('button')
+let buttons = document.getElementsByClassName('modal-btn')
 let modals = document.querySelectorAll('.modal')
-let span = document.getElementsByClassName('.close-modal');
+let span = document.getElementsByClassName('close-modal')[0];
+
+
+
+for (let modal of modals) {
+  if (span.id == modal.id) {
+    modal.style.display = "none"
+    console.log('Close Modal!')
+  }
+}
 
 for (let button of buttons) {
   button.onclick = function () {
     for (let modal of modals) {
+      //open modal
       if (button.id === modal.id) {
         modal.style.display = "block";
 
@@ -56,6 +66,10 @@ for (let button of buttons) {
           if (event.target == modal) {
             modal.style.display = "none";
           }
+        }
+        //close when click on X
+        span.onclick = function () {
+          modal.style.display = "none";
         }
       }
     }
@@ -76,19 +90,20 @@ inputSource.onkeyup = function () {
 addButton.onclick = function () {
   let clone = document.getElementById('example-card').cloneNode(true)
   clone.removeAttribute('id')
-  clone.classList.add('test')
   document.querySelector('.cards').append(clone)
-  
-  
-  // //for click event to work
-  // clone.addEventListener('click', Click, false)
 
-  // var newDiv = document.createElement('card')
-  // newDiv.cloneNode(true)
-  // document.querySelector('.cards').appendChild(newDiv)
-  
+
+
   console.log('New card created')
-  console.log(test)
 }
 
+
+//Sidenav Warnings
+//Я потом нормально сделаю, честно..
+function openNav() {
+  document.querySelector(".warnings-container").style.width = "600px";
+}
+function closeNav() {
+  document.querySelector(".warnings-container").style.width = "0";
+}
 

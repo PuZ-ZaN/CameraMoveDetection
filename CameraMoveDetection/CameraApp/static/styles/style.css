@@ -1,5 +1,74 @@
 @import url("https://fonts.googleapis.com/css2?family=Roboto:wght@500 &display=swap");
 
+/* ----------------------- Form Start -----------------------*/
+.add-form p {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  width: 80%;
+  margin: 0 auto;
+  padding: 5px;
+  text-align: left;
+}
+
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+.add-form input {
+  border: 2px solid #1a1a1a;
+  border-radius: 5px;
+  height: 120%;
+}
+
+.add-form label {
+  display: block;
+  font-size: 20px;
+}
+
+.add-form .add-btn {
+  border-bottom: 3px solid #1a1a1a;
+  padding: 10px;
+  margin: 20px;
+}
+
+.add-form .add-btn input {
+  /* width: 10%;
+  border: 2px solid #1a1a1a;
+  font-size: 20px;
+  border-radius: 10px; */
+
+  /* Это временно, я потом переделаю */
+  appearance: none;
+  background-color: #222226;
+  border: 2px solid #1a1a1a;
+  border-radius: 15px;
+  box-sizing: border-box;
+  color: #ffffff;
+  cursor: pointer;
+  display: inline-block;
+  font-size: 16px;
+  line-height: normal;
+  margin: 0;
+  max-height: 40px;
+  min-width: 0;
+  outline: none;
+  padding: 5px 24px;
+  text-align: center;
+  text-decoration: none;
+  transition: all 300ms cubic-bezier(0.23, 1, 0.32, 1);
+  user-select: none;
+  -webkit-user-select: none;
+  touch-action: manipulation;
+  will-change: transform;
+}
+
+.add-form .add-btn input:hover {
+  transform: translateY(-2px);
+}
+
+/* ----------------------- Form End -----------------------*/
 
 /* ----------------------- Button Start -----------------------*/
 button {
@@ -56,22 +125,61 @@ body {
   transition: 0.5s ease-in-out;
 }
 
+/* ----------------------- Warnings Start -----------------------*/
+.warnings-container {
+  height: 100%;
+  width: 0;
+  position: absolute;
+  z-index: 1;
+  top: 0;
+  right: 0;
+  background-color: #1a1a1a;
+  color: white;
+  overflow-x: hidden;
+  transition: 0.5s;
+  padding-top: 60px;
+}
+
+.warnings-container a {
+  padding: 8px 8px 8px 32px;
+  text-decoration: none;
+  font-size: 20px;
+  color: white;
+  display: block;
+  transition: 0.3s;
+}
+
+.warnings-container .closebtn {
+  position: absolute;
+  top: -10px;
+  left: -70px;
+  font-size: 36px;
+  margin-left: 50px;
+}
+
+@media screen and (max-height: 450px) {
+  .warnings-container {
+    padding-top: 15px;
+  }
+  .warnings-container a {
+    font-size: 18px;
+  }
+}
+/* ----------------------- Warnings End -----------------------*/
+
 /* ----------------------- Modal Start -----------------------*/
 
 .modal {
   display: none;
   position: fixed;
   z-index: 1;
-
-  padding-top: 100px;
   left: 0;
-  top: 0;
+  top: 5%;
   width: 100%;
   height: 100%;
   overflow: auto;
-
-  background-color: rgb(0, 0, 0);
-  background-color: rgba(0, 0, 0, 0.4);
+  
+  
 }
 
 .modal-content {
@@ -79,16 +187,15 @@ body {
   border-radius: 8px;
 
   background-color: #fefefe;
-  margin: auto;
+  margin: 0 auto;
   padding: 20px;
-  width: 90%;
-  height: 90%;
+  width: 80%;
+  height: 80%;
 }
 
 .close-modal {
   color: #1a1a1a;
-  float: right;
-  font-size: 28px;
+  font-size: 50px;
   font-weight: bold;
 }
 
@@ -103,11 +210,11 @@ body {
 /* ----------------------- Main Start -----------------------*/
 
 .main-container {
-  border: 5px solid #1a1a1a;
+  /* border: 5px solid #1a1a1a; */
   border-radius: 8px;
-  height: 97vh;
+  height: 100vh;
   /*подгонка под размер окна*/
-  margin: 10px;
+
   display: grid;
   grid-template-columns: auto 2fr;
 }
@@ -143,7 +250,7 @@ body {
   height: 90%;
 }
 
-.input {
+/* .input {
   display: flex;
   flex-direction: column;
   margin: 0 auto;
@@ -155,7 +262,7 @@ body {
 .input button{
   width: 50%;
   margin: 0 auto;
-}
+} */
 
 .example .card {
   width: 45%;
@@ -201,6 +308,10 @@ body {
   }
   .cards {
     grid-template-columns: repeat(2, auto);
+  }
+
+  .warnings-container {
+    width: 250px;
   }
 }
 
