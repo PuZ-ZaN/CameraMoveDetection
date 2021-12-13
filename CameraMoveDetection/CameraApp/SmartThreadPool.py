@@ -22,7 +22,7 @@ class SmartThreadPool:
         if len(self.__threads.keys()) == self.__max_avaiable_cpu:
             raise MaxThreadsCountReachedException("Unable to create threads more than CPU threads")
 
-        thread = threading.Thread(group = 'server_thread', target = thread_target, args = t_args, kwargs = t_kwargs)
+        thread = threading.Thread(target = thread_target, args = t_args, kwargs = t_kwargs)
         thread.start()
         thread_uid = self.__uid + ':' + str(self.__thread_count)
         self.__threads[thread_uid] = thread;
