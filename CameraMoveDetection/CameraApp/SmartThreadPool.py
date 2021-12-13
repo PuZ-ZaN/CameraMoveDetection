@@ -6,7 +6,7 @@ from typing import Callable, Any
 class SmartThreadPool:
     __max_avaiable_cpu = 0
     __threads = {}
-    __thread_count = 0
+    __thread_count = 0 #Данный счётчик означает общее кол-во потоков, когда либо созданных в текущем экземпляре SmartThreadPool, а не кол-во активных потоков. Кол-во активных потоков см. св-во active_threads_count
     __uid = None
 
     def __init__(self):
@@ -19,7 +19,7 @@ class SmartThreadPool:
         '''
         Создаёт и запускает новый поток и возвращает идентификатор, присвоенный данному потоку текущим экземпляром SmartThreadPool
         '''
-        if self.__thread_count == self.__max_avaiable_cpu:
+        if len(self.__threads.keys()) == self.__max_avaiable_cpu:
             raise MaxThreadsCountReachedException("Unable to create threads more than CPU threads")
 
         thread = threading.Thread(group = 'server_thread', target = thread_target, args = t_args, kwargs = t_kwargs)
@@ -37,6 +37,17 @@ class SmartThreadPool:
                     del self.__threads[thread_uid]
                 return True  
         return False
+
+    @property
+    def active_threads_count(self):
+        return len(self.__threads.keys())
+
+    @property
+    def threads_list(self):
+        reply = {}
+        for key in self.__threads.keys():
+            reply[key] = {f"status: {self.__threads[key].is_alive()}"}
+        return reply
 
 class CPUCountUnavaiableException(Exception):
     pass
