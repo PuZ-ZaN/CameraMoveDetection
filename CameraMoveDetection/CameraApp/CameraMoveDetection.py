@@ -7,7 +7,7 @@ import requests								#call url when camera is moving(-ed)
 
 from .History import History
 
-def CalculatePhaseCorrelate(source = "", callbackUrl="/callback", isMovedBorder = 100, isMovingBorder = 100, etalonChangeEveryNFps = 500, etalonHistoryLen=50, staticHistoryLen=700,framesBeforeTrigger=10):
+def CalculatePhaseCorrelate(name = "", source = "", callbackUrl="/callback", isMovedBorder = 100, isMovingBorder = 100, etalonChangeEveryNFps = 500, etalonHistoryLen=50, staticHistoryLen=700,framesBeforeTrigger=10):
 	fvs = FileVideoStream(source).start()
 	time.sleep(1.0)
 
@@ -68,8 +68,8 @@ def CalculatePhaseCorrelate(source = "", callbackUrl="/callback", isMovedBorder 
 				prev_gray = imGray
 			
 
-			_thisTime = time.time()
-			_diffTime = _thisTime - _prev_time
+			thisTime = time.time()
+			_diffTime = thisTime - _prev_time
 			_secs_counter +=_diffTime
 			_prev_time = thisTime
 
@@ -79,16 +79,17 @@ def CalculatePhaseCorrelate(source = "", callbackUrl="/callback", isMovedBorder 
 			
 			if (IsMoving or IsMover):
 				r = requests.post(callbackUrl,data={
-					'elapsedSecs':elapsedSecs,
-					'IsMoving':IsMoving,
-					'IsMoved':IsMoved,
-					'prevFrames' : prevFrames, 
-					'frame':frame
-					})#кадр еще
-
-
+					'name' : str(name),
+					'timestamp': str(thisTime),
+					'elapsedSecs':str(elapsedSecs),
+					'IsMoving':str(IsMoving),
+					'IsMoved':str(IsMoved),
+					#'prevFrames' : prevFrames, 
+					#'frame':frame
+					})
 
 		except Exception as e:
+			print("ERR")
 			print(e)
 			break
 	fvs.stop()
