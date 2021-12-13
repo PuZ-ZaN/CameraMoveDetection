@@ -78,18 +78,16 @@ def CalculatePhaseCorrelate(name = "", source = "", callbackUrl="/callback", isM
 			IsMoved = pStaticAvg > isMovedBorder
 			
 			if (IsMoving or IsMover):
-				r = requests.post(callbackUrl,data={
+				requests.post(f"http://localhost:5555"+callbackUrl,json={
 					'name' : str(name),
 					'timestamp': str(thisTime),
 					'elapsedSecs':str(elapsedSecs),
 					'IsMoving':str(IsMoving),
-					'IsMoved':str(IsMoved),
-					#'prevFrames' : prevFrames, 
-					#'frame':frame
+					'IsMoved':str(IsMoved)
 					})
-
+									#'prevFrames' : prevFrames, 
+					#'frame':frame
 		except Exception as e:
-			print("ERR")
-			print(e)
+			requests.post(callbackUrl,data = {"err":str(e)})
 			break
 	fvs.stop()
