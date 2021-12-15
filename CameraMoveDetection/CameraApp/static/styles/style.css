@@ -1,4 +1,97 @@
 @import url("https://fonts.googleapis.com/css2?family=Roboto:wght@500 &display=swap");
+body {
+  margin: 0;
+  padding: 0;
+  font-family: "Roboto", sans-serif;
+  overflow: hidden;
+}
+
+*,
+*:after,
+*:before {
+  box-sizing: border-box;
+  padding: 0;
+  margin: 0;
+  /* для плавности */
+  transition: 0.5s ease-in-out;
+}
+
+/* ----------------------- Right Click Menu Start -----------------------*/
+.context-menu {
+  position: absolute;
+  z-index: 999;
+}
+.menu {
+  display: flex;
+  flex-direction: column;
+  background-color: #1a1a1a;
+  border-radius: 10px;
+  box-shadow: 0 10px 20px rgb(64 64 64 / 5%);
+  padding: 10px 0;
+}
+.menu > li > a {
+  font: inherit;
+  border: 0;
+  padding: 10px 30px 10px 15px;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  position: relative;
+  text-decoration: unset;
+  color: white;
+  font-weight: 500;
+  transition: 0.3s linear;
+  -webkit-transition: 0.3s linear;
+  -moz-transition: 0.3s linear;
+  -ms-transition: 0.3s linear;
+  -o-transition: 0.3s linear;
+}
+.menu > li > a:hover {
+  background: white;
+  color: #1a1a1a;
+}
+.menu > li > a > i {
+  padding-right: 10px;
+}
+.menu > li.delete > a:hover {
+  color: red;
+}
+/* ----------------------- Right Click Menu End -----------------------*/
+
+/* ----------------------- Table Warnings Start -----------------------*/
+.warnings-container button {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+
+  background-color: white;
+  color: #1a1a1a;
+  font-weight: 700;
+}
+
+table {
+  border: 3px solid #1a1a1a;
+  border-collapse: collapse;
+  width: 95%;
+  margin: 10px;
+  color: black;
+  margin: 0 auto;
+}
+
+table td,
+table th {
+  border: 2px solid white;
+  padding: 8px;
+}
+
+table th {
+  padding-top: 12px;
+  padding-bottom: 12px;
+  text-align: left;
+  background-color: white;
+  color: black;
+}
+/* ----------------------- Table Warnings End -----------------------*/
 
 /* ----------------------- Form Start -----------------------*/
 .add-form p {
@@ -32,42 +125,6 @@ input::-webkit-inner-spin-button {
   padding: 10px;
   margin: 20px;
 }
-
-.add-form .add-btn input {
-  /* width: 10%;
-  border: 2px solid #1a1a1a;
-  font-size: 20px;
-  border-radius: 10px; */
-
-  /* Это временно, я потом переделаю */
-  appearance: none;
-  background-color: #222226;
-  border: 2px solid #1a1a1a;
-  border-radius: 15px;
-  box-sizing: border-box;
-  color: #ffffff;
-  cursor: pointer;
-  display: inline-block;
-  font-size: 16px;
-  line-height: normal;
-  margin: 0;
-  max-height: 40px;
-  min-width: 0;
-  outline: none;
-  padding: 5px 24px;
-  text-align: center;
-  text-decoration: none;
-  transition: all 300ms cubic-bezier(0.23, 1, 0.32, 1);
-  user-select: none;
-  -webkit-user-select: none;
-  touch-action: manipulation;
-  will-change: transform;
-}
-
-.add-form .add-btn input:hover {
-  transform: translateY(-2px);
-}
-
 /* ----------------------- Form End -----------------------*/
 
 /* ----------------------- Button Start -----------------------*/
@@ -109,22 +166,6 @@ button:hover {
 }
 /* ----------------------- Button End -----------------------*/
 
-body {
-  margin: 0;
-  padding: 0;
-  font-family: "Roboto", sans-serif;
-}
-
-*,
-*:after,
-*:before {
-  box-sizing: border-box;
-  padding: 0;
-  margin: 0;
-  /* для плавности */
-  transition: 0.5s ease-in-out;
-}
-
 /* ----------------------- Warnings Start -----------------------*/
 .warnings-container {
   height: 100%;
@@ -133,7 +174,7 @@ body {
   z-index: 1;
   top: 0;
   right: 0;
-  background-color: #1a1a1a;
+  background-color: #222226;
   color: white;
   overflow-x: hidden;
   transition: 0.5s;
@@ -178,8 +219,6 @@ body {
   width: 100%;
   height: 100%;
   overflow: auto;
-  
-  
 }
 
 .modal-content {
