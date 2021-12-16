@@ -1,20 +1,3 @@
-function addinput() {
-  $.ajax({
-    type: "POST",
-    url: "/addinput",
-    data: $('form').serialize(),
-    type: 'POST',
-    success: function (response) {
-      //var json = jQuery.parseJSON(response)
-      //$('#len').html(json.len)
-      console.log(response);
-    },
-    error: function (error) {
-      console.log(error);
-    }
-  });
-}
-
 let cards = document.querySelectorAll('.card')
 let videoName = document.querySelector('.input-info')
 let videoInput = document.getElementById('video-input')
@@ -39,6 +22,41 @@ for (let tag of videoTags) {
   }
 }
 
+//Right Click Menu
+for (let card of cards) {
+  card.onclick = function () {
+    console.log('click on card!')
+    //input name
+    videoName.textContent = card.textContent;
+  }
+}
+//Right Click Menu
+
+//Open menu when click on card
+for (let card of cards) {
+  card.oncontextmenu = rightClick;
+}
+
+//Hide menu when click on page
+document.onclick = hideMenu;
+
+function hideMenu() {
+  document.getElementById("contextMenu")
+    .style.display = "none"
+}
+
+function rightClick(e) {
+  e.preventDefault();
+
+  if (document.getElementById("contextMenu").style.display == "block") {
+    hideMenu();
+  } else {
+    var menu = document.getElementById("contextMenu")
+    menu.style.display = 'block';
+    menu.style.left = e.pageX + "px";
+    menu.style.top = e.pageY + "px";
+  }
+}
 
 //Modals
 let buttons = document.getElementsByClassName('modal-btn')

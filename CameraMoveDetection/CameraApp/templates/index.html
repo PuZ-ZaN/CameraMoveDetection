@@ -3,92 +3,148 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="stylesheet" href="{{ url_for('static',filename='styles/style.css') }}" />
-    <script src="https://code.jquery.com/jquery-3.6.0.js" integrity="sha256-H+K7U5CnXl1h5ywQfKtSj8PCmoN9aaq30gDh27Xc0jk=" crossorigin="anonymous"></script>
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static',filename='styles/style.css') }}"
+    />
+    <script
+      src="https://code.jquery.com/jquery-3.6.0.js"
+      integrity="sha256-H+K7U5CnXl1h5ywQfKtSj8PCmoN9aaq30gDh27Xc0jk="
+      crossorigin="anonymous"
+    ></script>
     <title>Camera Detection</title>
   </head>
 
   <body>
-      <div class="main-container">
+    <div class="main-container">
+      <!-- Right Click Menu -->
+      <div id="contextMenu" class="context-menu" style="display: none">
+        <ul class="menu">
+          <li class="edit">
+            <a href="#">Edit</a>
+          </li>
 
-        <div class="warnings-container">
-            <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
-            <a href="#" onclick="closeNav()">Some warning</a>
-            <a href="#" onclick="closeNav()">Another warning</a>
-          </div>
-
-          <div class="sidebar-container">
-              <div class="settings-container">
-                  <!-- Modal Buttons -->
-                  <button class="modal-btn" id="add">Add Input</button>
-                  <button class="warnings-btn" onclick="openNav()">Open Warnings</button>
-                  <!-- Modals -->
-                  <!-- Settings -->
-                  <div id="settings" class="modal">
-                      <div class="modal-content">Test Test</div>
-                  </div>
-
-                  <!-- Add Input -->
-                  <div id="add" class="modal">
-                      <div class="modal-content">
-                          <div class="add-form">
-                              <form action="" method="post" name="form">
-                                  <p>
-                                    <label for="name">Введите имя:</label>
-                                    <input id="name" name="name" type="text">
-                                  </p>
-
-                                  <p>
-                                    <label for="source">Введите ссылку:</label>
-                                    <input id="source" name="source" type="text">
-                                  </p>
-
-                                  <p>
-                                    <label for="isMovedBorder">Введите значение границы (isMovedBorder):</label>
-                                    <input id="isMovedBorder" name="isMovedBorder" type="number">
-                                  </p>
-
-                                  <p>
-                                    <label for="isMovingBorder ">Введите значение границы (isMovingBorder):</label>
-                                    <input id="isMovingBorder" name="isMovingBorder" type="number">
-                                  </p>
-
-                                  <div class="add-btn">
-                                    <input type="button" value="Отправить" onclick="addinput();">
-                                  </div>
-                              </form>
-                          </div>
-
-                          <div class="example">
-                              <div class="card" id="example-card">
-                                  <div id="input-name" class="input-name">NO NAME</div>
-                                  <video id="input-video" src="" preload="metadata"></video>
-                              </div>
-                          </div>
-                          <span id="add" class="close-modal">&times;</span>
-                      </div>
-                  </div>
-              </div>
-
-              <!-- Cards -->
-              <div class="cards">
-
-                  {% for camera in CameraList %}
-
-                  <div class="card">
-                      <div class="input-name">{{ camera['Name'] }}</div>
-                      <video src="{{ camera['Url'] }}" preload="metadata"></video>
-                  </div>
-
-                  {% endfor %}
-              </div>
-          </div>
-
-          <div class="video-container">
-              <video id="video-input" src="" muted></video>
-              <div class="input-info">NO INPUT</div>
-          </div>
+          <li class="delete">
+            <a href="#">Delete</a>
+          </li>
+        </ul>
       </div>
-      <script src="{{ url_for('static',filename='js/script.js') }}"></script>
+
+      <!-- Sidebar Warnings -->
+      <div class="warnings-container">
+        <a href="javascript:void(0)" class="closebtn" onclick="closeNav()"
+          >&times;</a
+        >
+        <button onclick="getAlarmList()">Обновить данные</button>
+
+        <div class="warnings-table">
+          <table>
+            <tr>
+              <th>Имя камеры</th>
+              <th>Время срабатывания</th>
+            </tr>
+            {% for something in somethingList %}
+            <tr>
+              <td>{{ something['name'] }}</td>
+              <td>{{ something['datetime'] }}</td>
+            </tr>
+            {% endfor %}
+          </table>
+        </div>
+      </div>
+
+      <div class="sidebar-container">
+        <div class="settings-container">
+          <!-- Modal Buttons -->
+          <button class="modal-btn" id="add">Add Input</button>
+          <button class="warnings-btn" onclick="openNav()">
+            Open Warnings
+          </button>
+          <!-- Modals -->
+          <!-- Settings -->
+          <div id="settings" class="modal">
+            <div class="modal-content">Test Test</div>
+          </div>
+
+          <!-- Add Input -->
+          <div id="add" class="modal">
+            <div class="modal-content">
+              <div class="add-form">
+                <form action="" method="post" name="form">
+                  <p>
+                    <label for="name">Введите имя:</label>
+                    <input id="name" name="name" type="text" />
+                  </p>
+
+                  <p>
+                    <label for="source">Введите ссылку:</label>
+                    <input id="source" name="source" type="text" />
+                  </p>
+
+                  <p>
+                    <label for="isMovedBorder"
+                      >Введите значение границы (isMovedBorder):</label
+                    >
+                    <input
+                      id="isMovedBorder"
+                      name="isMovedBorder"
+                      type="number"
+                    />
+                  </p>
+
+                  <p>
+                    <label for="isMovingBorder "
+                      >Введите значение границы (isMovingBorder):</label
+                    >
+                    <input
+                      id="isMovingBorder"
+                      name="isMovingBorder"
+                      type="number"
+                    />
+                  </p>
+
+                  <!-- <div class="add-btn">
+                    <input
+                      type="button"
+                      value="Отправить"
+                      onclick="addinput();"
+                    />
+                  </div> -->
+                  <button onclick="addinput()">Отправить</button>
+                </form>
+              </div>
+
+              <div class="example">
+                <div class="card" id="example-card">
+                  <div id="input-name" class="input-name">NO NAME</div>
+                  <video id="input-video" src="" preload="metadata"></video>
+                </div>
+              </div>
+              <span id="add" class="close-modal">&times;</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Cards -->
+        <div class="cards">
+          {% for camera in CameraList %}
+
+          <div class="card">
+            <div class="input-name">{{ camera['Name'] }}</div>
+            <video src="{{ camera['Url'] }}" preload="metadata"></video>
+          </div>
+
+          {% endfor %}
+        </div>
+      </div>
+
+      <div class="video-container">
+        <video id="video-input" src="" muted></video>
+        <div class="input-info">NO INPUT</div>
+      </div>
+    </div>
+    <script src="{{ url_for('static',filename='js/script.js') }}"></script>
+    <script src="{{ url_for('static',filename='js/requests.js') }}"></script>
   </body>
 </html>

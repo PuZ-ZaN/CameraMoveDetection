@@ -1,6 +1,6 @@
 from datetime import datetime
-import json
-from flask import render_template, request, Response
+#import json
+from flask import render_template, request, Response, jsonify
 from CameraApp import app
 from . import CameraMoveDetection as CMD
 from .db.wrapper import DBApi
