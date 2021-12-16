@@ -41,12 +41,10 @@ def callback():
 	return ""
 
 @app.route("/getAlarmList", methods=['POST'])
-@app.route("/alarms", methods=['POST'])
+@app.route("/gal", methods=['POST'])
 def getAlarmList():
-	res=''
-	for i in alarmlist:
-		res+=str(i)+r"\n"
-	return res
+	resp_dict = {'name':alarmlist[0],'timestamp':alarmlist[1],'elapsedSecs':alarmlist[2],'IsMoving':alarmlist[3],'IsMoved':alarmlist[4]}
+	return resp_dict
 
 
 @app.route("/getActiveThreads", methods=['POST'])
