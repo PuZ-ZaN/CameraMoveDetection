@@ -31,13 +31,12 @@ def runscript():
 
 @app.route("/callback", methods=['POST'])
 def callback():
-    request_data = request.get_json()
     alarmlist.append({
-        'name' : request_data['name'],
-        'timestamp': request_data['timestamp'],
-        'elapsedSecs': request_data['elapsedSecs'],
-        'IsMoving': request_data['IsMoving'],
-        'IsMoved': request_data['IsMoved']
+        'name' : request.form['name'],
+        'timestamp': request.form['timestamp'],
+        'elapsedSecs': request.form['elapsedSecs'],
+        'IsMoving': request.form['IsMoving'],
+        'IsMoved': request.form['IsMoved']
         })
     return "OK"
 
@@ -45,8 +44,8 @@ def callback():
 @app.route("/gal", methods=['POST'])
 def getAlarmList():
     dict_ret={}
-    for i in range(len(alarmList)):
-        dict_ret[i]=alarmList[i]
+    for i in range(len(alarmlist)):
+        dict_ret[i]=alarmlist[i]
     return dict_ret
 
 
