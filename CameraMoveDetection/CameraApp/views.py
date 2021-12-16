@@ -25,7 +25,7 @@ def addInput():
 	DBApi.insert(request.form['name'], request.form['source'])
 	return {request.form['name'] : request.form['source'] }
 
-@app.route("/run", methods=['POST'])#Игорь
+@app.route("/runscript", methods=['POST'])#Игорь
 def runscript():
 	try:
 		request_data = request.get_json()
@@ -56,7 +56,7 @@ def getAlarmList():
 	return res#Response(json.dumps(alarmlist),  mimetype='application/json')
 
 
-@app.route("/gat", methods=['POST'])
+@app.route("/getActiveThreads", methods=['POST'])
 def getActiveThreads():
 	res = f"alive threads: {ThreadsPool.active_threads_count}\n"
 	_counter = 0
@@ -65,10 +65,10 @@ def getActiveThreads():
 		_counter += 1
 	return res 
 
-@app.route('/gte', methods=['POST'])
+@app.route('/getThreadsErrors', methods=['POST'])
 def getThreadsErrors():
 	return ThreadsPool.threads_err
 
-@app.route('/p', methods=['POST'])
+@app.route('/getThreadsPulses', methods=['POST'])
 def getThreadsPulses():
 	return ThreadsPool.threads_pulses
