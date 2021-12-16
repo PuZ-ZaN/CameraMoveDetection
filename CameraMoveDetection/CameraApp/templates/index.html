@@ -39,17 +39,14 @@
         <button onclick="getAlarmList()">Обновить данные</button>
 
         <div class="warnings-table">
-          <table>
+          <table id="alarmList">
             <tr>
               <th>Имя камеры</th>
               <th>Время срабатывания</th>
             </tr>
-            {% for something in somethingList %}
-            <tr>
-              <td>{{ something['name'] }}</td>
-              <td>{{ something['datetime'] }}</td>
-            </tr>
-            {% endfor %}
+              <tbody>
+
+              </tbody>
           </table>
         </div>
       </div>

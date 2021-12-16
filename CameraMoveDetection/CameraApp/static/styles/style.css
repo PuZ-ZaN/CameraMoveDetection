@@ -76,6 +76,7 @@ table {
   margin: 10px;
   color: black;
   margin: 0 auto;
+  background-color: white;
 }
 
 table td,
@@ -388,8 +389,8 @@ button:hover {
 }
 
 ::-webkit-scrollbar-thumb {
-  background: #222226;
-  border: 1px solid #1a1a1a;
+  background: white;
+  border: 2px solid #1a1a1a;
   border-radius: 50px;
 }
 
