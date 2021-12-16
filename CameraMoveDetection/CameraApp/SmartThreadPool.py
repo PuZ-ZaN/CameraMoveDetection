@@ -1,11 +1,14 @@
 import threading
 import os
 import random
+from datetime import datetime
 from typing import Callable, Any
 
 class SmartThreadPool:
     __max_avaiable_cpu = 0
     __threads = {}
+    __threads_err = {}
+    __threads_pulse = {}
     __thread_count = 0 #Данный счётчик означает общее кол-во потоков, когда либо созданных в текущем экземпляре SmartThreadPool, а не кол-во активных потоков. Кол-во активных потоков см. св-во active_threads_count
     __uid = None
 
@@ -21,10 +24,15 @@ class SmartThreadPool:
         '''
         if len(self.__threads.keys()) == self.__max_avaiable_cpu:
             raise MaxThreadsCountReachedException("Unable to create threads more than CPU threads")
+        thread_uid = self.__uid + ':' + str(self.__thread_count)
+        self.__threads_pulse[thread_uid] = str(datetime.now())
+        t_kwargs['err_list'] = self.__threads_err
+        t_kwargs['host_id'] = thread_uid
+        t_kwargs['host_pulse'] = self.__threads_pulse
 
         thread = threading.Thread(target = thread_target, args = t_args, kwargs = t_kwargs)
         thread.start()
-        thread_uid = self.__uid + ':' + str(self.__thread_count)
+        
         self.__threads[thread_uid] = thread;
         self.__thread_count += 1
         return thread_uid 
@@ -46,8 +54,17 @@ class SmartThreadPool:
     def threads_list(self):
         reply = {}
         for key in self.__threads.keys():
-            reply[key] = {f"status: {self.__threads[key].is_alive()}"}
+            reply[key] = {f"status: {('alive' if self.__threads[key].is_alive() else 'dead')}"}
         return reply
+
+    @property
+    def threads_err(self):
+        return self.__threads_err
+
+    @property
+    def threads_pulses(self):
+        return self.__threads_pulse
+
 
 class CPUCountUnavaiableException(Exception):
     pass

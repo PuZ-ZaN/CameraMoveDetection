@@ -25,28 +25,28 @@ def addInput():
 	DBApi.insert(request.form['name'], request.form['source'])
 	return {request.form['name'] : request.form['source'] }
 
-@app.route("/runscript", methods=['POST'])#Игорь
+@app.route("/run", methods=['POST'])#Игорь
 def runscript():
 	try:
 		request_data = request.get_json()
 		print(request_data['name'])
-		return ThreadsPool.new_thread(CMD.CalculatePhaseCorrelate, name=request_data['name'], source=request_data['source'], isMovedBorder = request_data['isMovedBorder'], isMovingBorder = request_data['isMovingBorder'])
+		return ThreadsPool.new_thread(CMD.CalculatePhaseCorrelate, name=request_data['name'], source=request_data['source'], isMovedBorder = int(request_data['isMovedBorder']), isMovingBorder = int(request_data['isMovingBorder']))
 	except MaxThreadsCountReachedException as err:
 		return str(err)
 
 @app.route("/callback", methods=['POST'])
 def callback():
-	request_data = request.get_json()
-	#if
-	#'name' : name,
-	#'timestamp': thisTime,
-	#'elapsedSecs':elapsedSecs,
-	#'IsMoving':IsMoving,
-	#'IsMoved':IsMoved,
-	#'prevFrames' : prevFrames, 
-	#'frame':frame
-	alarmlist.append({request_data['name'],request_data['timestamp'],request_data['elapsedSecs'],request_data['IsMoving'],request_data['IsMoved']})
-	return request_data['timestamp']#Response(json.dumps(),  mimetype='application/json')
+	#request_data = request.json
+	#print(request.form['name'])
+	alarmlist.append(
+		{  request.form['name'],
+		   request.form['timestamp'],
+		   request.form['elapsedSecs'],
+		   request.form['IsMoving'],
+		   request.form['IsMoved']
+		 })
+	return ""
+	#return request.json['timestamp']#Response(json.dumps(),  mimetype='application/json')
 
 @app.route("/getAlarmList", methods=['POST'])
 def getAlarmList():
@@ -54,3 +54,21 @@ def getAlarmList():
 	for i in alarmlist:
 		res+=str(i)+r"\n"
 	return res#Response(json.dumps(alarmlist),  mimetype='application/json')
+
+
+@app.route("/gat", methods=['POST'])
+def getActiveThreads():
+	res = f"alive threads: {ThreadsPool.active_threads_count}\n"
+	_counter = 0
+	for key in ThreadsPool.threads_list.keys():
+		res += f'{_counter}: internal id: {key} - {ThreadsPool.threads_list[key]}\n'
+		_counter += 1
+	return res 
+
+@app.route('/gte', methods=['POST'])
+def getThreadsErrors():
+	return ThreadsPool.threads_err
+
+@app.route('/p', methods=['POST'])
+def getThreadsPulses():
+	return ThreadsPool.threads_pulses
