@@ -9,7 +9,7 @@ import cv2
 from History import History
 from DynamicPlot import DynamicPlot
 from Config import Config
-
+import base64
 #from scipy.fftpack import fftn, ifftn
 #from aioify import aioify
 #import asyncio
@@ -130,16 +130,18 @@ def main():
 
 				#cv2.putText(frame, "IsMoving: {}".format(IsMoving), (20, 70),
 				#cv2.FONT_HERSHEY_SIMPLEX, 0.6, colorMoving, 2)
-				cv2.putText(frame, "IsMovingVecLen: {}".format(vectorPEtalon), (20, 90), cv2.FONT_HERSHEY_SIMPLEX, 0.6, (0, 255, 0), 2)
-				cv2.putText(frame, "IsMovingVecsAvg (pEtalonAvg): {}".format(pEtalonAvg), (20, 110), cv2.FONT_HERSHEY_SIMPLEX, 0.6, colorPEtalonAvg, 2)
+				#cv2.putText(frame, "IsMovingVecLen: {}".format(vectorPEtalon), (20, 90), cv2.FONT_HERSHEY_SIMPLEX, 0.6, (0, 255, 0), 2)
+				#cv2.putText(frame, "IsMovingVecsAvg (pEtalonAvg): {}".format(pEtalonAvg), (20, 110), cv2.FONT_HERSHEY_SIMPLEX, 0.6, colorPEtalonAvg, 2)
 
 				#cv2.putText(frame, "IsMoved: {}".format(IsMoved), (20, 130),
 				#cv2.FONT_HERSHEY_SIMPLEX, 0.6, colorMoved, 2)
-				cv2.putText(frame, "IsMovedVecLen: {}".format(vectorPStatic), (20, 150), cv2.FONT_HERSHEY_SIMPLEX, 0.6, (0, 255, 0), 2)
-				cv2.putText(frame, "IsMovedVecsAvg (pStaticAvg): {}".format(pStaticAvg), (20, 170), cv2.FONT_HERSHEY_SIMPLEX, 0.6, colorPStaticAvg, 2)
+				#cv2.putText(frame, "IsMovedVecLen: {}".format(vectorPStatic), (20, 150), cv2.FONT_HERSHEY_SIMPLEX, 0.6, (0, 255, 0), 2)
+				#cv2.putText(frame, "IsMovedVecsAvg (pStaticAvg): {}".format(pStaticAvg), (20, 170), cv2.FONT_HERSHEY_SIMPLEX, 0.6, colorPStaticAvg, 2)
 
-				cv2.putText(frame, "IsMovedBorder: {}".format(config.isMovedBorder), (20, 190), cv2.FONT_HERSHEY_SIMPLEX, 0.6, (0, 255, 0), 2)
-				cv2.putText(frame, "IsMovingBorder: {}".format(config.isMovingBorder), (20, 210), cv2.FONT_HERSHEY_SIMPLEX, 0.6, (0, 255, 0), 2)
+				#cv2.putText(frame, "IsMovedBorder: {}".format(config.isMovedBorder), (20, 190), cv2.FONT_HERSHEY_SIMPLEX, 0.6, (0, 255, 0), 2)
+				#cv2.putText(frame, "IsMovingBorder: {}".format(config.isMovingBorder), (20, 210), cv2.FONT_HERSHEY_SIMPLEX, 0.6, (0, 255, 0), 2)
+				#cv2.putText(frame, "B64: {}".format(stra), (20, 310), cv2.FONT_HERSHEY_SIMPLEX, 0.6, (0, 255, 0), 2)
+				
 				cv2.imshow(config.NameVideoWindow, frame)
 			
 			#exit key functionality
