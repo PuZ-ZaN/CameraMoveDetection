@@ -1,5 +1,4 @@
 from datetime import datetime
-#import json
 from flask import render_template, request, Response, jsonify
 from CameraApp import app
 from . import CameraMoveDetection as CMD
@@ -31,22 +30,29 @@ def runscript():
 
 @app.route("/callback", methods=['POST'])
 def callback():
-    alarmlist.append({
-        'name' : request.form['name'],
-        'timestamp': request.form['timestamp'],
-        'elapsedSecs': request.form['elapsedSecs'],
-        'IsMoving': request.form['IsMoving'],
-        'IsMoved': request.form['IsMoved']
-        })
-    return "OK"
+	alarmlist.append({
+		'name' : request.form['name'],
+		'timestamp': request.form['timestamp'],
+		'elapsedSecs': request.form['elapsedSecs'],
+		'IsMoving': request.form['IsMoving'],
+		'IsMoved': request.form['IsMoved'],
+		'frame' : request.form['frame']
+		})
+	return "OK"
 
 @app.route("/getAlarmList", methods=['POST'])
 @app.route("/gal", methods=['POST'])
 def getAlarmList():
-    dict_ret={}
-    for i in range(len(alarmlist)):
-        dict_ret[i]=alarmlist[i]
-    return dict_ret
+	dict_ret={}
+	for i in range(len(alarmlist)):
+		dict_ret[i]={
+			'name' : alarmlist[i]['name'],
+			'timestamp': alarmlist[i]['timestamp'],
+			'elapsedSecs': alarmlist[i]['elapsedSecs'],
+			'IsMoving': alarmlist[i]['IsMoving'],
+			'IsMoved': alarmlist[i]['IsMoved']
+		}
+	return dict_ret
 
 
 @app.route("/getActiveThreads", methods=['POST'])
@@ -68,3 +74,12 @@ def getThreadsErrors():
 @app.route('/p', methods=['POST'])
 def getThreadsPulses():
 	return ThreadsPool.threads_pulses
+
+
+@app.route('/getImage', methods=['POST'])
+def getImage():
+	request_data = request.get_json()
+	id = int(request_data['id'])
+	if len(alarmlist)>id and id>0:
+		return alarmlist[id]['frame']
+	return "Incorrect id"

@@ -54,6 +54,7 @@
   <ItemGroup>
     <Content Include="CameraApp\db\CameraMoveDetection.mdf" />
     <Content Include="CameraApp\db\CameraMoveDetection_log.ldf" />
+    <Content Include="CameraApp\static\js\requests.js" />
     <Content Include="CameraApp\static\js\script.js" />
     <Content Include="CameraApp\static\styles\style.css" />
     <Content Include="CameraApp\templates\index.html" />

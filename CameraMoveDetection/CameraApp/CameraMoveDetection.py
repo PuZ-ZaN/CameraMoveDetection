@@ -8,9 +8,9 @@ import traceback
 from datetime import datetime
 import sys
 from .History import History
+import base64
 
 def CalculatePhaseCorrelate(name = "", source = "", callbackUrl="/callback", err_list = {}, host_id = '', host_pulse = {}, isMovedBorder = 100, isMovingBorder = 100, etalonChangeEveryNFps = 500, etalonHistoryLen=50, staticHistoryLen=700,framesBeforeTrigger=10):
-	
 	try:
 		camera = VideoStream(source).start()
 		time.sleep(1.0)
@@ -86,12 +86,15 @@ def CalculatePhaseCorrelate(name = "", source = "", callbackUrl="/callback", err
 				IsMoved = pStaticAvg > isMovedBorder
 				host_pulse[host_id] = f"{str(datetime.now())} :: frames elapsed - {fpsCounter} :: elapsed secs - {elapsedSecs} :: pEthalon - {pEtalonAvg} :: pStatic - {pStaticAvg}"
 				if (IsMoving or IsMoved):
+					retval, buffer = cv2.imencode('.jpg', frame)
+					jpg_as_text = base64.b64encode(buffer)
 					r = requests.post(r"http://localhost:5555/callback",data={ #TODO Починить гавно
 						'name' : str(name),
 						'timestamp': str(thisTime),
 						'elapsedSecs':str(elapsedSecs),
 						'IsMoving':str(IsMoving),
 						'IsMoved':str(IsMoved),
+						'frame':jpg_as_text
 						#'prevFrames' : prevFrames, 
 						#'frame':frame
 						})
