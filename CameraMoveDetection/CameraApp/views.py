@@ -31,20 +31,23 @@ def runscript():
 
 @app.route("/callback", methods=['POST'])
 def callback():
-	alarmlist.append(
-		{  request.form['name'],
-		   request.form['timestamp'],
-		   request.form['elapsedSecs'],
-		   request.form['IsMoving'],
-		   request.form['IsMoved']
-		 })
-	return ""
+    request_data = request.get_json()
+    alarmlist.append({
+        'name' : request_data['name'],
+        'timestamp': request_data['timestamp'],
+        'elapsedSecs': request_data['elapsedSecs'],
+        'IsMoving': request_data['IsMoving'],
+        'IsMoved': request_data['IsMoved']
+        })
+    return "OK"
 
 @app.route("/getAlarmList", methods=['POST'])
 @app.route("/gal", methods=['POST'])
 def getAlarmList():
-	resp_dict = {'name':alarmlist[0],'timestamp':alarmlist[1],'elapsedSecs':alarmlist[2],'IsMoving':alarmlist[3],'IsMoved':alarmlist[4]}
-	return resp_dict
+    dict_ret={}
+    for i in range(len(alarmList)):
+        dict_ret[i]=alarmList[i]
+    return dict_ret
 
 
 @app.route("/getActiveThreads", methods=['POST'])
