@@ -6,12 +6,6 @@ from . import CameraMoveDetection as CMD
 from .db.wrapper import DBApi
 from .SmartThreadPool import SmartThreadPool, CPUCountUnavaiableException, MaxThreadsCountReachedException
 
-OK = 'SERVER 200' #Я не уверен в том, что я делаю)
-FAILURE_INTERNAL = 'SERVER 500'
-FAILURE_PUBLIC = 'SERVER 413 UNABLE TO CREATE SERVER THREAD'
-
-sensorArr=[]
-
 ThreadsPool= SmartThreadPool()
 alarmlist = []
 
@@ -25,7 +19,8 @@ def addInput():
 	DBApi.insert(request.form['name'], request.form['source'])
 	return {request.form['name'] : request.form['source'] }
 
-@app.route("/runscript", methods=['POST'])#Игорь
+@app.route("/runscript", methods=['POST'])
+@app.route("/run", methods=['POST'])
 def runscript():
 	try:
 		request_data = request.get_json()
@@ -36,8 +31,6 @@ def runscript():
 
 @app.route("/callback", methods=['POST'])
 def callback():
-	#request_data = request.json
-	#print(request.form['name'])
 	alarmlist.append(
 		{  request.form['name'],
 		   request.form['timestamp'],
@@ -46,17 +39,18 @@ def callback():
 		   request.form['IsMoved']
 		 })
 	return ""
-	#return request.json['timestamp']#Response(json.dumps(),  mimetype='application/json')
 
 @app.route("/getAlarmList", methods=['POST'])
+@app.route("/alarms", methods=['POST'])
 def getAlarmList():
 	res=''
 	for i in alarmlist:
 		res+=str(i)+r"\n"
-	return res#Response(json.dumps(alarmlist),  mimetype='application/json')
+	return res
 
 
 @app.route("/getActiveThreads", methods=['POST'])
+@app.route("/gat", methods=['POST'])
 def getActiveThreads():
 	res = f"alive threads: {ThreadsPool.active_threads_count}\n"
 	_counter = 0
@@ -66,9 +60,11 @@ def getActiveThreads():
 	return res 
 
 @app.route('/getThreadsErrors', methods=['POST'])
+@app.route('/gte', methods=['POST'])
 def getThreadsErrors():
 	return ThreadsPool.threads_err
 
 @app.route('/getThreadsPulses', methods=['POST'])
+@app.route('/p', methods=['POST'])
 def getThreadsPulses():
 	return ThreadsPool.threads_pulses
