@@ -1,13 +1,13 @@
 from imutils.video import FileVideoStream
 from math import sqrt
 import numpy as np
-import matplotlib.pyplot as plt
+#import matplotlib.pyplot as plt
 import imutils
 import time
 import cv2
 
 from History import History
-from DynamicPlot import DynamicPlot
+#from DynamicPlot import DynamicPlot
 from Config import Config
 import base64
 #from scipy.fftpack import fftn, ifftn
@@ -64,7 +64,7 @@ def main():
 	pEtalonAvg = 0
 	pStaticAvg = 0
 
-	dynamicGraph = DynamicPlot()
+	#dynamicGraph = DynamicPlot()
 
 	while fvs.more() != None:
 		try:
@@ -94,7 +94,7 @@ def main():
 			if fpsCounter % config.etalonChangeEveryNFps == 0:
 				prev_gray = imGray
 			
-			dynamicGraph.addPoint(fpsCounter / 3,pStaticAvg,pEtalonAvg)
+			#dynamicGraph.addPoint(fpsCounter / 3,pStaticAvg,pEtalonAvg)
 
 			#cv2.putText(frame, "phaseCorrelateEtalon:
 			#{}".format(turpleRound(pEtalon)),
