@@ -1,8 +1,6 @@
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
-#from sqlalchemy.types import Text 
 from CameraApp import app
-#app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'mssql+pyodbc://root:root@localhost/CameraMoveDetection?driver=ODBC Driver 17 for SQL Server'
 #SQLALCHEMY_TRACK_MODIFICATIONS = False
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
@@ -10,17 +8,19 @@ db = SQLAlchemy(app)
 
 
 class Camera(db.Model):
-    __tablename__ = 'Camera'
+    __tablename__ = 'Cameras'
     CameraId = db.Column(db.Integer, db.Sequence('seq_reg_id', start=1, increment=1), primary_key=True, nullable=False)
     Name = db.Column(db.String(50), nullable=False)
     Url = db.Column(db.String(200), nullable=False)
+    isMovedBorder = db.Column(db.Integer, nullable=False)
+    isMovingBorder = db.Column(db.Integer, nullable=False)
 
     def __init__(self, Name, Url):
         self.Name = Name
         self.Url = Url
 
     def __repr__(self):
-        return f'{self.CameraId} {self.Name} {self.Url}'
+        return f'{self.CameraId} {self.Name} {self.Url} {isMovedBorder} {isMovingBorder}'
 
 class DBApi():
     def createDb():

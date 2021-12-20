@@ -13,11 +13,6 @@ def index():
 	cameras = DBApi.selectAll()
 	return render_template('index.html',CameraList=cameras)
 
-@app.route("/addinput", methods=['POST'])
-def addInput():
-	DBApi.insert(request.form['name'], request.form['source'])
-	return {request.form['name'] : request.form['source'] }
-
 @app.route("/runscript", methods=['POST'])
 @app.route("/run", methods=['POST'])
 def runscript():
@@ -83,3 +78,43 @@ def getImage():
 	if len(alarmlist)>id and id>0:
 		return alarmlist[id]['frame']
 	return "Incorrect id"
+
+@app.route("/addinput", methods=['POST'])
+@app.route("/ai", methods=['POST'])
+def addInput():
+	try:
+		DBApi.insert(request.form['name'], request.form['source'],request.form['isMovedBorder'],request.form['isMovingBorder'])
+	except:
+		return "NOT OK"
+	return "OK"
+
+@app.route('/delete', methods=['POST'])
+@app.route('/d', methods=['POST'])
+def delete():
+	request_data = request.get_json()
+	name = int(request_data['name'])
+	source = int(request_data['source'])
+	try:
+		DBApi.delete(name,source)
+	except:
+		return "NOT OK"
+	return "OK"
+
+@app.route('/edit', methods=['POST'])
+@app.route('/e', methods=['POST'])
+def edit():
+	oldname = int(request_data['oldname'])
+	oldsource = int(request_data['oldsource'])
+	newname = int(request_data['newname'])
+	newsource = int(request_data['newsource'])
+	try:
+		DBApi.delete(oldname,oldsource)
+		DBApi.insert(newname,newsource)
+	except:
+		return "NOT OK"
+	return "OK"
+
+def init():
+	pass
+
+init()
