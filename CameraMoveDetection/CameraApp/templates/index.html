@@ -26,42 +26,20 @@
           </li>
 
           <li class="delete">
-            <a href="#">Delete</a>
+            <a href="#" onclick="deleteInput()">Delete</a>
           </li>
         </ul>
-      </div>
-
-      <!-- Sidebar Warnings -->
-      <div class="warnings-container">
-        <a href="javascript:void(0)" class="closebtn" onclick="closeNav()"
-          >&times;</a
-        >
-        <button onclick="getAlarmList()">Обновить данные</button>
-
-        <div class="warnings-table">
-          <table id="alarmList">
-            <tr>
-              <th>Имя камеры</th>
-              <th>Время срабатывания</th>
-            </tr>
-              <tbody>
-
-              </tbody>
-          </table>
-        </div>
       </div>
 
       <div class="sidebar-container">
         <div class="settings-container">
           <!-- Modal Buttons -->
-          <button class="modal-btn" id="add">Add Input</button>
-          <button class="warnings-btn" onclick="openNav()">
-            Open Warnings
-          </button>
+          <button class="modal-btn" id="add">Добавить камеру</button>
+          <button class="warnings-btn" onclick="openNav()">Ошибки</button>
           <!-- Modals -->
           <!-- Settings -->
-          <div id="settings" class="modal">
-            <div class="modal-content">Test Test</div>
+          <div id="screen" class="modal">
+            <div class="modal-content">Screen Here!</div>
           </div>
 
           <!-- Add Input -->
@@ -71,12 +49,12 @@
                 <form action="" method="post" name="form">
                   <p>
                     <label for="name">Введите имя:</label>
-                    <input id="name" name="name" type="text" />
+                    <input id="name" name="name" type="text" required />
                   </p>
 
                   <p>
                     <label for="source">Введите ссылку:</label>
-                    <input id="source" name="source" type="text" />
+                    <input id="source" name="source" type="text" required />
                   </p>
 
                   <p>
@@ -87,6 +65,7 @@
                       id="isMovedBorder"
                       name="isMovedBorder"
                       type="number"
+                      required
                     />
                   </p>
 
@@ -98,28 +77,43 @@
                       id="isMovingBorder"
                       name="isMovingBorder"
                       type="number"
+                      required
                     />
                   </p>
 
-                  <!-- <div class="add-btn">
+                  <div class="add-btn">
                     <input
                       type="button"
                       value="Отправить"
                       onclick="addinput();"
                     />
-                  </div> -->
-                  <button onclick="addinput()">Отправить</button>
+                  </div>
+                  <!-- <button onclick="addinput()">Отправить</button> -->
                 </form>
-              </div>
-
-              <div class="example">
-                <div class="card" id="example-card">
-                  <div id="input-name" class="input-name">NO NAME</div>
-                  <video id="input-video" src="" preload="metadata"></video>
-                </div>
-              </div>
-              <span id="add" class="close-modal">&times;</span>
+              </div> 
+              <span id="add" class="close-modal">&times;</span>            
             </div>
+          </div>
+        </div>
+
+        <!-- Sidebar Warnings -->
+        <div class="warnings-container">
+          <a href="javascript:void(0)" class="closebtn" onclick="closeNav()"
+            >&times;</a
+          >
+          <button onclick="getAlarmList()">Обновить данные</button>
+
+          <div class="warnings-table">
+            <table id="alarmList">
+              <tr>
+                <th>Имя камеры</th>
+                <th>Время срабатывания</th>
+              </tr>
+              <tbody>
+                <td name="alarmCell">Test Name</td>
+                <td name="alarmCell">Test Time Stamp</td>
+              </tbody>
+            </table>
           </div>
         </div>
 
@@ -136,7 +130,7 @@
         </div>
       </div>
 
-      <div class="video-container">
+      <div class="video-container" id="tesvid">
         <video id="video-input" src="" muted></video>
         <div class="input-info">NO INPUT</div>
       </div>
