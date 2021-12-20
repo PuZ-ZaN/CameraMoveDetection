@@ -1,4 +1,5 @@
 import threading
+import multiprocessing #Процессы могут игнорировать GIL, по этому попробуем поюзать их
 import os
 import random
 from datetime import datetime
@@ -13,9 +14,9 @@ class SmartThreadPool:
     __uid = None
 
     def __init__(self):
-        self.__max_avaiable_cpu = os.cpu_count() 
+        self.__max_avaiable_cpu = os.cpu_count() - 2 #Два ядра, хотя бы виртуальных, оставляем ОС
         if self.__max_avaiable_cpu == None or self.__max_avaiable_cpu == 0:
-            raise CPUCountUnavaiableException("System doesn't provides CPU count so unable to adequately manage server threads")
+            raise CPUCountUnavaiableException("System doesn't provides CPU cores count or current CPU has 2 virtual cores or less")
         self.__uid = str(__import__('uuid').uuid4().hex)
 
     def new_thread(self, thread_target: Callable[[Any], None], *t_args, **t_kwargs) -> str:
@@ -30,7 +31,7 @@ class SmartThreadPool:
         t_kwargs['host_id'] = thread_uid
         t_kwargs['host_pulse'] = self.__threads_pulse
 
-        thread = threading.Thread(target = thread_target, args = t_args, kwargs = t_kwargs)
+        thread = multiprocessing.Process(target = thread_target, args = t_args, kwargs = t_kwargs)
         thread.start()
         
         self.__threads[thread_uid] = thread;
@@ -40,7 +41,7 @@ class SmartThreadPool:
     def abort_thread(self, thread_uid: str, need_remove: bool = False) -> bool:
         if thread_uid in self.__threads.keys():
             if self.__threads[thread_uid].is_alive():
-                self.__threads[thread_uid].join()   
+                self.__threads[thread_uid].terminate()
                 if need_remove:
                     del self.__threads[thread_uid]
                 return True  
