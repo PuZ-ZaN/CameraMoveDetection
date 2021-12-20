@@ -113,6 +113,10 @@ for (let button of buttons) {
   }
 }
 
+// Add Input
+// let inputName = document.getElementById('name')
+// let inputSource = document.getElementById('source')
+// let addButton = document.getElementById('add-input')
  //let inputname = document.getelementbyid('name')
  //let inputsource = document.getelementbyid('source')
  //let addbutton = document.getelementbyid('add-input')
