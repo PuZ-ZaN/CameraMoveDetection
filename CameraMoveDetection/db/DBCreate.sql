@@ -8,17 +8,21 @@ GO
 SET QUOTED_IDENTIFIER ON
 GO
 
-CREATE TABLE [dbo].[Camera](
-	[CameraId] [int] NOT NULL,
-	[Name] [varchar](50) NOT NULL,
-	[Url] [varchar](200) NOT NULL,
+CREATE TABLE Camera(
+	CameraId [int] primary key identity(1,1) NOT NULL,
+	Name [varchar](50) NOT NULL,
+	Url [varchar](200) NOT NULL,
 	isMovingBorder [int] NOT NULL,
 	isMovedBorder [int] NOT NULL,
-PRIMARY KEY CLUSTERED 
-(
-	[CameraId] ASC
-)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
-) ON [PRIMARY]
+)
 GO
+
+create table Signals(
+	SignalID int primary key not null,
+	[CameraId] [int] foreign key references dbo.Camera NOT NULL,
+	[Image] text not null,
+	[TimeStamp] datetime not null
+)
+go
 
 

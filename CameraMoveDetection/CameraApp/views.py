@@ -11,14 +11,15 @@ alarmlist = []
 
 @app.route("/")
 def index():
-	cameras = DBApi.selectAll()
+	cameras = DBApi.CamerasSelectAll()
 	return render_template('index.html',CameraList=cameras)
 
 @app.route("/addinput", methods=['POST'])
 def addInput():
 	try:
-		request_data = request.get_json()
-		DBApi.insert(request_data['name'], request_data['source']) #,request.form['isMovedBorder'],request.form['isMovingBorder']
+		#request_data = request.get_json()
+		print(request.form)
+		DBApi.CamerasInsert(name=request.form['name'], source=request.form['source'], isMovedBorder = request.form['isMovedBorder'], isMovingBorder = request.form['isMovingBorder']) #,request.form['isMovedBorder'],request.form['isMovingBorder']
 	except Exception as e:
 		return traceback.format_exc()
 	return "OK"
@@ -97,7 +98,7 @@ def delete():
 		#name = request_data["name"]
 		#source = request_data["source"]
 
-		DBApi.delete(request_data ['name'],request_data['source'],request_data['isMovedBorder'],request_data['isMovingBorder'])
+		DBApi.CamerasDelete(request_data ['name'],request_data['source'],request_data['isMovedBorder'],request_data['isMovingBorder'])
 	except:
 		return "NOT OK"
 	return "OK"
@@ -106,12 +107,12 @@ def delete():
 def edit():
 	try:
 		request_data = request.get_json()
-		DBApi.delete(
+		DBApi.CamerasDelete(
 			request_data['oldname'], 
 			request_data['oldsource'],
 			request_data['oldisMovedBorder'],
 			request_data['oldisMovingBorder'])
-		DBApi.insert(
+		DBApi.CamerasInsert(
 			request_data['newname'], 
 			request_data['newsource'],
 			request_data['newisMovedBorder'],
@@ -122,5 +123,11 @@ def edit():
 
 @app.route("/cameraList", methods=['POST'])
 def cameraList():
-	cameras = DBApi.selectAll()
+	cameras = DBApi.CamerasSelectAll()
 	return jsonify(result=cameras)
+
+
+def runAllWorkers():
+	pass
+
+runAllWorkers()

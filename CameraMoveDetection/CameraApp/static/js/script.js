@@ -113,23 +113,22 @@ for (let button of buttons) {
   }
 }
 
-//Add Input
-// let inputName = document.getElementById('name')
-// let inputSource = document.getElementById('source')
-// let addButton = document.getElementById('add-input')
+ //let inputname = document.getelementbyid('name')
+ //let inputsource = document.getelementbyid('source')
+ //let addbutton = document.getelementbyid('add-input')
 
-// inputName.onkeyup = function () {
-//   document.getElementById('input-name').textContent = inputName.value;
-// }
-// inputSource.onkeyup = function () {
-//   document.getElementById('input-video').src = inputSource.value
-// }
-// addButton.onclick = function () {
-//   let clone = document.getElementById('example-card').cloneNode(true)
-//   clone.removeAttribute('id')
-//   document.querySelector('.cards').append(clone)
+ //inputname.onkeyup = function () {
+ //  document.getelementbyid('input-name').textcontent = inputname.value;
+ //}
+ //inputsource.onkeyup = function () {
+ //  document.getelementbyid('input-video').src = inputsource.value
+ //}
+ //addbutton.onclick = function () {
+ //  let clone = document.getelementbyid('example-card').clonenode(true)
+ //  clone.removeattribute('id')
+ //  document.queryselector('.cards').append(clone)
   
-//   console.log('New card created')
-// }
+ //  console.log('new card created')
+ //}
 
 
