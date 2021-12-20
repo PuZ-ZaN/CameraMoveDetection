@@ -79,13 +79,13 @@
     <Folder Include="CameraApp\" />
   </ItemGroup>
   <ItemGroup>
-    <InterpreterReference Include="Global|ContinuumAnalytics|Anaconda38-64" />
+    <InterpreterReference Include="CondaEnv|CondaEnv|CameraMoveDetection" />
   </ItemGroup>
   <ItemGroup>
     <Interpreter Include=".env\">
       <Id>.env</Id>
-      <Version>3.9</Version>
-      <Description>.env (Python 3.9 (64-bit))</Description>
+      <Version>3.8</Version>
+      <Description>.env (Python 3.8 (64-bit))</Description>
       <InterpreterPath>Scripts\python.exe</InterpreterPath>
       <WindowsInterpreterPath>Scripts\pythonw.exe</WindowsInterpreterPath>
       <PathEnvironmentVariable>PYTHONPATH</PathEnvironmentVariable>
