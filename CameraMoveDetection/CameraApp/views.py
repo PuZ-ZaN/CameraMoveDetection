@@ -18,8 +18,13 @@ def index():
 def addInput():
 	try:
 		#request_data = request.get_json()
+		#print(request_data)
 		print(request.form)
-		DBApi.CamerasInsert(name=request.form['name'], source=request.form['source'], isMovedBorder = request.form['isMovedBorder'], isMovingBorder = request.form['isMovingBorder']) #,request.form['isMovedBorder'],request.form['isMovingBorder']
+		DBApi.CamerasInsert(
+			name=request.form['name'], 
+			source=request.form['source'], 
+			isMovedBorder = request.form['isMovedBorder'], 
+			isMovingBorder = request.form['isMovingBorder'])
 	except Exception as e:
 		return traceback.format_exc()
 	return "OK"
@@ -107,6 +112,7 @@ def delete():
 def edit():
 	try:
 		request_data = request.get_json()
+		#TODO need optimization
 		DBApi.CamerasDelete(
 			request_data['oldname'], 
 			request_data['oldsource'],

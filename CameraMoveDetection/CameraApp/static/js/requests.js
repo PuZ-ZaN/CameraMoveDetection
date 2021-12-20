@@ -2,7 +2,7 @@ function addinput() {
   $.ajax({
     type: "POST",
     url: "/addinput",
-    data: $('form').serialize(),
+    data: $('#frm').serialize(),
     type: 'POST',
     success: function (response) {
       //var json = jQuery.parseJSON(response)

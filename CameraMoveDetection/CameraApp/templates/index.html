@@ -46,7 +46,7 @@
           <div id="add" class="modal">
             <div class="modal-content">
               <div class="add-form">
-                <form action="" method="post" name="form">
+                <form id="frm" action="" method="post" name="form">
                   <p>
                     <label for="name">Введите имя:</label>
                     <input id="name" name="name" type="text" required />
@@ -122,7 +122,7 @@
           {% for camera in CameraList %}
 
           <div class="card">
-            <div class="input-name">{{ camera['Name'] }}</div>
+              <div class="input-name">ID: {{camera['CameraID']}}, NM: {{camera['Name']}}</div>
             <video src="{{ camera['Url'] }}" preload="metadata"></video>
           </div>
 

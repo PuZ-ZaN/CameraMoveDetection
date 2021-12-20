@@ -8,10 +8,11 @@ GO
 SET QUOTED_IDENTIFIER ON
 GO
 
+/*Drop table Camera;*/
 CREATE TABLE Camera(
 	CameraId [int] primary key identity(1,1) NOT NULL,
-	Name [varchar](50) NOT NULL,
-	Url [varchar](200) NOT NULL,
+	Name [varchar](50) unique NOT NULL,
+	Url [varchar](200) unique NOT NULL,
 	isMovingBorder [int] NOT NULL,
 	isMovedBorder [int] NOT NULL,
 )
