@@ -113,7 +113,7 @@ for (let button of buttons) {
   }
 }
 
-//Add Input
+// Add Input
 // let inputName = document.getElementById('name')
 // let inputSource = document.getElementById('source')
 // let addButton = document.getElementById('add-input')
