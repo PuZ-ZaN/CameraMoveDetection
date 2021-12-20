@@ -100,7 +100,7 @@ table th {
   grid-template-columns: 1fr 1fr;
   width: 80%;
   margin: 0 auto;
-  padding: 5px;
+  padding: 10px;
   text-align: left;
 }
 
@@ -124,7 +124,7 @@ input::-webkit-inner-spin-button {
 .add-form .add-btn {
   border-bottom: 3px solid #1a1a1a;
   padding: 10px;
-  margin: 20px;
+  margin: 30px;
 }
 /* ----------------------- Form End -----------------------*/
 
@@ -170,9 +170,9 @@ button:hover {
 /* ----------------------- Warnings Start -----------------------*/
 .warnings-container {
   height: 100%;
-  width: 0;
+  width: 65%;
   position: absolute;
-  z-index: 1;
+  z-index: 3;
   top: 0;
   right: 0;
   background-color: #222226;
@@ -214,7 +214,7 @@ button:hover {
 .modal {
   display: none;
   position: fixed;
-  z-index: 1;
+  z-index: 99;
   left: 0;
   top: 5%;
   width: 100%;
@@ -230,7 +230,7 @@ button:hover {
   margin: 0 auto;
   padding: 20px;
   width: 80%;
-  height: 80%;
+  height: auto;
 }
 
 .close-modal {
@@ -250,16 +250,16 @@ button:hover {
 /* ----------------------- Main Start -----------------------*/
 
 .main-container {
-  /* border: 5px solid #1a1a1a; */
-  border-radius: 8px;
+  /* border: 5px solid #1a1a1a;
+  border-radius: 8px; */
   height: 100vh;
   /*подгонка под размер окна*/
 
   display: grid;
-  grid-template-columns: auto 2fr;
+  grid-template-columns: 35% 2fr;
 }
 
-/* ----------------------- Main End -----------------------*/
+/* ----------------------- Main End ----------------------- */
 
 /* ----------------------- Sidebar Start -----------------------*/
 
@@ -283,6 +283,8 @@ button:hover {
   list-style-type: none;
   margin: 5px;
   padding: 0;
+
+  justify-content: center;
 }
 
 .card {
@@ -328,33 +330,15 @@ button:hover {
   border: 3px solid red;
 }
 
-@media (max-width: 1100px) {
+@media (max-width: 1500px) {
   .cards {
     grid-template-columns: repeat(1, auto);
   }
-}
 
-@media (max-width: 800px) {
-  .main-container {
-    display: flex;
-    flex-direction: row;
-    flex-wrap: wrap;
-    justify-content: center;
-    align-items: center;
-    border: 0;
-  }
-  .sidebar-container {
-    overflow-y: hidden;
-  }
-  .cards {
-    grid-template-columns: repeat(2, auto);
-  }
-
-  .warnings-container {
-    width: 250px;
+  .card {
+    width: 100%;
   }
 }
-
 /* ----------------------- Sidebar End -----------------------*/
 
 /* ----------------------- Video Start -----------------------*/

@@ -1,7 +1,31 @@
+//Sidenav Warnings
+//Я потом нормально сделаю, честно..
+function openNav() {
+  document.querySelector(".warnings-container").style.width = "65%";    
+}
+function closeNav() {
+  document.querySelector(".warnings-container").style.width = "0";
+}
+
+
+
+
+//Table func
+let table = document.querySelector('.warnings-table')
+let cells = document.getElementsByName('alarmCell')
+
+for (let cell of cells) {
+  cell.onclick = function () {
+    console.log('Cell click!')
+    getImage()
+  }
+}
+
+
+//Cards
 let cards = document.querySelectorAll('.card')
 let videoName = document.querySelector('.input-info')
 let videoInput = document.getElementById('video-input')
-
 
 // Input name func
 for (let card of cards) {
@@ -9,6 +33,8 @@ for (let card of cards) {
     console.log('click on card!')
     //input name
     videoName.textContent = card.textContent;
+
+    closeNav();
   }
 }
 
@@ -22,16 +48,9 @@ for (let tag of videoTags) {
   }
 }
 
-//Right Click Menu
-for (let card of cards) {
-  card.onclick = function () {
-    console.log('click on card!')
-    //input name
-    videoName.textContent = card.textContent;
-  }
-}
-//Right Click Menu
+let tests = document.querySelectorAll('.input-name')
 
+//Right Click Menu
 //Open menu when click on card
 for (let card of cards) {
   card.oncontextmenu = rightClick;
@@ -95,33 +114,22 @@ for (let button of buttons) {
 }
 
 //Add Input
-let inputName = document.getElementById('name')
-let inputSource = document.getElementById('source')
-let addButton = document.getElementById('add-input')
+// let inputName = document.getElementById('name')
+// let inputSource = document.getElementById('source')
+// let addButton = document.getElementById('add-input')
 
-inputName.onkeyup = function () {
-  document.getElementById('input-name').textContent = inputName.value;
-}
-inputSource.onkeyup = function () {
-  document.getElementById('input-video').src = inputSource.value
-}
-addButton.onclick = function () {
-  let clone = document.getElementById('example-card').cloneNode(true)
-  clone.removeAttribute('id')
-  document.querySelector('.cards').append(clone)
+// inputName.onkeyup = function () {
+//   document.getElementById('input-name').textContent = inputName.value;
+// }
+// inputSource.onkeyup = function () {
+//   document.getElementById('input-video').src = inputSource.value
+// }
+// addButton.onclick = function () {
+//   let clone = document.getElementById('example-card').cloneNode(true)
+//   clone.removeAttribute('id')
+//   document.querySelector('.cards').append(clone)
+  
+//   console.log('New card created')
+// }
 
-
-
-  console.log('New card created')
-}
-
-
-//Sidenav Warnings
-//Я потом нормально сделаю, честно..
-function openNav() {
-  document.querySelector(".warnings-container").style.width = "600px";
-}
-function closeNav() {
-  document.querySelector(".warnings-container").style.width = "0";
-}
 
