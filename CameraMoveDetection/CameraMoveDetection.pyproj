@@ -26,9 +26,6 @@
     <EnableUnmanagedDebugging>false</EnableUnmanagedDebugging>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="CameraApp\db\database.py">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Include="CameraApp\db\wrapper.py">
       <SubType>Code</SubType>
     </Compile>
@@ -53,8 +50,6 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="CameraApp\db\CameraMoveDetection.mdf" />
-    <Content Include="CameraApp\db\CameraMoveDetection_log.ldf" />
     <Content Include="CameraApp\static\js\requests.js" />
     <Content Include="CameraApp\static\js\script.js" />
     <Content Include="CameraApp\static\styles\style.css" />
@@ -68,6 +63,9 @@
     <Content Include="datasets\seVidTest.mp4" />
     <Content Include="datasets\xNFfw.png" />
     <Content Include="datasets\xNFfw1.png" />
+    <Content Include="db\CameraMoveDetection.mdf" />
+    <Content Include="db\CameraMoveDetection_log.ldf" />
+    <Content Include="db\DBCreate.sql" />
     <Content Include="requirements.txt" />
   </ItemGroup>
   <ItemGroup>
@@ -78,6 +76,7 @@
     <Folder Include="CameraApp\templates\" />
     <Folder Include="datasets\" />
     <Folder Include="CameraApp\" />
+    <Folder Include="db\" />
   </ItemGroup>
   <ItemGroup>
     <InterpreterReference Include="CondaEnv|CondaEnv|CameraMoveDetection" />

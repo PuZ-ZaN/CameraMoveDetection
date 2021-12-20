@@ -4,6 +4,7 @@ from CameraApp import app
 from . import CameraMoveDetection as CMD
 from .db.wrapper import DBApi
 from .SmartThreadPool import SmartThreadPool, CPUCountUnavaiableException, MaxThreadsCountReachedException
+import traceback
 
 ThreadsPool= SmartThreadPool()
 alarmlist = []
@@ -15,8 +16,12 @@ def index():
 
 @app.route("/addinput", methods=['POST'])
 def addInput():
-	DBApi.insert(request.form['name'], request.form['source'])
-	return {request.form['name'] : request.form['source'] }
+	try:
+		request_data = request.get_json()
+		DBApi.insert(request_data['name'], request_data['source']) #,request.form['isMovedBorder'],request.form['isMovingBorder']
+	except Exception as e:
+		return traceback.format_exc()
+	return "OK"
 
 @app.route("/runscript", methods=['POST'])
 @app.route("/run", methods=['POST'])
@@ -30,13 +35,14 @@ def runscript():
 
 @app.route("/callback", methods=['POST'])
 def callback():
+	request_data = request.get_json()
 	alarmlist.append({
-		'name' : request.form['name'],
-		'timestamp': request.form['timestamp'],
-		'elapsedSecs': request.form['elapsedSecs'],
-		'IsMoving': request.form['IsMoving'],
-		'IsMoved': request.form['IsMoved'],
-		'frame' : request.form['frame']
+		'name' : request_data['name'],
+		'timestamp': request_data['timestamp'],
+		'elapsedSecs': request_data['elapsedSecs'],
+		'IsMoving': request_data['IsMoving'],
+		'IsMoved': request_data['IsMoved'],
+		'frame' : request_data['frame']
 		})
 	return "OK"
 
@@ -83,3 +89,38 @@ def getImage():
 	if len(alarmlist)>id and id>0:
 		return alarmlist[id]['frame']
 	return "Incorrect id"
+
+@app.route('/delete', methods=['POST'])
+def delete():
+	try:
+		request_data = request.get_json()
+		#name = request_data["name"]
+		#source = request_data["source"]
+
+		DBApi.delete(request_data ['name'],request_data['source'],request_data['isMovedBorder'],request_data['isMovingBorder'])
+	except:
+		return "NOT OK"
+	return "OK"
+
+@app.route('/edit', methods=['POST'])
+def edit():
+	try:
+		request_data = request.get_json()
+		DBApi.delete(
+			request_data['oldname'], 
+			request_data['oldsource'],
+			request_data['oldisMovedBorder'],
+			request_data['oldisMovingBorder'])
+		DBApi.insert(
+			request_data['newname'], 
+			request_data['newsource'],
+			request_data['newisMovedBorder'],
+			request_data['newisMovingBorder'])
+	except:
+		return "NOT OK"
+	return "OK"
+
+@app.route("/cameraList", methods=['POST'])
+def cameraList():
+	cameras = DBApi.selectAll()
+	return jsonify(result=cameras)

@@ -10,7 +10,7 @@ import sys
 from .History import History
 import base64
 
-def CalculatePhaseCorrelate(name = "", source = "", callbackUrl="/callback", err_list = {}, host_id = '', host_pulse = {}, isMovedBorder = 100, isMovingBorder = 100, etalonChangeEveryNFps = 500, etalonHistoryLen=50, staticHistoryLen=700,framesBeforeTrigger=10):
+def CalculatePhaseCorrelate(name = "", source = "", isMovedBorder = 100, isMovingBorder = 100, callbackUrl=r"http://localhost:5555/callback", err_list = {}, host_id = '', host_pulse = {}, etalonChangeEveryNFps = 500, etalonHistoryLen=50, staticHistoryLen=700):
 	try:
 		camera = VideoStream(source).start()
 		time.sleep(1.0)
@@ -30,21 +30,11 @@ def CalculatePhaseCorrelate(name = "", source = "", callbackUrl="/callback", err
 		vectorPEtalon = None
 		vectorPStatic = None
 
-		prevFrames=[]
-		prefFramesCounter=0
-
 		while (True):
 			try:
 				frame = camera.read()#grab the frame from the threaded video file stream
 				if(frame is None):
 					break
-
-				#save prev N frames
-				#if prefFramesCounter<framesBeforeTrigger:
-				#	prevFrames[prefFramesCounter] = frame
-				#	prefFramesCounter+=1
-				#else:
-				#	prefFramesCounter=0;
 
 				imGray = cv2.cvtColor(frame.astype('float32'), cv2.COLOR_BGR2GRAY)#convert it to grayscale (while still retaining 3 channels)
 
@@ -68,7 +58,7 @@ def CalculatePhaseCorrelate(name = "", source = "", callbackUrl="/callback", err
 				
 				#gray update functionality
 				fpsCounter+=1
-				if fpsCounter % etalonChangeEveryNFps == 0:
+				if etalonChangeEveryNFps!=0 and fpsCounter % etalonChangeEveryNFps == 0:
 					prev_gray = imGray
 			
 
@@ -88,15 +78,13 @@ def CalculatePhaseCorrelate(name = "", source = "", callbackUrl="/callback", err
 				if (IsMoving or IsMoved):
 					retval, buffer = cv2.imencode('.jpg', frame)
 					jpg_as_text = base64.b64encode(buffer)
-					r = requests.post(r"http://localhost:5555/callback",data={ #TODO Починить гавно
+					r = requests.post(callbackUrl,data={
 						'name' : str(name),
 						'timestamp': str(thisTime),
 						'elapsedSecs':str(elapsedSecs),
 						'IsMoving':str(IsMoving),
 						'IsMoved':str(IsMoved),
 						'frame':jpg_as_text
-						#'prevFrames' : prevFrames, 
-						#'frame':frame
 						})
 
 			except Exception as e:
