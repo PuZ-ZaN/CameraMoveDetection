@@ -11,11 +11,10 @@
     <OutputPath>.</OutputPath>
     <Name>CameraMoveDetection</Name>
     <RootNamespace>CameraMoveDetection</RootNamespace>
-    <InterpreterId>MSBuild|.env|$(MSBuildProjectFullPath)</InterpreterId>
+    <InterpreterId>CondaEnv|CondaEnv|CameraMoveDetection</InterpreterId>
     <SuppressPackageInstallationPrompt>True</SuppressPackageInstallationPrompt>
     <LaunchProvider>Web launcher</LaunchProvider>
     <WebBrowserUrl>http://localhost:5555</WebBrowserUrl>
-    <SuppressEnvironmentCreationPrompt>True</SuppressEnvironmentCreationPrompt>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
     <DebugSymbols>true</DebugSymbols>
@@ -26,6 +25,9 @@
     <EnableUnmanagedDebugging>false</EnableUnmanagedDebugging>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="CameraApp\db\database.py">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="CameraApp\db\wrapper.py">
       <SubType>Code</SubType>
     </Compile>
@@ -78,17 +80,6 @@
   </ItemGroup>
   <ItemGroup>
     <InterpreterReference Include="CondaEnv|CondaEnv|CameraMoveDetection" />
-  </ItemGroup>
-  <ItemGroup>
-    <Interpreter Include=".env\">
-      <Id>.env</Id>
-      <Version>3.7</Version>
-      <Description>.env (Python 3.7 (64-bit))</Description>
-      <InterpreterPath>Scripts\python.exe</InterpreterPath>
-      <WindowsInterpreterPath>Scripts\pythonw.exe</WindowsInterpreterPath>
-      <PathEnvironmentVariable>PYTHONPATH</PathEnvironmentVariable>
-      <Architecture>X64</Architecture>
-    </Interpreter>
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\Python Tools\Microsoft.PythonTools.targets" />
   <!-- Uncomment the CoreCompile target to enable the Build command in
