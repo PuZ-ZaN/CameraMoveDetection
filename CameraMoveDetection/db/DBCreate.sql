@@ -18,11 +18,13 @@ CREATE TABLE Camera(
 )
 GO
 
-create table Signals(
+create table Signal(
 	SignalID int primary key not null,
 	[CameraId] [int] foreign key references dbo.Camera NOT NULL,
 	[Image] text not null,
-	[TimeStamp] datetime not null
+	[TimeStamp] datetime not null,
+	[isMoved] bit Default "false" not null,
+	[isMoving] bit Default "false" not null
 )
 go
 

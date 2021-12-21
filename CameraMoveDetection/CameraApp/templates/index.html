@@ -1,141 +1,129 @@
 <!DOCTYPE html>
 <html lang="ru">
-  <head>
+<head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta http-equiv="X-UA-Compatible" content="ie=edge" />
-    <link
-      rel="stylesheet"
-      href="{{ url_for('static',filename='styles/style.css') }}"
-    />
-    <script
-      src="https://code.jquery.com/jquery-3.6.0.js"
-      integrity="sha256-H+K7U5CnXl1h5ywQfKtSj8PCmoN9aaq30gDh27Xc0jk="
-      crossorigin="anonymous"
-    ></script>
+    <link rel="stylesheet"
+          href="{{ url_for('static',filename='styles/style.css') }}" />
+    <script src="https://code.jquery.com/jquery-3.6.0.js"
+            integrity="sha256-H+K7U5CnXl1h5ywQfKtSj8PCmoN9aaq30gDh27Xc0jk="
+            crossorigin="anonymous"></script>
     <title>Camera Detection</title>
-  </head>
+</head>
 
-  <body>
+<body>
     <div class="main-container">
-      <!-- Right Click Menu -->
-      <div id="contextMenu" class="context-menu" style="display: none">
-        <ul class="menu">
-          <li class="edit">
-            <a href="#">Edit</a>
-          </li>
+        <!-- Right Click Menu -->
+        <div id="contextMenu" class="context-menu" style="display: none">
+            <ul class="menu">
+                <li class="edit">
+                    <a href="#">Edit</a>
+                </li>
 
-          <li class="delete">
-            <a href="#" onclick="deleteInput()">Delete</a>
-          </li>
-        </ul>
-      </div>
+                <li class="delete">
+                    <a href="#" onclick="deleteInput()">Delete</a>
+                </li>
+            </ul>
+        </div>
 
-      <div class="sidebar-container">
-        <div class="settings-container">
-          <!-- Modal Buttons -->
-          <button class="modal-btn" id="add">Добавить камеру</button>
-          <button class="warnings-btn" onclick="openNav()">Ошибки</button>
-          <!-- Modals -->
-          <!-- Settings -->
-          <div id="screen" class="modal">
-            <div class="modal-content">Screen Here!</div>
-          </div>
+        <div class="sidebar-container">
+            <div class="settings-container">
+                <!-- Modal Buttons -->
+                <button class="modal-btn" id="add">Добавить камеру</button>
+                <button class="warnings-btn" onclick="openNav()">Ошибки</button>
+                <label class="switch">
+                    <input type="checkbox">
+                    <span class="slider round"></span>
+                </label>
+                <!-- Modals -->
+                <!-- Settings -->
+                <div id="screen" class="modal">
+                    <div class="modal-content">Screen Here!</div>
+                </div>
 
-          <!-- Add Input -->
-          <div id="add" class="modal">
-            <div class="modal-content">
-              <div class="add-form">
-                <form id="frm" action="" method="post" name="form">
-                  <p>
-                    <label for="name">Введите имя:</label>
-                    <input id="name" name="name" type="text" required />
-                  </p>
+                <!-- Add Input -->
+                <div id="add" class="modal">
+                    <div class="modal-content">
+                        <div class="add-form">
+                            <form id="frm" action="" method="post" name="form">
+                                <p>
+                                    <label for="name">Введите имя:</label>
+                                    <input id="name" name="name" type="text" required />
+                                </p>
 
-                  <p>
-                    <label for="source">Введите ссылку:</label>
-                    <input id="source" name="source" type="text" required />
-                  </p>
+                                <p>
+                                    <label for="source">Введите ссылку:</label>
+                                    <input id="source" name="source" type="text" required />
+                                </p>
 
-                  <p>
-                    <label for="isMovedBorder"
-                      >Введите значение границы (isMovedBorder):</label
-                    >
-                    <input
-                      id="isMovedBorder"
-                      name="isMovedBorder"
-                      type="number"
-                      required
-                    />
-                  </p>
+                                <p>
+                                    <label for="isMovedBorder">Введите значение границы (isMovedBorder):</label>
+                                    <input id="isMovedBorder"
+                                           name="isMovedBorder"
+                                           type="number"
+                                           required />
+                                </p>
 
-                  <p>
-                    <label for="isMovingBorder "
-                      >Введите значение границы (isMovingBorder):</label
-                    >
-                    <input
-                      id="isMovingBorder"
-                      name="isMovingBorder"
-                      type="number"
-                      required
-                    />
-                  </p>
+                                <p>
+                                    <label for="isMovingBorder ">Введите значение границы (isMovingBorder):</label>
+                                    <input id="isMovingBorder"
+                                           name="isMovingBorder"
+                                           type="number"
+                                           required />
+                                </p>
 
-                  <div class="add-btn">
-                    <input
-                      type="button"
-                      value="Отправить"
-                      onclick="addinput();"
-                    />
-                  </div>
-                  <!-- <button onclick="addinput()">Отправить</button> -->
-                </form>
-              </div> 
-              <span id="add" class="close-modal">&times;</span>            
+                                <div class="add-btn">
+                                    <input type="button"
+                                           value="Отправить"
+                                           onclick="addinput();" />
+                                </div>
+                                <!-- <button onclick="addinput()">Отправить</button> -->
+                            </form>
+                        </div>
+                        <span id="add" class="close-modal">&times;</span>
+                    </div>
+                </div>
             </div>
-          </div>
+
+            <!-- Sidebar Warnings -->
+            <div class="warnings-container">
+                <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
+                <button onclick="getAlarmList()">Обновить данные</button>
+
+                <div class="warnings-table">
+                    <table id="alarmList">
+                        <tr>
+                            <th>Имя камеры</th>
+                            <th>Время срабатывания</th>
+                        </tr>
+                        <tbody>
+                        <td name="alarmCell">Test Name</td>
+                        <td name="alarmCell">Test Time Stamp</td>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Cards -->
+            <div class="cards">
+                {% for camera in CameraList %}
+
+                <div class="card">
+                    <div class="input-name">ID: {{camera['CameraID']}}, NM: {{camera['Name']}}</div>
+                    <video src="{{ camera['Url'] }}" preload="metadata"></video>
+                </div>
+
+                {% endfor %}
+            </div>
         </div>
 
-        <!-- Sidebar Warnings -->
-        <div class="warnings-container">
-          <a href="javascript:void(0)" class="closebtn" onclick="closeNav()"
-            >&times;</a
-          >
-          <button onclick="getAlarmList()">Обновить данные</button>
-
-          <div class="warnings-table">
-            <table id="alarmList">
-              <tr>
-                <th>Имя камеры</th>
-                <th>Время срабатывания</th>
-              </tr>
-              <tbody>
-                <td name="alarmCell">Test Name</td>
-                <td name="alarmCell">Test Time Stamp</td>
-              </tbody>
-            </table>
-          </div>
+        <div class="video-container" id="tesvid">
+            <video id="video-input" src="" muted></video>
+            <div class="input-info">NO INPUT</div>
         </div>
-
-        <!-- Cards -->
-        <div class="cards">
-          {% for camera in CameraList %}
-
-          <div class="card">
-              <div class="input-name">ID: {{camera['CameraID']}}, NM: {{camera['Name']}}</div>
-            <video src="{{ camera['Url'] }}" preload="metadata"></video>
-          </div>
-
-          {% endfor %}
-        </div>
-      </div>
-
-      <div class="video-container" id="tesvid">
-        <video id="video-input" src="" muted></video>
-        <div class="input-info">NO INPUT</div>
-      </div>
     </div>
     <script src="{{ url_for('static',filename='js/script.js') }}"></script>
     <script src="{{ url_for('static',filename='js/requests.js') }}"></script>
-  </body>
+</body>
 </html>

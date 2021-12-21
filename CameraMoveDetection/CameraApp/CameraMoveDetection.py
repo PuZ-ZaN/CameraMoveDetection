@@ -10,7 +10,7 @@ import sys
 from .History import History
 import base64
 
-def CalculatePhaseCorrelate(name = "", source = "", isMovedBorder = 100, isMovingBorder = 100, callbackUrl=r"http://localhost:5555/callback", err_list = {}, host_id = '', host_pulse = {}, etalonChangeEveryNFps = 500, etalonHistoryLen=50, staticHistoryLen=700):
+def CalculatePhaseCorrelate(CameraID = "", name = "", source = "", isMovedBorder = 100, isMovingBorder = 100, callbackUrl=r"http://localhost:5555/callback", err_list = {}, host_id = '', host_pulse = {}, etalonChangeEveryNFps = 500, etalonHistoryLen=50, staticHistoryLen=700):
 	try:
 		camera = VideoStream(source).start()
 		time.sleep(1.0)
@@ -79,16 +79,18 @@ def CalculatePhaseCorrelate(name = "", source = "", isMovedBorder = 100, isMovin
 					retval, buffer = cv2.imencode('.jpg', frame)
 					jpg_as_text = base64.b64encode(buffer)
 					r = requests.post(callbackUrl,data={
-						'name' : str(name),
+						'CameraID' : CameraID,
+						'name' : name,
 						'timestamp': str(thisTime),
 						'elapsedSecs':str(elapsedSecs),
 						'IsMoving':str(IsMoving),
 						'IsMoved':str(IsMoved),
 						'frame':jpg_as_text
 						})
-
+					err_list[host_id] = f"CameraID {CameraID} saying {r}"
 			except Exception as e:
 				err_list[host_id] = traceback.format_exc()
+				print("FUCKING SLAVS")
 				break
 
 		camera.stop()

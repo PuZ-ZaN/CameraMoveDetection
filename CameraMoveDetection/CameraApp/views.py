@@ -5,9 +5,10 @@ from . import CameraMoveDetection as CMD
 from .db.wrapper import DBApi
 from .SmartThreadPool import SmartThreadPool, CPUCountUnavaiableException, MaxThreadsCountReachedException
 import traceback
+import requests
 
 ThreadsPool= SmartThreadPool()
-alarmlist = []
+#alarmlist = []
 
 @app.route("/")
 def index():
@@ -29,42 +30,34 @@ def addInput():
 		return traceback.format_exc()
 	return "OK"
 
-@app.route("/runscript", methods=['POST'])
-@app.route("/run", methods=['POST'])
-def runscript():
-	try:
-		request_data = request.get_json()
-		print(request_data['name'])
-		return ThreadsPool.new_thread(CMD.CalculatePhaseCorrelate, name=request_data['name'], source=request_data['source'], isMovedBorder = int(request_data['isMovedBorder']), isMovingBorder = int(request_data['isMovingBorder']))
-	except MaxThreadsCountReachedException as err:
-		return str(err)
+
 
 @app.route("/callback", methods=['POST'])
 def callback():
 	request_data = request.get_json()
-	alarmlist.append({
-		'name' : request_data['name'],
-		'timestamp': request_data['timestamp'],
-		'elapsedSecs': request_data['elapsedSecs'],
-		'IsMoving': request_data['IsMoving'],
-		'IsMoved': request_data['IsMoved'],
-		'frame' : request_data['frame']
-		})
-	return "OK"
+	return DBApi.SignalsInsert(
+		cameraId = request_data["CameraID"],
+		image = request_data["frame"],
+		timestamp = request_data["TimeStamp"],
+		isMoving=request_data["IsMoving"],
+		isMoved=request_data["IsMoved"]
+		)
 
 @app.route("/getAlarmList", methods=['POST'])
 @app.route("/gal", methods=['POST'])
 def getAlarmList():
-	dict_ret={}
-	for i in range(len(alarmlist)):
-		dict_ret[i]={
-			'name' : alarmlist[i]['name'],
-			'timestamp': alarmlist[i]['timestamp'],
-			'elapsedSecs': alarmlist[i]['elapsedSecs'],
-			'IsMoving': alarmlist[i]['IsMoving'],
-			'IsMoved': alarmlist[i]['IsMoved']
-		}
-	return dict_ret
+	sigs = DBApi.SignalsSelectAll()
+	return jsonify(sigs)
+	#dict_ret={}
+	#for sig in sigs:
+	#	dict_ret[sig.SignalId]={
+	#		'CameraId' : sig["CameraId"],
+	#		'Image': sig["Image"],
+	#		'TimeStamp': sig["TimeStamp"],
+	#		'IsMoved': sig["IsMoved"],
+	#		'IsMoving': sig["IsMoving"]
+	#	}
+	#return dict_ret
 
 
 @app.route("/getActiveThreads", methods=['POST'])
@@ -92,17 +85,12 @@ def getThreadsPulses():
 def getImage():
 	request_data = request.get_json()
 	id = int(request_data['id'])
-	if len(alarmlist)>id and id>0:
-		return alarmlist[id]['frame']
-	return "Incorrect id"
+	return DBApi.SignalSelectById(id)["Image"]
 
 @app.route('/delete', methods=['POST'])
 def delete():
 	try:
 		request_data = request.get_json()
-		#name = request_data["name"]
-		#source = request_data["source"]
-
 		DBApi.CamerasDelete(request_data ['name'],request_data['source'],request_data['isMovedBorder'],request_data['isMovingBorder'])
 	except:
 		return "NOT OK"
@@ -127,13 +115,36 @@ def edit():
 		return "NOT OK"
 	return "OK"
 
-@app.route("/cameraList", methods=['POST'])
+@app.route("/getCamerasData", methods=['POST'])
 def cameraList():
 	cameras = DBApi.CamerasSelectAll()
 	return jsonify(result=cameras)
 
+@app.route("/runscript", methods=['POST'])
+@app.route("/run", methods=['POST'])
+def runscript():
+	try:
+		request_data = request.get_json()
+		return ThreadsPool.new_thread(
+			CMD.CalculatePhaseCorrelate, 
+			CameraID = request_data["CameraID"],
+			name=request_data['name'], 
+			source=request_data['source'], 
+			isMovedBorder = int(request_data['isMovedBorder']), 
+			isMovingBorder = int(request_data['isMovingBorder']))
+	except MaxThreadsCountReachedException as err:
+		return str(err)
 
+@app.route("/runAll", methods=['POST'])
 def runAllWorkers():
-	pass
-
-runAllWorkers()
+	cameras = cameraList()
+	for cam in cameras:
+		r = requests.post("/run",data={
+						'CameraID' : cam["CameraID"],
+						'name' : cam["name"],
+						'source': cam["source"],
+						'isMovedBorder':str(cam["isMovedBorder"]),
+						'isMovingBorder':str(cam["isMovingBorder"])
+						})
+		print(r)
+	return cameras
