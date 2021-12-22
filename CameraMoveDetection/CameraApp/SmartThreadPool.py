@@ -47,6 +47,15 @@ class SmartThreadPool:
                 return True  
         return False
 
+    def abort_all(self) -> bool:
+        try:
+            for thread in self.__threads.keys():
+                self.__threads[thread].terminate()
+                del self.__threads[thread]
+            return True
+        except:
+            return False
+
     @property
     def active_threads_count(self):
         return len(self.__threads.keys())
