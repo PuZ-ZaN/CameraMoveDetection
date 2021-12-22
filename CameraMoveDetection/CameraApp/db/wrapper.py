@@ -1,14 +1,26 @@
-from flask import Flask
+from flask import Flask, jsonify
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy.exc import IntegrityError
+import json
 #from sqlalchemy.types import Text
 from CameraApp import app
+from datetime import datetime
 #app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'mssql+pyodbc://root:root@localhost/CameraMoveDetection?driver=ODBC Driver 17 for SQL Server'
 #SQLALCHEMY_TRACK_MODIFICATIONS = False
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 db = SQLAlchemy(app)
 
+from sqlalchemy.inspection import inspect
+
+class Serializer(object):
+
+	def serialize(self):
+		return {c: getattr(self, c) for c in inspect(self).attrs.keys()}
+
+	@staticmethod
+	def serialize_list(l):
+		return [m.serialize() for m in l]
 
 class Camera(db.Model):
 	__tablename__ = 'Camera'
@@ -18,15 +30,25 @@ class Camera(db.Model):
 	IsMovedBorder = db.Column(db.Integer, nullable=False)
 	IsMovingBorder = db.Column(db.Integer, nullable=False)
 
-	def __init__(self,CameraId, Name, Url,isMovedBorder,isMovingBorder):
-		self.CameraId = CameraId
-		self.Name = Name
-		self.Url = Url
-		self.isMovedBorder = isMovedBorder
-		self.isMovingBorder = isMovingBorder
+	#def __init__(self, Name='', Url='',isMovedBorder='100',isMovingBorder='100'):
+	#	self.CameraId = CameraId
+	#	self.Name = Name
+	#	self.Url = Url
+	#	self.IsMovedBorder = int(isMovedBorder)
+	#	self.IsMovingBorder = int(isMovingBorder)
 
 	def __repr__(self):
 		return f'{self.CameraId} {self.Name} {self.Url} {self.isMovedBorder} {self.isMovingBorder}'
+
+	def dict(self):
+		return {
+			"CameraId":self.CameraId,
+			"Name":self.Name,
+			"Url":self.Url ,
+			"IsMovedBorder":self.IsMovedBorder ,
+			"IsMovingBorder":self.IsMovingBorder
+		  }
+
 
 class Signal(db.Model):
 	__tablename__ = 'Signal'
@@ -36,14 +58,24 @@ class Signal(db.Model):
 	IsMoved = db.Column(db.Boolean,server_default="false", nullable=False)
 	IsMoving = db.Column(db.Boolean,server_default="false", nullable=False)
 	 
-	def __init__(self,CameraId,Image,TimeStamp,IsMoved,IsMoving):
-		self.CameraId = int(CameraId)
-		self.TimeStamp = TimeStamp
-		self.Image = Image
-		self.IsMoved = bool(IsMoved)
-		self.IsMoving = bool(IsMoving)
+	#def __init__(self,CameraId,Image,TimeStamp,IsMoved,IsMoving):
+	#	self.CameraId = int(CameraId)
+	#	self.TimeStamp = TimeStamp
+	#	self.Image = Image
+	#	self.IsMoved = bool(IsMoved)
+	#	self.IsMoving = bool(IsMoving)
+
 	def __repr__(self):
 		return f'{self.CameraId} {self.TimeStamp} {self.Image} {IsMoved} {IsMoving}'
+
+	def dict(self):
+		return {
+		  "CameraId":self.CameraId,
+		  "TimeStamp":self.TimeStamp,
+		  "Image":self.Image,
+		  "IsMoved":self.IsMoved,
+		  "IsMoving":self.IsMoving
+		  }
 
 
 class DBApi():
@@ -52,52 +84,72 @@ class DBApi():
 	def CamerasSelectAll():
 		try:
 			resultFromDB = Camera.query.all()
-			result = []
-			for camera in resultFromDB:
-				result.append({
-					 "CameraID" : camera.CameraId,
-					 "Name" : camera.Name, 
-					 "Url" : camera.Url, 
-					 "isMovedBorder" : camera.isMovingBorder,
-					 "isMovedBorder": camera.isMovedBorder})
-			return result
+			ls = []
+			for i in resultFromDB:
+				ls.append(i.dict())
+			return ls
 		except IntegrityError as e:
 			return "Something wrong with DB"
+
+	def SignalsSelectAll():
+		try:
+			resultFromDB = Signal.query.all()
+			ls = []
+			for i in resultFromDB:
+				ls.append(i.dict())
+			return ls
+		except IntegrityError as e:
+				return "Something wrong with DB"
 	
 	def CamerasInsert(name='',url='',isMovingBorder='',isMovedBorder=''):
 		try:
-			db.session.add(Camera(name,url,int(isMovingBorder),int(isMovedBorder)))
+			db.session.add(Camera(
+				Name = name,
+				Url = url,
+				IsMovedBorder = int(isMovingBorder),
+				IsMovingBorder = int(isMovedBorder)))
 			db.session.commit()
 		except IntegrityError as e:
 			return "Something wrong with DB"
-		return "OK"
-
-	def CamerasDelete(cameraID: int):
-		try:
-			Camera.query.filter(Camera.CameraID == cameraID).delete()
-			db.session.commit()
-		except IntegrityError as e:
-			return "Unknown CameraID or something"
 		return "OK"
 
 	def SignalsInsert(cameraId='', timestamp='', image='',isMoved='',isMoving=''):
 		try:
-			db.session.add(Signal(CameraId=cameraId, TimeStamp=timestamp, Image=image,IsMoved=isMoved,IsMoving=isMoving))
+			db.session.add(Signal(
+				CameraId=int(cameraId), 
+				TimeStamp=datetime.strptime(timestamp, "%d/%m/%Y %H:%M:%S"), 
+				Image=image,
+				IsMoved=bool(isMoved),
+				IsMoving=bool(isMoving)))
 			db.session.commit()
 		except IntegrityError as e:
-			return "Unknown CameraID, TimeStamp or something"
+			return f"Unknown CameraID or TimeStamp already in base"
+		return "OK"
+
+	def SignalsDeleteByCameraId(cameraId):
+		try:
+			Signal.query.filter(Signal.CameraId == cameraId).delete()
+		except IntegrityError as e:
+			return f"Unknown CameraID or have undeleted signals"
+		return "OK"
+	def CamerasDelete(self,cameraID,hard):
+		try:
+			if(hard==True):
+				self.SignalsDeleteByCameraId(cameraID)
+				db.session.commit()
+			Camera.query.filter(Camera.CameraId == int(cameraID)).delete()
+			db.session.commit()
+		except IntegrityError as e:
+			return f"Unknown CameraID or have undeleted signals {e}"
 		return "OK"
 
 
-	def SignalSelectById(cameraId,timestamp):
-		return Signal.query.filter(Signal.CameraId == cameraId, Signal.TimeStamp == timestamp).first()
 
-	def SignalsSelectAll():
-		resultFromDB = Signal.query.all()
-		result = []
-		for signal in resultFromDB:
-			result.append({"CameraID" : signal.CameraID, "TimeStamp": signal.TimeStamp, "Image" : signal.Image,"IsMoved": signal.IsMoved,"IsMoving": signal.IsMoving})
-		return result
+
+	def SignalSelectById(cameraId,TimeStamp):
+		return Signal.query.filter(Signal.CameraId == cameraId, Signal.TimeStamp == TimeStamp).first()
+
+
 
 #from CameraApp.db.wrapper import db,Camera
 #db.create_all()

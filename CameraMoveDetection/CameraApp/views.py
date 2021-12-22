@@ -8,143 +8,154 @@ import traceback
 import requests
 
 ThreadsPool= SmartThreadPool()
-#alarmlist = []
+workingThreadUrls = []
+threadsErrorList=[]
 
 @app.route("/")
 def index():
 	cameras = DBApi.CamerasSelectAll()
-	return render_template('index.html',CameraList=cameras)
+	return ""#render_template('index.html',CameraList=list(cameras))
 
-@app.route("/addinput", methods=['POST'])
+
+#=======CAMERAS CRUD============
+@app.route("/CameraAdd", methods=['POST'])
 def addInput():
 	try:
-		#request_data = request.get_json()
-		#print(request_data)
-		print(request.form)
+		if len(request.form)>0:
+			request_data = request.form
+		else:
+			request_data = request.get_json()
+			if len(request_data)==0:
+				return "KeyError"
 		DBApi.CamerasInsert(
-			name=request.form['name'], 
-			source=request.form['source'], 
-			isMovedBorder = request.form['isMovedBorder'], 
-			isMovingBorder = request.form['isMovingBorder'])
+			name=request_data['Name'], 
+			url=request_data['Url'],
+			isMovingBorder = request_data['IsMovingBorder'],
+			isMovedBorder = request_data['IsMovedBorder']
+			)
 	except Exception as e:
 		return traceback.format_exc()
 	return "OK"
 
-
-
-@app.route("/callback", methods=['POST'])
-def callback():
-	request_data = request.get_json()
-	return DBApi.SignalsInsert(
-		cameraId = request_data["CameraID"],
-		image = request_data["frame"],
-		timestamp = request_data["TimeStamp"],
-		isMoving=request_data["IsMoving"],
-		isMoved=request_data["IsMoved"]
-		)
-
-@app.route("/getAlarmList", methods=['POST'])
-@app.route("/gal", methods=['POST'])
-def getAlarmList():
-	sigs = DBApi.SignalsSelectAll()
-	return jsonify(sigs)
-	#dict_ret={}
-	#for sig in sigs:
-	#	dict_ret[sig.SignalId]={
-	#		'CameraId' : sig["CameraId"],
-	#		'Image': sig["Image"],
-	#		'TimeStamp': sig["TimeStamp"],
-	#		'IsMoved': sig["IsMoved"],
-	#		'IsMoving': sig["IsMoving"]
-	#	}
-	#return dict_ret
-
-
-@app.route("/getActiveThreads", methods=['POST'])
-@app.route("/gat", methods=['POST'])
-def getActiveThreads():
-	res = f"alive threads: {ThreadsPool.active_threads_count}\n"
-	_counter = 0
-	for key in ThreadsPool.threads_list.keys():
-		res += f'{_counter}: internal id: {key} - {ThreadsPool.threads_list[key]}\n'
-		_counter += 1
-	return res 
-
-@app.route('/getThreadsErrors', methods=['POST'])
-@app.route('/gte', methods=['POST'])
-def getThreadsErrors():
-	return ThreadsPool.threads_err
-
-@app.route('/getThreadsPulses', methods=['POST'])
-@app.route('/p', methods=['POST'])
-def getThreadsPulses():
-	return ThreadsPool.threads_pulses
-
-
-@app.route('/getImage', methods=['POST'])
-def getImage():
-	request_data = request.get_json()
-	id = int(request_data['id'])
-	return DBApi.SignalSelectById(id)["Image"]
-
-@app.route('/delete', methods=['POST'])
-def delete():
+@app.route('/CameraDeleteById', methods=['POST'])
+def CameraDeleteById():
 	try:
 		request_data = request.get_json()
-		DBApi.CamerasDelete(request_data ['name'],request_data['source'],request_data['isMovedBorder'],request_data['isMovingBorder'])
-	except:
-		return "NOT OK"
-	return "OK"
+		print(bool(request_data['Hard']))
+		res = DBApi.CamerasDelete(DBApi,request_data['Id'],bool(request_data['Hard']))
+	except Exception as e:
+		return f"NOT OK {e}"
+	return res
 
-@app.route('/edit', methods=['POST'])
+@app.route('/CameraEdit', methods=['POST'])
 def edit():
 	try:
 		request_data = request.get_json()
 		#TODO need optimization
 		DBApi.CamerasDelete(
-			request_data['oldname'], 
-			request_data['oldsource'],
-			request_data['oldisMovedBorder'],
-			request_data['oldisMovingBorder'])
+			request_data['oldName'], 
+			request_data['oldUrl'],
+			request_data['oldIsMovedBorder'],
+			request_data['oldIsMovingBorder'])
 		DBApi.CamerasInsert(
-			request_data['newname'], 
-			request_data['newsource'],
-			request_data['newisMovedBorder'],
-			request_data['newisMovingBorder'])
+			request_data['newName'], 
+			request_data['newUrl'],
+			request_data['newIsMovedBorder'],
+			request_data['newIsMovingBorder'])
 	except:
 		return "NOT OK"
 	return "OK"
 
-@app.route("/getCamerasData", methods=['POST'])
+@app.route("/Cameras", methods=['POST'])
 def cameraList():
 	cameras = DBApi.CamerasSelectAll()
-	return jsonify(result=cameras)
+	return jsonify(cameras)
 
-@app.route("/runscript", methods=['POST'])
-@app.route("/run", methods=['POST'])
+#=======SIGNALS CRUD============
+@app.route("/SignalAdd", methods=['POST'])
+def AddNewSignal():
+	if request.form is None:
+		request_data = request.form
+	else:
+		request_data = request.get_json()
+		if request_data is None:
+			return "KeyError"
+	return DBApi.SignalsInsert(
+		cameraId = request_data["CameraID"],
+		image = request_data["Frame"],
+		timestamp = request_data["TimeStamp"],
+		isMoving=request_data["IsMoving"],
+		isMoved=request_data["IsMoved"]
+		)
+
+@app.route("/Signals", methods=['POST'])
+def SignalsGet():
+	sigs = DBApi.SignalsSelectAll()
+	print(sigs)
+	return jsonify(sigs)
+
+@app.route('/SignalGetImageByIdAndTimestamp', methods=['POST'])
+def GetSignalImage():
+	try:
+		request_data = request.get_json()
+		id = int(request_data['Id'])
+		ts = request_data['TimeStamp']
+		res = DBApi.SignalSelectById(id,ts).Image
+		if(res is None):
+			return "Nothing"
+		return {"Url":res}
+	except KeyError:
+		return "Unknows Id!"
+	except Exception as e:
+		return f"Something Wrong! {e}"
+
+#=======THREADS INFO============
+@app.route("/Threads", methods=['POST'])
+def ThreadsGetActive():
+	res = [{
+		"Active threads":f"{ThreadsPool.active_threads_count}",
+		"Errors": ThreadsPool.threads_err, 
+		"Pulses":ThreadsPool.threads_pulses}]
+	_counter = 0
+	for key in ThreadsPool.threads_list.keys():
+		res.append({ key : f"internal id: {key} {ThreadsPool.threads_list[key]}" })
+		_counter += 1
+	return {"res":res,"Errors":threadsErrorList}
+
+@app.route("/ThreadsErrorHandler", methods=['POST'])
+def ThreadsErrorHandler():
+	if request.form is None:
+		request_data = request.form
+	else:
+		request_data = request.get_json()
+		if request_data is None:
+			return "KeyError"
+	threadsErrorList.append(request_data["ErrorText"])
+
+#=======THREADS CONTROL============
+@app.route("/ThreadRun", methods=['POST'])
 def runscript():
 	try:
 		request_data = request.get_json()
 		return ThreadsPool.new_thread(
 			CMD.CalculatePhaseCorrelate, 
 			CameraID = request_data["CameraID"],
-			name=request_data['name'], 
-			source=request_data['source'], 
-			isMovedBorder = int(request_data['isMovedBorder']), 
-			isMovingBorder = int(request_data['isMovingBorder']))
+			Url=request_data['Url'], 
+			IsMovedBorder = int(request_data['IsMovedBorder']), 
+			IsMovingBorder = int(request_data['IsMovingBorder']))
 	except MaxThreadsCountReachedException as err:
 		return str(err)
 
-@app.route("/runAll", methods=['POST'])
+@app.route("/ThreadsRunAll", methods=['POST'])
 def runAllWorkers():
-	cameras = cameraList()
+	cameras = DBApi.CamerasSelectAll()
 	for cam in cameras:
-		r = requests.post("/run",data={
-						'CameraID' : cam["CameraID"],
-						'name' : cam["name"],
-						'source': cam["source"],
-						'isMovedBorder':str(cam["isMovedBorder"]),
-						'isMovingBorder':str(cam["isMovingBorder"])
-						})
-		print(r)
-	return cameras
+		if not cam["Url"] in workingThreadUrls:
+			ThreadsPool.new_thread(CMD.CalculatePhaseCorrelate,
+				CameraID = cam["CameraId"], 
+				Url=cam["Url"], 
+				IsMovedBorder = int(cam["IsMovedBorder"]), 
+				IsMovingBorder = int(cam["IsMovingBorder"]))
+
+			workingThreadUrls.append(cam["Url"])
+	return "OK"

@@ -14,7 +14,8 @@
     <InterpreterId>MSBuild|.env|$(MSBuildProjectFullPath)</InterpreterId>
     <SuppressPackageInstallationPrompt>True</SuppressPackageInstallationPrompt>
     <LaunchProvider>Web launcher</LaunchProvider>
-    <WebBrowserUrl>http://localhost:5555</WebBrowserUrl>
+    <WebBrowserUrl>
+    </WebBrowserUrl>
     <SuppressEnvironmentCreationPrompt>True</SuppressEnvironmentCreationPrompt>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
@@ -39,9 +40,6 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="CameraApp\CameraMoveDetection.py" />
-    <Compile Include="CameraApp\Config.py">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Include="FlaskApp.py">
       <SubType>Code</SubType>
     </Compile>
@@ -50,6 +48,7 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="CameraApp\RESTQueriesSamples.txt" />
     <Content Include="CameraApp\static\js\requests.js" />
     <Content Include="CameraApp\static\js\script.js" />
     <Content Include="CameraApp\static\styles\style.css" />
@@ -84,8 +83,8 @@
   <ItemGroup>
     <Interpreter Include=".env\">
       <Id>.env</Id>
-      <Version>3.8</Version>
-      <Description>.env (Python 3.8 (64-bit))</Description>
+      <Version>3.7</Version>
+      <Description>.env (Python 3.7 (64-bit))</Description>
       <InterpreterPath>Scripts\python.exe</InterpreterPath>
       <WindowsInterpreterPath>Scripts\pythonw.exe</WindowsInterpreterPath>
       <PathEnvironmentVariable>PYTHONPATH</PathEnvironmentVariable>

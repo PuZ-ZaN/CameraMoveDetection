@@ -1,6 +1,6 @@
-from imutils.video import VideoStream		#read frames from source
+from imutils.video import VideoStream		#read Frames from Url
 from math import sqrt						#calc change vector
-import numpy as np							#frame format
+import numpy as np							#Frame format
 import time									#calc fps, elapsed time, etc.
 import cv2									#using phaseCorrelate func
 import requests								#call url when camera is moving(-ed)
@@ -10,9 +10,9 @@ import sys
 from .History import History
 import base64
 
-def CalculatePhaseCorrelate(CameraID = "", name = "", source = "", isMovedBorder = 100, isMovingBorder = 100, callbackUrl=r"http://localhost:5555/callback", err_list = {}, host_id = '', host_pulse = {}, etalonChangeEveryNFps = 500, etalonHistoryLen=50, staticHistoryLen=700):
+def CalculatePhaseCorrelate(CameraID = "", Url = "", IsMovedBorder = 100, IsMovingBorder = 100, callbackUrl=r"http://localhost:5555/SignalAdd", err_list = {}, host_id = '', host_pulse = {}, etalonChangeEveryNFps = 500, etalonHistoryLen=50, staticHistoryLen=700):
 	try:
-		camera = VideoStream(source).start()
+		camera = VideoStream(Url).start()
 		time.sleep(1.0)
 
 		prev_gray = None
@@ -25,18 +25,18 @@ def CalculatePhaseCorrelate(CameraID = "", name = "", source = "", isMovedBorder
 		pEtalonAvg = 0
 		pStaticAvg = 0
 		_prev_time = time.time()
-		frame = None
+		Frame = None
 		imGray = None
 		vectorPEtalon = None
 		vectorPStatic = None
 
 		while (True):
 			try:
-				frame = camera.read()#grab the frame from the threaded video file stream
-				if(frame is None):
+				Frame = camera.read()#grab the Frame from the threaded video file stream
+				if(Frame is None):
 					break
 
-				imGray = cv2.cvtColor(frame.astype('float32'), cv2.COLOR_BGR2GRAY)#convert it to grayscale (while still retaining 3 channels)
+				imGray = cv2.cvtColor(Frame.astype('float32'), cv2.COLOR_BGR2GRAY)#convert it to grayscale (while still retaining 3 channels)
 
 				if(prev_gray is None):
 					prev_gray = imGray
@@ -72,20 +72,18 @@ def CalculatePhaseCorrelate(CameraID = "", name = "", source = "", isMovedBorder
 				else:
 					elapsedSecs = 0
 
-				IsMoving = pEtalonAvg > isMovingBorder
-				IsMoved = pStaticAvg > isMovedBorder
-				host_pulse[host_id] = f"{str(datetime.now())} :: frames elapsed - {fpsCounter} :: elapsed secs - {elapsedSecs} :: pEthalon - {pEtalonAvg} :: pStatic - {pStaticAvg}"
+				IsMoving = pEtalonAvg > IsMovingBorder
+				IsMoved = pStaticAvg > IsMovedBorder
+				host_pulse[host_id] = f"{str(datetime.now())} :: Frames elapsed - {fpsCounter} :: elapsed secs - {elapsedSecs} :: pEthalon - {pEtalonAvg} :: pStatic - {pStaticAvg}"
 				if (IsMoving or IsMoved):
-					retval, buffer = cv2.imencode('.jpg', frame)
+					retval, buffer = cv2.imencode('.jpg', Frame)
 					jpg_as_text = base64.b64encode(buffer)
 					r = requests.post(callbackUrl,data={
 						'CameraID' : CameraID,
-						'name' : name,
-						'timestamp': str(thisTime),
-						'elapsedSecs':str(elapsedSecs),
+						'TimeStamp': str(thisTime),
 						'IsMoving':str(IsMoving),
 						'IsMoved':str(IsMoved),
-						'frame':jpg_as_text
+						'Frame':jpg_as_text
 						})
 					err_list[host_id] = f"CameraID {CameraID} saying {r}"
 			except Exception as e:
@@ -97,3 +95,5 @@ def CalculatePhaseCorrelate(CameraID = "", name = "", source = "", isMovedBorder
 		err_list[host_id] = f'success finish {fpsCounter}'
 	except Exception as e:
 		err_list[host_id] = traceback.format_exc()
+	err_list[host_id] = "End"
+	print("END")
