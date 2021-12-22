@@ -139,12 +139,16 @@ def runscript():
 def runAllWorkers():
 	cameras = cameraList()
 	for cam in cameras:
-		r = requests.post("/run",data={
+		requests.post("/run",data={
 						'CameraID' : cam["CameraID"],
 						'name' : cam["name"],
 						'source': cam["source"],
 						'isMovedBorder':str(cam["isMovedBorder"]),
 						'isMovingBorder':str(cam["isMovingBorder"])
 						})
-		print(r)
 	return cameras
+
+
+@app.route('/killAll', methods=['POST'])
+def killAllWorkers():
+	ThreadsPool.abort_all();
