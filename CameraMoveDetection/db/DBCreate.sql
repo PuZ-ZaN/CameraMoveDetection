@@ -10,21 +10,21 @@ GO
 
 /*Drop table Camera;*/
 CREATE TABLE Camera(
-	CameraId [int] primary key identity(1,1) NOT NULL,
-	Name [varchar](50) unique NOT NULL,
-	Url [varchar](200) unique NOT NULL,
-	isMovingBorder [int] NOT NULL,
-	isMovedBorder [int] NOT NULL,
+	[CameraId] int primary key identity(1,1) NOT NULL,
+	[Name] varchar(50) unique NOT NULL,
+	[Url] text NOT NULL,
+	[IsMovingBorder] int NOT NULL,
+	[IsMovedBorder] int NOT NULL
 )
 GO
 
 create table Signal(
-	SignalID int primary key not null,
 	[CameraId] [int] foreign key references dbo.Camera NOT NULL,
-	[Image] text not null,
 	[TimeStamp] datetime not null,
-	[isMoved] bit Default "false" not null,
-	[isMoving] bit Default "false" not null
+	[isMoved] bit Default 0 not null,
+	[isMoving] bit Default 0 not null,
+	[Image] text not null,
+	Constraint PK_Clustered_CameraId_TimeStamp primary key clustered (CameraId,TimeStamp)
 )
 go
 
