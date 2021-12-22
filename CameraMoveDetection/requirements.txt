@@ -5,6 +5,5 @@ Flask-SQLAlchemy==2.5.1
 pyodbc==4.0.32
 requests==2.26.0
 #необязательные зависимости
-Pillow==8.4.0
 mysqlclient==2.1.0
 
