@@ -19,23 +19,23 @@ function addinput() {
 
 function SignalsSpec(id, ts) {
     console.log("SignalsSpec");
-        $.ajax({
-            type: "POST",
-            url: "/SignalsSpec",
-            data: { "CameraId": id, "TimeStamp": ts },
-            type: 'POST',
-            success: function (response) {
-                console.log(response)
-                $("#mdlda").html(`<img src=\'${response[0]['Image']}\'>`);
-                //�������� �������� response[""]
-                modal.classList.add('modal_vis'); // ��������� ��������� ����
-                modal.classList.remove('bounceOutDown'); // ������� ������ ��������
-                body.classList.add('body_block');
-            },
-            error: function (error) {
-                console.log(error);
-            }
-        });
+    $.ajax({
+        type: "POST",
+        url: "/SignalsSpec",
+        data: { "CameraId": id, "TimeStamp": ts },
+        type: 'POST',
+        success: function (response) {
+            console.log(response)
+            $("#mdlda").html(`<img src=\'${response[0]['Image']}\'>`);
+            //�������� �������� response[""]
+            modal.classList.add('modal_vis'); // ��������� ��������� ����
+            modal.classList.remove('bounceOutDown'); // ������� ������ ��������
+            body.classList.add('body_block');
+        },
+        error: function (error) {
+            console.log(error);
+        }
+    });
 }
 
 function SliderBindRunAll() {
@@ -49,7 +49,7 @@ function SliderBindRunAll() {
                 data: {},
                 type: 'POST',
                 success: function (response) {
-                    console.log(response)
+                    console.log(response);
                 },
                 error: function (error) {
                     console.log(error);
@@ -62,7 +62,7 @@ function SliderBindRunAll() {
                 data: {},
                 type: 'POST',
                 success: function (response) {
-                    console.log(response)       
+                    console.log(response);
                 },
                 error: function (error) {
                     console.log(error);
@@ -77,7 +77,7 @@ function SliderBindRunAll() {
 SliderBindRunAll();
 
 function updateDisplays() {
-    console.log("awdadw");
+    console.log("Start func updateDisplays");
     $.ajax({
         type: "POST",
         url: "/GetImages",
@@ -85,15 +85,15 @@ function updateDisplays() {
         type: 'POST',
         success: function (response) {
             console.log(response);
-            console.log("updateDisplays")
-            for (r in response) {
-                console.log(r)
+            for (var key in response) {
+                document.getElementById(`Cam${key}`).src = "data:image/png;base64," + response[key];
+                //Do stuff where key would be 0 and value would be the object
+
+                console.log('Key =', key)
+                console.log('Value =', value)
+                console.log('Test=', response[key])
             }
-            //for ((key, value) in response) {
-            //    document.getElementById(`Cam${key}`).src = "data:image/png;base64," + value;
-            //    //Do stuff where key would be 0 and value would be the object
-            //}
-            
+
         },
         error: function (error) {
             console.log(error);
@@ -103,6 +103,7 @@ function updateDisplays() {
 
 var alarmList = [];
 function getAlarmList() {
+    console.log("Start func getAlarmList");
     updateDisplays();
     $.ajax({
         type: "POST",
@@ -116,9 +117,9 @@ function getAlarmList() {
             //document.getElementById("alarmList").innerHTML = `<tr><th>WatchImg</th><th>CamId</th><th>SensTime</th><th>IsMove</th><th>IsMoving</th></tr >`;
             for (let alarm of alarmList) {
                 console.log(alarm.TimeStamp);
-                dt = new Date(alarm.TimeStamp)
+                dt = new Date(alarm.TimeStamp);
                 //onclick = SignalsSpec(${ alarm.CameraId }, '${alarm.TimeStamp}')
-                document.getElementById("alarmList").insertRow(-1).innerHTML = ` <button value="Image" onclick="SignalsSpec(${alarm.CameraId}, '${alarm.TimeStamp}')">Показать</button></td><tr onclick=SignalsSpec(3,"23-12-2021 23:00:00")><td>${alarm.CameraId}</td><td>${alarm.TimeStamp}</td><td>${alarm.IsMoved}</td><td>${alarm.IsMoving}</td></td></tr>`;
+                document.getElementById("alarmList").insertRow(-1).innerHTML = ` <button value="Image" onclick="SignalsSpec(${alarm.CameraId}, '${alarm.TimeStamp}')"></button></td><tr onclick=SignalsSpec(3,"23-12-2021 23:00:00")><td>${alarm.CameraId}</td><td>${alarm.TimeStamp}</td><td>${alarm.IsMoved}</td><td>${alarm.IsMoving}</td></td></tr>`;
                 //console.log("ANN")
                 //console.log($('#alarmList > tbody > tr:last-child'));
                 //$('#alarmList > tbody > tr:last-child').onclick = console.log("awda");//SignalsSpec(alarm.CameraId, alarm.TimeStamp);

@@ -113,7 +113,7 @@
           <a href="javascript:void(0)" class="closebtn" onclick="closeNav()"
             >&times;</a
           >
-          <button class="sidebtn" onclick="getAlarmList()">Обновить данные</button>
+          <button class="sidebtn" onclick="getAlarmList();">Обновить данные</button>
 
           <div class="warnings-table">
             <table id="alarmList">
@@ -141,7 +141,8 @@
             <div class="input-name">
               [{{ camera['CameraId'] }}] {{camera['Name']}}
             </div>
-            <img id="Cam{{ camera['CameraId'] }}" src="" /><img />
+            <img id="Cam{{ camera['CameraId'] }}" src="" alt="NO DATA" />
+
           </div>
 
           {% endfor %}
