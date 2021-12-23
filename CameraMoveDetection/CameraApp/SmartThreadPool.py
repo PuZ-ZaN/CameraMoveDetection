@@ -46,7 +46,7 @@ class SmartThreadPool:
                 return True  
         return False
 
-    def killall(self):
+    def killAll(self):
         for i in __threads.keys():
             abort_thread(i)
 

@@ -190,3 +190,5 @@ def runAllWorkers():
 	return "OK"
 @app.route("/ThreadsStopAll", methods=['POST'])
 def stopAllWorkers():
+	ThreadsPool.killAll();
+	return "OK";
