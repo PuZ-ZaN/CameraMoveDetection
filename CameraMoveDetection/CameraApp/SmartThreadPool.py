@@ -62,12 +62,15 @@ class SmartThreadPool:
 
     def clear_threads(self): 
         for uid in list(self.__threads.keys()):
-            if not self.__threads[uid].is_alive():
-                self.__threads[uid].join()
-                del self.__threads_pulse[uid]
-                del self.__threads_err[uid]
-                del self.__threads_actives[uid]
-                del self.__threads[uid]
+            try:
+                if not self.__threads[uid].is_alive():
+                    self.__threads[uid].join()
+                    del self.__threads[uid]
+                    del self.__threads_pulse[uid]
+                    del self.__threads_err[uid]
+                    del self.__threads_actives[uid]
+            except KeyError:
+                continue
 
     @property
     def active_threads_count(self):
