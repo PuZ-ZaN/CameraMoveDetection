@@ -57,7 +57,6 @@ class SmartThreadPool:
     def abort_all(self):
         for uid in self.__threads.keys():
             self.__threads_actives[uid].set_value(False)
-        print('abort_all')
         self.clear_threads()
 
     def clear_threads(self): 
@@ -99,9 +98,7 @@ class ReferenceObject:
         self.__value = _value 
 
     def set_value(self, _value: Generic[_T]) -> None:
-        print("set_value")
         if ((not self.__instance_predicate is None) and self.__instance_predicate(_value)):
-            print('value setted')
             self.__value = _value;
 
     @property 

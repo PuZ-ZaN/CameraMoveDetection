@@ -52,7 +52,6 @@ def CalculatePhaseCorrelate(CameraID = "",
 		vectorPStatic = None
 		while (True):
 			try:
-				print(activity_flag)
 				if (not (activity_flag is None) and (activity_flag.value == False)):
 					return
 				#возьмем кадр
