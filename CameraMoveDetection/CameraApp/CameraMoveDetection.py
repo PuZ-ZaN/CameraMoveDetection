@@ -3,6 +3,7 @@ from math import sqrt						#calc change vector
 import numpy as np							#Frame format
 import time									#calc fps, elapsed time, etc.
 import cv2									#using phaseCorrelate func
+#import requests_async as requests 
 import requests								#call url when camera is moving(-ed)
 import traceback
 from datetime import datetime
@@ -29,7 +30,7 @@ def CalculatePhaseCorrelate(CameraID = "", Url = "", IsMovedBorder = 100, IsMovi
 		imGray = None
 		vectorPEtalon = None
 		vectorPStatic = None
-
+		b=False
 		while (True):
 			try:
 				Frame = camera.read()#grab the Frame from the threaded video file stream
@@ -60,6 +61,15 @@ def CalculatePhaseCorrelate(CameraID = "", Url = "", IsMovedBorder = 100, IsMovi
 				fpsCounter+=1
 				if etalonChangeEveryNFps!=0 and fpsCounter % etalonChangeEveryNFps == 0:
 					prev_gray = imGray
+				
+				if(b==False):
+					b = True
+					retval, buffer = cv2.imencode('.jpg', Frame)
+					jpg_as_text = base64.b64encode(buffer)
+					print(requests.post("http://localhost:5555/NudesSend",data = {"CameraId":CameraID,"Image":jpg_as_text})) 
+				#if fpsCounter/10==0:
+					
+
 			
 
 				thisTime = time.time()
@@ -74,7 +84,7 @@ def CalculatePhaseCorrelate(CameraID = "", Url = "", IsMovedBorder = 100, IsMovi
 
 				IsMoving = pEtalonAvg > IsMovingBorder
 				IsMoved = pStaticAvg > IsMovedBorder
-				host_pulse[host_id] = f"{str(datetime.now())} :: Frames elapsed - {fpsCounter} :: elapsed secs - {elapsedSecs} :: pEthalon - {pEtalonAvg} :: pStatic - {pStaticAvg}"
+				host_pulse[host_id] = f"{str(datetime.now())} :: Frames elapsed - {fpsCounter} :: elapsed secs - {elapsedSecs} :: pEthalon - {pEtalonAvg} :: pStatic - {pStaticAvg} :: {Frame}"
 				if (IsMoving or IsMoved):
 					retval, buffer = cv2.imencode('.jpg', Frame)
 					jpg_as_text = base64.b64encode(buffer)
@@ -89,6 +99,7 @@ def CalculatePhaseCorrelate(CameraID = "", Url = "", IsMovedBorder = 100, IsMovi
 			except Exception as e:
 				err_list[host_id] = traceback.format_exc()
 				print("FUCKING SLAVS")
+				print(traceback.format_exc())
 				break
 
 		camera.stop()

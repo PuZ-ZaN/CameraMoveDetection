@@ -11,10 +11,39 @@ ThreadsPool= SmartThreadPool()
 workingThreadUrls = []
 threadsErrorList=[]
 
+
+FramesFromCamsNow={}
+
+@app.route("/NudesSend", methods=['POST'])
+def SendImage():
+	request_data = request.form
+	if request_data is None:
+		request_data = request.get_json()
+		if request_data is None:
+			return "NoDataError"
+		print(request_data["CameraId"])
+		FramesFromCamsNow[request_data["CameraId"]]=request_data["Image"]
+	return "OK"
+
+@app.route("/NudesGet", methods=['POST'])
+def GetImage():
+	return jsonify(FramesFromCamsNow) 
+
+@app.route("/NudesGetById", methods=['POST'])
+def GetImageById():
+	request_data = request.form
+	if request_datais is None:
+		request_data = request.get_json()
+		if request_data is None:
+			return "KeyError"
+	return FramesFromCamsNow[request_data["Id"]]
+
+
+
 @app.route("/")
 def index():
 	cameras = DBApi.CamerasSelectAll()
-	return ""#render_template('index.html',CameraList=list(cameras))
+	return render_template('index.html',CameraList=list(cameras))
 
 
 #=======CAMERAS CRUD============
@@ -74,9 +103,8 @@ def cameraList():
 #=======SIGNALS CRUD============
 @app.route("/SignalAdd", methods=['POST'])
 def AddNewSignal():
-	if request.form is None:
-		request_data = request.form
-	else:
+	request_data = request.form
+	if request_datais is None:
 		request_data = request.get_json()
 		if request_data is None:
 			return "KeyError"
@@ -124,9 +152,8 @@ def ThreadsGetActive():
 
 @app.route("/ThreadsErrorHandler", methods=['POST'])
 def ThreadsErrorHandler():
-	if request.form is None:
-		request_data = request.form
-	else:
+	request_data = request.form
+	if request_datais is None:
 		request_data = request.get_json()
 		if request_data is None:
 			return "KeyError"
@@ -150,12 +177,12 @@ def runscript():
 def runAllWorkers():
 	cameras = DBApi.CamerasSelectAll()
 	for cam in cameras:
-		if not cam["Url"] in workingThreadUrls:
-			ThreadsPool.new_thread(CMD.CalculatePhaseCorrelate,
-				CameraID = cam["CameraId"], 
-				Url=cam["Url"], 
-				IsMovedBorder = int(cam["IsMovedBorder"]), 
-				IsMovingBorder = int(cam["IsMovingBorder"]))
+		#if not cam["Url"] in workingThreadUrls:
+		ThreadsPool.new_thread(CMD.CalculatePhaseCorrelate,
+			CameraID = cam["CameraId"], 
+			Url=cam["Url"], 
+			IsMovedBorder = int(cam["IsMovedBorder"]), 
+			IsMovingBorder = int(cam["IsMovingBorder"]))
 
-			workingThreadUrls.append(cam["Url"])
+		workingThreadUrls.append(cam["Url"])
 	return "OK"
