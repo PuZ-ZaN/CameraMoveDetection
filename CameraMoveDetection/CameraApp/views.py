@@ -6,37 +6,52 @@ from .db.wrapper import DBApi
 from .SmartThreadPool import SmartThreadPool, CPUCountUnavaiableException, MaxThreadsCountReachedException
 import traceback
 import requests
+import threading
 
 ThreadsPool= SmartThreadPool()
 workingThreadUrls = []
 threadsErrorList=[]
 
 
+class ThreadSafeDict(dict):
+	def __init__(self, * p_arg, ** n_arg) :
+		dict.__init__(self, * p_arg, ** n_arg)
+		self._lock = threading.Lock()
+
+	def __enter__(self) :
+		self._lock.acquire()
+		return self
+
+	def __exit__(self, type, value, traceback):
+		self._lock.release()
+
+u = ThreadSafeDict()
 FramesFromCamsNow={}
 
-@app.route("/NudesSend", methods=['POST'])
-def SendImage():
-	request_data = request.form
-	if request_data is None:
-		request_data = request.get_json()
-		if request_data is None:
-			return "NoDataError"
-		print(request_data["CameraId"])
-		FramesFromCamsNow[request_data["CameraId"]]=request_data["Image"]
-	return "OK"
+#@app.route("/NudesSend", methods=['POST'])
+#def SendImage():
+#	request_data = request.form
+#	if request_data is None:
+#		request_data = request.get_json()
+#		if request_data is None:
+#			return "NoDataError"
+#		print(request_data["CameraId"])
+#		FramesFromCamsNow[request_data["CameraId"]]=request_data["Image"]
+#	return "OK"
 
 @app.route("/NudesGet", methods=['POST'])
 def GetImage():
-	return jsonify(FramesFromCamsNow) 
+	print(u)
+	return ''
 
-@app.route("/NudesGetById", methods=['POST'])
-def GetImageById():
-	request_data = request.form
-	if request_datais is None:
-		request_data = request.get_json()
-		if request_data is None:
-			return "KeyError"
-	return FramesFromCamsNow[request_data["Id"]]
+#@app.route("/NudesGetById", methods=['POST'])
+#def GetImageById():
+#	request_data = request.form
+#	if request_datais is None:
+#		request_data = request.get_json()
+#		if request_data is None:
+#			return "KeyError"
+#	return FramesFromCamsNow[request_data["Id"]]
 
 
 
@@ -137,6 +152,7 @@ def GetSignalImage():
 	except Exception as e:
 		return f"Something Wrong! {e}"
 
+
 #=======THREADS INFO============
 @app.route("/Threads", methods=['POST'])
 def ThreadsGetActive():
@@ -169,7 +185,7 @@ def runscript():
 			CameraID = request_data["CameraID"],
 			Url=request_data['Url'], 
 			IsMovedBorder = int(request_data['IsMovedBorder']), 
-			IsMovingBorder = int(request_data['IsMovingBorder']))
+			IsMovingBorder = int(request_data['IsMovingBorder']),u=u)
 	except MaxThreadsCountReachedException as err:
 		return str(err)
 

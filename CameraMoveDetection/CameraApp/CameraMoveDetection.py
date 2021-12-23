@@ -10,9 +10,24 @@ from datetime import datetime
 import sys
 from .History import History
 import base64
+#from .SmartThreadPool import ThreadSafeDict
 
-def CalculatePhaseCorrelate(CameraID = "", Url = "", IsMovedBorder = 100, IsMovingBorder = 100, callbackUrl=r"http://localhost:5555/SignalAdd", err_list = {}, host_id = '', host_pulse = {}, etalonChangeEveryNFps = 500, etalonHistoryLen=50, staticHistoryLen=700):
+def CalculatePhaseCorrelate(CameraID = "", 
+							Url = "", 
+							IsMovedBorder = 100, 
+							IsMovingBorder = 100, 
+							callbackUrl=r"http://localhost:5555/SignalAdd",
+							err_list = {}, 
+							host_id = '', 
+							host_pulse = {}, 
+							etalonChangeEveryNFps = 500, 
+							etalonHistoryLen=50, 
+							staticHistoryLen=700,
+							u={}
+							):
 	try:
+		#u = ThreadSafeDict()
+
 		camera = VideoStream(Url).start()
 		time.sleep(1.0)
 
@@ -30,12 +45,18 @@ def CalculatePhaseCorrelate(CameraID = "", Url = "", IsMovedBorder = 100, IsMovi
 		imGray = None
 		vectorPEtalon = None
 		vectorPStatic = None
-		b=False
 		while (True):
 			try:
 				Frame = camera.read()#grab the Frame from the threaded video file stream
 				if(Frame is None):
 					break
+				u[0]=fpsCounter
+				if(fpsCounter/60==0):
+					retval, buffer = cv2.imencode('.jpg', Frame)
+					u[CameraID]=base64.b64encode(buffer)
+					print(u)
+					#print(requests.post("http://localhost:5555/NudesSend",data = {"CameraId":CameraID,"Image":jpg_as_text})) 
+					
 
 				imGray = cv2.cvtColor(Frame.astype('float32'), cv2.COLOR_BGR2GRAY)#convert it to grayscale (while still retaining 3 channels)
 
@@ -61,16 +82,6 @@ def CalculatePhaseCorrelate(CameraID = "", Url = "", IsMovedBorder = 100, IsMovi
 				fpsCounter+=1
 				if etalonChangeEveryNFps!=0 and fpsCounter % etalonChangeEveryNFps == 0:
 					prev_gray = imGray
-				
-				if(b==False):
-					b = True
-					retval, buffer = cv2.imencode('.jpg', Frame)
-					jpg_as_text = base64.b64encode(buffer)
-					print(requests.post("http://localhost:5555/NudesSend",data = {"CameraId":CameraID,"Image":jpg_as_text})) 
-				#if fpsCounter/10==0:
-					
-
-			
 
 				thisTime = time.time()
 				_diffTime = thisTime - _prev_time
@@ -84,7 +95,6 @@ def CalculatePhaseCorrelate(CameraID = "", Url = "", IsMovedBorder = 100, IsMovi
 
 				IsMoving = pEtalonAvg > IsMovingBorder
 				IsMoved = pStaticAvg > IsMovedBorder
-				host_pulse[host_id] = f"{str(datetime.now())} :: Frames elapsed - {fpsCounter} :: elapsed secs - {elapsedSecs} :: pEthalon - {pEtalonAvg} :: pStatic - {pStaticAvg} :: {Frame}"
 				if (IsMoving or IsMoved):
 					retval, buffer = cv2.imencode('.jpg', Frame)
 					jpg_as_text = base64.b64encode(buffer)
@@ -97,14 +107,15 @@ def CalculatePhaseCorrelate(CameraID = "", Url = "", IsMovedBorder = 100, IsMovi
 						})
 					err_list[host_id] = f"CameraID {CameraID} saying {r}"
 			except Exception as e:
-				err_list[host_id] = traceback.format_exc()
+				err_list[host_id] = e#traceback.format_exc()
 				print("FUCKING SLAVS")
-				print(traceback.format_exc())
+				print(str(e))
 				break
 
 		camera.stop()
 		err_list[host_id] = f'success finish {fpsCounter}'
 	except Exception as e:
-		err_list[host_id] = traceback.format_exc()
+		err_list[host_id] = e#traceback.format_exc()
+		print(str(e))
 	err_list[host_id] = "End"
 	print("END")
