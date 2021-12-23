@@ -86,11 +86,10 @@ function updateDisplays() {
         success: function (response) {
             console.log(response);
             for (var key in response) {
-                document.getElementById(`Cam${key}`).src = "data:image/png;base64," + response[key];
+                document.getElementById(`Cam${key}`).src = response[key];
                 //Do stuff where key would be 0 and value would be the object
 
                 console.log('Key =', key)
-                console.log('Value =', value)
                 console.log('Test=', response[key])
             }
 
@@ -114,12 +113,12 @@ function getAlarmList() {
             console.log(response);
             console.log(alarmList);
             alarmList = Object.keys(response).map((key) => response[key]);
-            //document.getElementById("alarmList").innerHTML = `<tr><th>WatchImg</th><th>CamId</th><th>SensTime</th><th>IsMove</th><th>IsMoving</th></tr >`;
+            document.getElementById("alarmList").innerHTML = `<tr><th>Кадр</th><th>Номер камеры</th><th>Время срабатывания</th><th>IsMove</th><th>IsMoving</th></tr >`;
             for (let alarm of alarmList) {
                 console.log(alarm.TimeStamp);
                 dt = new Date(alarm.TimeStamp);
                 //onclick = SignalsSpec(${ alarm.CameraId }, '${alarm.TimeStamp}')
-                document.getElementById("alarmList").insertRow(-1).innerHTML = ` <button value="Image" onclick="SignalsSpec(${alarm.CameraId}, '${alarm.TimeStamp}')"></button></td><tr onclick=SignalsSpec(3,"23-12-2021 23:00:00")><td>${alarm.CameraId}</td><td>${alarm.TimeStamp}</td><td>${alarm.IsMoved}</td><td>${alarm.IsMoving}</td></td></tr>`;
+                document.getElementById("alarmList").insertRow(-1).innerHTML = ` <button onclick="SignalsSpec(${alarm.CameraId}, '${alarm.TimeStamp}')">X</button></td><tr onclick=SignalsSpec(3,"23-12-2021 23:00:00")><td>${alarm.CameraId}</td><td>${alarm.TimeStamp}</td><td>${alarm.IsMoved}</td><td>${alarm.IsMoving}</td></td></tr>`;
                 //console.log("ANN")
                 //console.log($('#alarmList > tbody > tr:last-child'));
                 //$('#alarmList > tbody > tr:last-child').onclick = console.log("awda");//SignalsSpec(alarm.CameraId, alarm.TimeStamp);

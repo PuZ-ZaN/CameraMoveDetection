@@ -39,8 +39,8 @@ for (let card of cards) {
 }
 
 // Input video src func
-var videoTags = document.getElementsByTagName('video')
-for (let tag of videoTags) {
+var imgTags = document.getElementsByTagName('img')
+for (let tag of imgTags) {
   tag.onclick = function () {
     videoInput.src = tag.src;
     videoInput.load();

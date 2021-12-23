@@ -367,41 +367,19 @@ table th {
 
 .card {
   width: 250px;
-  height: 90%;
-}
-
-/* .input {
-  display: flex;
-  flex-direction: column;
-  margin: 0 auto;
-  width: 60%;
-  padding-bottom: 10px;
-  border-bottom: 3px solid #1a1a1a;
-}
-
-.input button{
-  width: 50%;
-  margin: 0 auto;
-} */
-
-.example .card {
-  width: 45%;
-  margin: 0 auto;
-  margin-top: 10px;
+  height: 120px;
 }
 
 .card:hover {
   transform: translateY(-2px);
 }
 
-.card video {
-  object-fit: fill;
-  box-sizing: border-box;
+.card img {
   border: 3px solid #1a1a1a;
   border-radius: 15px;
-  /* фит видео в пределах дива */
-  width: 100%;
-  height: 100%;
+
+  width: 250px;
+  height: 120px;
 }
 
 .warning video {
