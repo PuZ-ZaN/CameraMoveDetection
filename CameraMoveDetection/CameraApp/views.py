@@ -64,7 +64,7 @@ def addInput():
 @app.route('/CameraDeleteById', methods=['POST'])
 def CameraDeleteById():
 	try:
-		request_data = request.get_json()
+		request_data = request.form
 		print(bool(request_data['Hard']))
 		res = DBApi.CamerasDelete(DBApi,request_data['Id'],bool(request_data['Hard']))
 	except Exception as e:
