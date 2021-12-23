@@ -95,10 +95,14 @@ function updateDisplays() {
         success: function (response) {
             console.log("XA4A")
             console.log(response);
+            var selected = document.getElementByClassName("input-info");
+            console.log(selected)
+            selected = select.split("]");
             for (var key in response) {
                 document.getElementById(`Cam${key}`).src = "data:image/jpeg;base64,"+response[key]["Frame"];
                 //Do stuff where key would be 0 and value would be the object
-
+                if (key == selected)
+                    document.getElementByClassName("video-input").src = response[key]["Frame"] ;
                 console.log('Key =', key);
                 console.log('Test=', response[key]);
             }
