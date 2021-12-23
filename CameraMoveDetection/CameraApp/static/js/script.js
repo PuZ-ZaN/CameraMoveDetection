@@ -25,7 +25,7 @@ for (let cell of cells) {
 //Cards
 let cards = document.querySelectorAll('.card')
 let videoName = document.querySelector('.input-info')
-let videoInput = document.getElementById('video-input')
+let imgInput = document.getElementById('img-input')
 
 // Input name func
 for (let card of cards) {
@@ -42,9 +42,7 @@ for (let card of cards) {
 var imgTags = document.getElementsByTagName('img')
 for (let tag of imgTags) {
   tag.onclick = function () {
-    videoInput.src = tag.src;
-    videoInput.load();
-    videoInput.play();
+    imgInput.src = tag.src;
   }
 }
 

@@ -405,7 +405,7 @@ table th {
   overflow-y: auto;
 }
 
-.video-container video {
+.video-container img {
   /* исключение стилей для нормального отображения */
   width: 100% !important;
   height: auto !important;
