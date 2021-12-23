@@ -20,11 +20,11 @@ GO
 
 create table Signal(
 	[CameraId] [int] foreign key references dbo.Camera NOT NULL,
-	[SmallTimeStamp] datetime not null,
+	[TimeStamp] smalldatetime not null,
 	[isMoved] bit Default 0 not null,
 	[isMoving] bit Default 0 not null,
 	[Image] text not null,
-	Constraint PK_Clustered_CameraId_TimeStamp primary key clustered (CameraId,TimeStamp)
+	Constraint PK_Clustered_CameraId_TimeStamp primary key clustered (CameraId, TimeStamp)
 )
 go
 
