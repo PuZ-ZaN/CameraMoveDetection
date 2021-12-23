@@ -9,6 +9,7 @@ import traceback
 from datetime import datetime
 import sys
 from .History import History
+from .SmartThreadPool import ReferenceObject
 import base64
 #from .SmartThreadPool import ThreadSafeDict
 """
@@ -29,6 +30,7 @@ def CalculatePhaseCorrelate(CameraID = "",
 							err_list = {}, 
 							host_id = '', 
 							host_pulse = {}, 
+							activity_flag: ReferenceObject = None
 							):
 	try:
 		print(f"BEBIN {CameraID} {Url}")
@@ -50,6 +52,9 @@ def CalculatePhaseCorrelate(CameraID = "",
 		vectorPStatic = None
 		while (True):
 			try:
+				print(activity_flag)
+				if (not (activity_flag is None) and (activity_flag.value == False)):
+					return
 				#возьмем кадр
 				Frame = camera.read()
 				if(Frame is None):
