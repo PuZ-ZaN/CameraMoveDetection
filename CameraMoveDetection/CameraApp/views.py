@@ -173,7 +173,7 @@ def runscript():
 			CameraID = request_data["CameraID"],
 			Url=request_data['Url'], 
 			IsMovedBorder = int(request_data['IsMovedBorder']), 
-			IsMovingBorder = int(request_data['IsMovingBorder']),u=u)
+			IsMovingBorder = int(request_data['IsMovingBorder']))
 	except MaxThreadsCountReachedException as err:
 		return str(err)
 
@@ -190,5 +190,5 @@ def runAllWorkers():
 	return "OK"
 @app.route("/ThreadsStopAll", methods=['POST'])
 def stopAllWorkers():
-	ThreadsPool.killAll();
-	return "OK";
+	ThreadsPool.abort_all()
+	return "OK"

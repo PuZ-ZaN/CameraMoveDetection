@@ -1,14 +1,18 @@
 import threading
 import os
 import random
+import time
 from datetime import datetime
-from typing import Callable, Any
+from typing import Callable, Any, Generic, TypeVar
+
+_T = TypeVar('T') #Меня бесит динамическая типизация
 
 class SmartThreadPool:
     __max_avaiable_cpu = 0
     __threads = {}
     __threads_err = {}
     __threads_pulse = {}
+    __threads_actives = {}
     __thread_count = 0 #Данный счётчик означает общее кол-во потоков, когда либо созданных в текущем экземпляре SmartThreadPool, а не кол-во активных потоков. Кол-во активных потоков см. св-во active_threads_count
     __uid = None
 
@@ -29,6 +33,10 @@ class SmartThreadPool:
         t_kwargs['err_list'] = self.__threads_err
         t_kwargs['host_id'] = thread_uid
         t_kwargs['host_pulse'] = self.__threads_pulse
+        
+        activity_flag = ReferenceObject(True)
+        t_kwargs['activity_flag'] = activity_flag
+        self.__threads_actives[thread_uid] = activity_flag
 
         thread = threading.Thread(target = thread_target, args = t_args, kwargs = t_kwargs)
         thread.start()
@@ -40,17 +48,26 @@ class SmartThreadPool:
     def abort_thread(self, thread_uid: str, need_remove: bool = False) -> bool:
         if thread_uid in self.__threads.keys():
             if self.__threads[thread_uid].is_alive():
-                self.__threads[thread_uid].join()   
+                self.__threads_actives[thread_uid].set_value(False) 
                 if need_remove:
                     del self.__threads[thread_uid]
                 return True  
         return False
 
-    def killAll(self):
-        for j in self.__threads.values():
-            j.join()
-            del j
-        print(__threads)
+    def abort_all(self):
+        for uid in self.__threads.keys():
+            self.__threads_actives[uid].set_value(False)
+        print('abort_all')
+        self.clear_threads()
+
+    def clear_threads(self): 
+        for uid in list(self.__threads.keys()):
+            if not self.__threads[uid].is_alive():
+                self.__threads[uid].join()
+                del self.__threads_pulse[uid]
+                del self.__threads_err[uid]
+                del self.__threads_actives[uid]
+                del self.__threads[uid]
 
     @property
     def active_threads_count(self):
@@ -71,6 +88,26 @@ class SmartThreadPool:
     def threads_pulses(self):
         return self.__threads_pulse
 
+class ReferenceObject:
+    __value = None
+    __instance_predicate = lambda a, b: True #TODO починить 
+
+    def __init__(self, _value: Generic[_T], _instance_predicate : Callable[[Any], bool] = None) -> None:
+        self.__value = _value 
+
+    def set_value(self, _value: Generic[_T]) -> None:
+        print("set_value")
+        if ((not self.__instance_predicate is None) and self.__instance_predicate(_value)):
+            print('value setted')
+            self.__value = _value;
+
+    @property 
+    def value(self):
+        return self.__value
+
+    def __str__(self):
+        return str(self.__value)
+    
 
 class CPUCountUnavaiableException(Exception):
     pass
