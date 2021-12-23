@@ -188,5 +188,3 @@ def runAllWorkers():
 			IsMovingBorder = int(cam["IsMovingBorder"]))
 
 	return "OK"
-@app.route("/ThreadsStopAll", methods=['POST'])
-def stopAllWorkers():
