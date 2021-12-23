@@ -65,7 +65,7 @@
 {
 	"CameraID":"1"
 	"Name":"one",
-	"Url"":"rtsp://awd.awd",
+	"Url":"rtsp://awd.awd",
 	"IsMovingBorder":"100",
 	"IsMovedBorder":"100"
 }
