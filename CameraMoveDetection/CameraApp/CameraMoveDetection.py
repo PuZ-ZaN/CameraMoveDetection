@@ -57,8 +57,13 @@ def CalculatePhaseCorrelate(CameraID = "",
 
 				if(fpsCounter%ServerUpdateNFrames==0):
 					retval, buffer = cv2.imencode('.jpg', Frame)
-					jpg_as_text = base64.b64encode(buffer)
-					requests.post(sendImageUrl,data={'CameraID' : CameraID,'Frame':jpg_as_text})
+					jpg_as_text = "data:image/jpeg;base64,"+str(base64.b64encode(buffer))
+					requests.post(sendImageUrl,data={
+						'CameraID' : CameraID,
+						'Frame':jpg_as_text,
+						"pStaticAvg":pEtalonAvg,
+						"pEtalonAvg":pStaticAvg
+						})
 				
 				#конвертнем в серый
 				imGray = cv2.cvtColor(Frame.astype('float32'), cv2.COLOR_BGR2GRAY)
@@ -97,6 +102,7 @@ def CalculatePhaseCorrelate(CameraID = "",
 				IsMoving = pEtalonAvg > IsMovingBorder
 				IsMoved = pStaticAvg > IsMovedBorder
 				if (IsMoving or IsMoved):
+					print("SEE BD")
 					retval, buffer = cv2.imencode('.jpg', Frame)
 					jpg_as_text = base64.b64encode(buffer)
 					r = requests.post(callbackUrl,data={

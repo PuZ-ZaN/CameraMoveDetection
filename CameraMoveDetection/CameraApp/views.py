@@ -24,7 +24,11 @@ alarmlist={}
 @app.route("/SendImage", methods=['POST'])
 def SendImage():
 	request_data = request.form
-	alarmlist[request_data['CameraID']]=request_data['Frame']
+	alarmlist[request_data['CameraID']]={
+		"Frame":request_data['Frame'],
+		"pStaticAvg":request_data['pStaticAvg'],
+		"pEtalonAvg":request_data['pEtalonAvg']
+		}
 	return "OK"
 
 @app.route("/GetImagesById", methods=['POST'])
