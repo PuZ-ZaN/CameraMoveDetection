@@ -25,11 +25,11 @@ function SignalsSpec(id, ts) {
         data: { "CameraId": id, "TimeStamp": ts },
         type: 'POST',
         success: function (response) {
-            console.log(response)
-            $("#mdlda").html(`<img src=\'${response[0]['Image']}\'>`);
-            //�������� �������� response[""]
-            modal.classList.add('modal_vis'); // ��������� ��������� ����
-            modal.classList.remove('bounceOutDown'); // ������� ������ ��������
+            console.log("CHAVKA")
+            console.log(response[0]['Image'])
+            $("#mdlda").html(`<img src='${response[0]['Image']}'>`);
+            modal.classList.add('modal_vis');
+            modal.classList.remove('bounceOutDown');
             body.classList.add('body_block');
         },
         error: function (error) {
@@ -37,12 +37,20 @@ function SignalsSpec(id, ts) {
         }
     });
 }
-
+var isNeedupdate = true;
+var interval = NaN;
 function SliderBindRunAll() {
     var span = $('#sldr');
     span.click(() => {
         if ($('#sldr').prop('checked')) {
             /*span.prop('checked', true);*/
+            isNeedupdate = true;
+            interval = setInterval(() => {
+                 if (isNeedupdate == false)
+                    clearInterval(interval);
+                updateDisplays();
+                console.log("WKRAWF");
+            }, 3000);
             $.ajax({
                 type: "POST",
                 url: "/ThreadsRunAll",
@@ -56,6 +64,7 @@ function SliderBindRunAll() {
                 }
             });
         } else {
+            isNeedupdate = false;
             $.ajax({
                 type: "POST",
                 url: "/ThreadsStopAll",
@@ -73,7 +82,7 @@ function SliderBindRunAll() {
         span.innerText += "1";
     });
 }
-
+ 
 SliderBindRunAll();
 
 function updateDisplays() {
@@ -84,13 +93,14 @@ function updateDisplays() {
         data: {},
         type: 'POST',
         success: function (response) {
+            console.log("XA4A")
             console.log(response);
             for (var key in response) {
-                document.getElementById(`Cam${key}`).src = response[key];
+                document.getElementById(`Cam${key}`).src = "data:image/jpeg;base64,"+response[key]["Frame"];
                 //Do stuff where key would be 0 and value would be the object
 
-                console.log('Key =', key)
-                console.log('Test=', response[key])
+                console.log('Key =', key);
+                console.log('Test=', response[key]);
             }
 
         },
@@ -103,7 +113,7 @@ function updateDisplays() {
 var alarmList = [];
 function getAlarmList() {
     console.log("Start func getAlarmList");
-    updateDisplays();
+    //updateDisplays();
     $.ajax({
         type: "POST",
         url: "/Signals",

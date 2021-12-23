@@ -57,7 +57,7 @@ def CalculatePhaseCorrelate(CameraID = "",
 
 				if(fpsCounter%ServerUpdateNFrames==0):
 					retval, buffer = cv2.imencode('.jpg', Frame)
-					jpg_as_text = "data:image/jpeg;base64,"+str(base64.b64encode(buffer))
+					jpg_as_text = base64.b64encode(buffer)
 					requests.post(sendImageUrl,data={
 						'CameraID' : CameraID,
 						'Frame':jpg_as_text,

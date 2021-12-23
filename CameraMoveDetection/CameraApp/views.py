@@ -39,7 +39,7 @@ def GetImagesById():
 
 @app.route("/GetImages", methods=['POST'])
 def GetImages():
-	return jsonify(alarmlist)
+	return alarmlist
 
 #=======CAMERAS CRUD============
 @app.route("/CameraAdd", methods=['POST'])
