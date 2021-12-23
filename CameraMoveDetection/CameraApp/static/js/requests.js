@@ -18,7 +18,7 @@ function addinput() {
 
 
 function SignalsSpec(id, ts) {
-        console.log("awdadw");
+    console.log("SignalsSpec");
         $.ajax({
             type: "POST",
             url: "/SignalsSpec",
@@ -38,9 +38,72 @@ function SignalsSpec(id, ts) {
         });
 }
 
+function SliderBindRunAll() {
+    var span = $('#sldr');
+    span.click(() => {
+        if ($('#sldr').prop('checked')) {
+            /*span.prop('checked', true);*/
+            $.ajax({
+                type: "POST",
+                url: "/ThreadsRunAll",
+                data: {},
+                type: 'POST',
+                success: function (response) {
+                    console.log(response)
+                },
+                error: function (error) {
+                    console.log(error);
+                }
+            });
+        } else {
+            $.ajax({
+                type: "POST",
+                url: "/ThreadsStopAll",
+                data: {},
+                type: 'POST',
+                success: function (response) {
+                    console.log(response)       
+                },
+                error: function (error) {
+                    console.log(error);
+                }
+            });
+        }
+        console.log(span.prop('checked'));
+        span.innerText += "1";
+    });
+}
+
+SliderBindRunAll();
+
+function updateDisplays() {
+    console.log("awdadw");
+    $.ajax({
+        type: "POST",
+        url: "/GetImages",
+        data: {},
+        type: 'POST',
+        success: function (response) {
+            console.log(response);
+            console.log("awdwd")
+            for (r in response) {
+                console.log(r)
+            }
+            //for ((key, value) in response) {
+            //    document.getElementById(`Cam${key}`).src = "data:image/png;base64," + value;
+            //    //Do stuff where key would be 0 and value would be the object
+            //}
+            
+        },
+        error: function (error) {
+            console.log(error);
+        }
+    });
+}
 
 var alarmList = [];
 function getAlarmList() {
+    updateDisplays();
     $.ajax({
         type: "POST",
         url: "/Signals",
@@ -50,7 +113,7 @@ function getAlarmList() {
             console.log(response);
             console.log(alarmList);
             alarmList = Object.keys(response).map((key) => response[key]);
-            document.getElementById("alarmList").innerHTML = `<tr><th>WatchImg</th><th>CamId</th><th>SensTime</th><th>IsMove</th><th>IsMoving</th></tr >`
+            document.getElementById("alarmList").innerHTML = `<tr><th>WatchImg</th><th>CamId</th><th>SensTime</th><th>IsMove</th><th>IsMoving</th></tr >`;
             for (let alarm of alarmList) {
                 console.log(alarm.TimeStamp);
                 dt = new Date(alarm.TimeStamp)

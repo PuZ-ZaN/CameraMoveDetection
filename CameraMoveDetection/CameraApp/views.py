@@ -15,6 +15,7 @@ import json
 @app.route("/")
 def index():
 	cameras = DBApi.CamerasSelectAll()
+	print(cameras)
 	return render_template('index.html',CameraList=list(cameras))
 
 ThreadsPool= SmartThreadPool()
@@ -26,12 +27,15 @@ def SendImage():
 	alarmlist[request_data['CameraID']]=request_data['Frame']
 	return "OK"
 
-@app.route("/GetImages", methods=['POST'])
-def getAlarmList():
+@app.route("/GetImagesById", methods=['POST'])
+def GetImagesById():
 	if(request.form is None):
 		return "Unknown CameraId"
 	return alarmlist[request.form["CameraId"]]
 
+@app.route("/GetImages", methods=['POST'])
+def GetImages():
+	return jsonify(alarmlist)
 
 #=======CAMERAS CRUD============
 @app.route("/CameraAdd", methods=['POST'])

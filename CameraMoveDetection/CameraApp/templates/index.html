@@ -34,7 +34,7 @@
                 <button class="modal-btn" id="add">Добавить камеру</button>
                 <button class="warnings-btn" onclick="openNav()">Ошибки</button>
                 <label class="switch">
-                    <input type="checkbox">
+                    <input id ="sldr" type="checkbox">
                     <span class="slider round"></span>
                 </label>
                 <!-- Modals -->
@@ -117,8 +117,8 @@
                 {% for camera in CameraList %}
 
                 <div class="card">
-                    <div class="input-name">ID: {{camera['CameraID']}}, NM: {{camera['Name']}}</div>
-                    <img src=""></img>
+                    <div class="input-name">ID: {{ camera['CameraId'] }}, NM: {{camera['Name']}}</div>
+                    <img id="Cam{{ camera['CameraId'] }}" src=""></img>
                 </div>
 
                 {% endfor %}
