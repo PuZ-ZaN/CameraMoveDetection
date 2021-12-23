@@ -98,8 +98,9 @@ def cameraList():
 #=======SIGNALS CRUD============
 @app.route("/SignalAdd", methods=['POST'])
 def AddNewSignal():
+	print("SIG")
 	request_data = request.form
-	if request_datais is None:
+	if request_data is None:
 		request_data = request.get_json()
 		if request_data is None:
 			print("SIGNAL EEERR")

@@ -111,7 +111,7 @@ def CalculatePhaseCorrelate(CameraID = "",
 					jpg_as_text = base64.b64encode(buffer)
 					r = requests.post(callbackUrl,data={
 						'CameraID' : CameraID,
-						'TimeStamp': str(thisTime),
+						'TimeStamp': str(datetime.now().strftime("%d/%m/%Y %H:%M:%S")),
 						'IsMoving':str(IsMoving),
 						'IsMoved':str(IsMoved),
 						'Frame':jpg_as_text
