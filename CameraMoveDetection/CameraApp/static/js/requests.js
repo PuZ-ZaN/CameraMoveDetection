@@ -27,9 +27,9 @@ function SignalsSpec(id, ts) {
             success: function (response) {
                 console.log(response)
                 $("#mdlda").html(`<img src=\'${response[0]['Image']}\'>`);
-                //Показать картинку response[""]
-                modal.classList.add('modal_vis'); // добавляем видимость окна
-                modal.classList.remove('bounceOutDown'); // удаляем эффект закрытия
+                //пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ response[""]
+                modal.classList.add('modal_vis'); // пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ
+                modal.classList.remove('bounceOutDown'); // пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
                 body.classList.add('body_block');
             },
             error: function (error) {
@@ -85,7 +85,7 @@ function updateDisplays() {
         type: 'POST',
         success: function (response) {
             console.log(response);
-            console.log("awdwd")
+            console.log("updateDisplays")
             for (r in response) {
                 console.log(r)
             }
@@ -113,12 +113,12 @@ function getAlarmList() {
             console.log(response);
             console.log(alarmList);
             alarmList = Object.keys(response).map((key) => response[key]);
-            document.getElementById("alarmList").innerHTML = `<tr><th>WatchImg</th><th>CamId</th><th>SensTime</th><th>IsMove</th><th>IsMoving</th></tr >`;
+            //document.getElementById("alarmList").innerHTML = `<tr><th>WatchImg</th><th>CamId</th><th>SensTime</th><th>IsMove</th><th>IsMoving</th></tr >`;
             for (let alarm of alarmList) {
                 console.log(alarm.TimeStamp);
                 dt = new Date(alarm.TimeStamp)
                 //onclick = SignalsSpec(${ alarm.CameraId }, '${alarm.TimeStamp}')
-                document.getElementById("alarmList").insertRow(-1).innerHTML = `<td><input type="button" value="Image" onclick="SignalsSpec(${alarm.CameraId}, '${alarm.TimeStamp}')" type="button"></td><tr onclick=SignalsSpec(3,"23-12-2021 23:00:00")><td>${alarm.CameraId}</td><td>${alarm.TimeStamp}</td><td>${alarm.IsMoved}</td><td>${alarm.IsMoving}</td></td></tr>`;
+                document.getElementById("alarmList").insertRow(-1).innerHTML = ` <button value="Image" onclick="SignalsSpec(${alarm.CameraId}, '${alarm.TimeStamp}')">РџРѕРєР°Р·Р°С‚СЊ</button></td><tr onclick=SignalsSpec(3,"23-12-2021 23:00:00")><td>${alarm.CameraId}</td><td>${alarm.TimeStamp}</td><td>${alarm.IsMoved}</td><td>${alarm.IsMoving}</td></td></tr>`;
                 //console.log("ANN")
                 //console.log($('#alarmList > tbody > tr:last-child'));
                 //$('#alarmList > tbody > tr:last-child').onclick = console.log("awda");//SignalsSpec(alarm.CameraId, alarm.TimeStamp);

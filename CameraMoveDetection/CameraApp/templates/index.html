@@ -1,136 +1,164 @@
 <!DOCTYPE html>
 <html lang="ru">
-<head>
+  <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta http-equiv="X-UA-Compatible" content="ie=edge" />
-    <link rel="stylesheet"
-          href="{{ url_for('static',filename='styles/style.css') }}" />
-    <link rel="stylesheet" href="https://atuin.ru/demo/animate.min.css"/>
-    <script src="https://code.jquery.com/jquery-3.6.0.js"
-            integrity="sha256-H+K7U5CnXl1h5ywQfKtSj8PCmoN9aaq30gDh27Xc0jk="
-            crossorigin="anonymous"></script>
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static',filename='styles/style.css') }}"
+    />
+    <link rel="stylesheet" href="https://atuin.ru/demo/animate.min.css" />
+    <script
+      src="https://code.jquery.com/jquery-3.6.0.js"
+      integrity="sha256-H+K7U5CnXl1h5ywQfKtSj8PCmoN9aaq30gDh27Xc0jk="
+      crossorigin="anonymous"
+    ></script>
     <title>Camera Detection</title>
-</head>
+  </head>
 
-<body>
+  <body>
     <div class="main-container">
-        <!-- Right Click Menu -->
-        <div id="contextMenu" class="context-menu" style="display: none">
-            <ul class="menu">
-                <li class="edit">
-                    <a href="#">Edit</a>
-                </li>
+      <!-- Right Click Menu -->
+      <div id="contextMenu" class="context-menu" style="display: none">
+        <ul class="menu">
+          <li class="edit">
+            <a href="#">Edit</a>
+          </li>
 
-                <li class="delete">
-                    <a href="#" onclick="deleteInput()">Delete</a>
-                </li>
-            </ul>
+          <li class="delete">
+            <a href="#" onclick="deleteInput()">Delete</a>
+          </li>
+        </ul>
+      </div>
+
+      <div class="sidebar-container">
+        <div class="settings-container">
+          <!-- Switch Button -->
+          <label class="switch">
+            <input id="sldr" type="checkbox" />
+            <span class="slider round"></span>
+          </label>
+          <!-- Modal Buttons -->
+          <button class="modal-btn" id="add">Добавить камеру</button>
+          <button class="warnings-btn" onclick="openNav()">Ошибки</button>
+          <!-- Modals -->
+          <!-- Settings -->
+          
+          <!-- <button class="open_modal">Test Modal</button> -->
+          <div id="modal" class="modal bounceIn">
+              <button id="close_modal">Закрыть</button>
+            <div id="mdlda" class="modal_txt">Текст в модальном окне</div>
+          </div>
+
+          <div id="screen" class="modal">
+            <div class="modal-content">Screen Here!</div>
+          </div>
+
+          <!-- Add Input -->
+          <div id="add" class="modal">
+            <div class="modal-content">
+              <div class="add-form">
+                <form id="frm" action="" method="post" name="form">
+                  <p>
+                    <label for="Name">Введите имя:</label>
+                    <input id="Name" name="Name" type="text" required />
+                  </p>
+
+                  <p>
+                    <label for="Url">Введите ссылку:</label>
+                    <input id="Url" name="Url" type="text" required />
+                  </p>
+
+                  <p>
+                    <label for="IsMovedBorder"
+                      >Введите значение границы (IsMovedBorder):</label
+                    >
+                    <input
+                      id="IsMovedBorder"
+                      name="IsMovedBorder"
+                      type="number"
+                      required
+                    />
+                  </p>
+
+                  <p>
+                    <label for="IsMovingBorder "
+                      >Введите значение границы (isMovingBorder):</label
+                    >
+                    <input
+                      id="IsMovingBorder"
+                      name="IsMovingBorder"
+                      type="number"
+                      required
+                    />
+                  </p>
+
+                  <div class="add-btn">
+                    <input
+                      type="button"
+                      value="Отправить"
+                      onclick="addinput();"
+                    />
+                  </div>
+                </form>
+              </div>
+              <span id="add" class="close-modal">&times;</span>
+            </div>
+          </div>
         </div>
 
-        <div class="sidebar-container">
-            <div class="settings-container">
-                <!-- Modal Buttons -->
-                <button class="modal-btn" id="add">Добавить камеру</button>
-                <button class="warnings-btn" onclick="openNav()">Ошибки</button>
-                <label class="switch">
-                    <input id ="sldr" type="checkbox">
-                    <span class="slider round"></span>
-                </label>
-                <!-- Modals -->
-                <!-- Settings -->
-                <div id="screen" class="modal">
-                    <div class="modal-content">Screen Here!</div>
-                </div>
+        <!-- Sidebar Warnings -->
+        <div class="warnings-container">
+          <a href="javascript:void(0)" class="closebtn" onclick="closeNav()"
+            >&times;</a
+          >
+          <button class="sidebtn" onclick="getAlarmList()">Обновить данные</button>
 
-                <a class="open_modal">Открыть окно</a>
-                <div id="modal" class="modal bounceIn">
-                    <div id="close_modal">+</div>
-                    <div id="mdlda" class="modal_txt">Текст в модальном окне</div>
-                </div>
-
-                <!-- Add Input -->
-                <div id="add" class="modal">
-                    <div class="modal-content">
-                        <div class="add-form">
-                            <form id="frm" action="" method="post" name="form">
-                                <p>
-                                    <label for="Name">Введите имя:</label>
-                                    <input id="Name" name="Name" type="text" required />
-                                </p>
-
-                                <p>
-                                    <label for="Url">Введите ссылку:</label>
-                                    <input id="Url" name="Url" type="text" required />
-                                </p>
-
-                                <p>
-                                    <label for="IsMovedBorder">Введите значение границы (IsMovedBorder):</label>
-                                    <input id="IsMovedBorder"
-                                           name="IsMovedBorder"
-                                           type="number"
-                                           required />
-                                </p>
-
-                                <p>
-                                    <label for="IsMovingBorder ">Введите значение границы (isMovingBorder):</label>
-                                    <input id="IsMovingBorder"
-                                           name="IsMovingBorder"
-                                           type="number"
-                                           required />
-                                </p>
-
-                                <div class="add-btn">
-                                    <input type="button"
-                                           value="Отправить"
-                                           onclick="addinput();" />
-                                </div>
-                                <!-- <button onclick="addinput()">Отправить</button> -->
-                            </form>
-                        </div>
-                        <span id="add" class="close-modal">&times;</span>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Sidebar Warnings -->
-            <div class="warnings-container">
-                <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
-                <button onclick="getAlarmList()">Обновить данные</button>
-
-                <div class="warnings-table">
-                    <table id="alarmList">
-                        <tr>
-                            <th>Имя камеры</th>
-                            <th>Время срабатывания</th>
-                        </tr>
-                        <tbody>
-                        <!--<td name="alarmCell">Test Name</td>
+          <div class="warnings-table">
+            <table id="alarmList">
+              <tr>
+                <th>Кадр</th>
+                <th>Номер камеры</th>
+                <th>Время срабатывания</th>
+                <th>IsMove</th>
+                <th>IsMoving</th>
+              </tr>
+              <tbody>
+                <td>
+                <!--<td name="alarmCell">Test Name</td>
                         <td name="alarmCell">Test Time Stamp</td>-->
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-
-            <!-- Cards -->
-            <div class="cards">
-                {% for camera in CameraList %}
-
-                <div class="card">
-                    <div class="input-name">ID: {{ camera['CameraId'] }}, NM: {{camera['Name']}}</div>
-                    <img id="Cam{{ camera['CameraId'] }}" src=""></img>
-                </div>
-
-                {% endfor %}
-            </div>
+              </tbody>
+            </table>
+          </div>
         </div>
 
-        <div class="video-container" id="tesvid">
-            <video id="video-input" src="" muted></video>
-            <div class="input-info">NO INPUT</div>
+        <!-- Cards -->
+        <div class="cards">
+          {% for camera in CameraList %}
+
+          <div class="card">
+            <div class="input-name">
+              [{{ camera['CameraId'] }}] {{camera['Name']}}
+            </div>
+            <img id="Cam{{ camera['CameraId'] }}" src="" /><img />
+          </div>
+
+          {% endfor %}
         </div>
+
+        <!-- Logs -->
+        <div class="logs-container">
+            Logs from the console sent here
+        </div>
+      </div>
+
+      <div class="video-container" id="tesvid">
+        <video id="video-input" src="" muted></video>
+        <div class="input-info">NO INPUT</div>
+      </div>
     </div>
     <script src="{{ url_for('static',filename='js/script.js') }}"></script>
     <script src="{{ url_for('static',filename='js/requests.js') }}"></script>
-</body>
+  </body>
 </html>
