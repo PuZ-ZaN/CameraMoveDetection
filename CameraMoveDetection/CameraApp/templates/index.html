@@ -22,12 +22,8 @@
       <!-- Right Click Menu -->
       <div id="contextMenu" class="context-menu" style="display: none">
         <ul class="menu">
-          <li class="edit">
-            <a href="#">Edit</a>
-          </li>
-
           <li class="delete">
-            <a href="#" onclick="deleteInput()">Delete</a>
+            <p onclick="deleteInput()">Delete</p>
           </li>
         </ul>
       </div>
@@ -131,6 +127,9 @@
               [{{ camera['CameraId'] }}] {{camera['Name']}}
             </div>
             <img id="Cam{{ camera['CameraId'] }}" src="" alt="NO DATA" />
+            <div id="Vector{{camera['CameraId']}}">
+                
+            </div>
 
           </div>
 

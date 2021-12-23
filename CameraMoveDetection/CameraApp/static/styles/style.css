@@ -95,7 +95,8 @@ input:checked + .slider:before {
   box-shadow: 0 10px 20px rgb(64 64 64 / 5%);
   padding: 10px 0;
 }
-.menu > li > a {
+.menu > li > p {
+  cursor: pointer;
   font: inherit;
   border: 0;
   padding: 10px 30px 10px 15px;
@@ -112,14 +113,14 @@ input:checked + .slider:before {
   -ms-transition: 0.3s linear;
   -o-transition: 0.3s linear;
 }
-.menu > li > a:hover {
+.menu > li > p:hover {
   background: white;
   color: #1a1a1a;
 }
-.menu > li > a > i {
+.menu > li > p > i {
   padding-right: 10px;
 }
-.menu > li.delete > a:hover {
+.menu > li.delete > p:hover {
   color: red;
 }
 /* ----------------------- Right Click Menu End -----------------------*/

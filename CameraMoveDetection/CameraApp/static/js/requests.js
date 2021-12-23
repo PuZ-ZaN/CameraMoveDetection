@@ -5,6 +5,7 @@ function addinput() {
         data: $('#frm').serialize(),
         type: 'POST',
         success: function (response) {
+            document.location.reload();//Refresh Page
             //var json = jQuery.parseJSON(response)
             //$('#len').html(json.len)
             console.log(response);
@@ -46,7 +47,7 @@ function SliderBindRunAll() {
             /*span.prop('checked', true);*/
             isNeedupdate = true;
             interval = setInterval(() => {
-                 if (isNeedupdate == false)
+                if (isNeedupdate == false)
                     clearInterval(interval);
                 updateDisplays();
                 console.log("WKRAWF");
@@ -82,7 +83,7 @@ function SliderBindRunAll() {
         span.innerText += "1";
     });
 }
- 
+
 SliderBindRunAll();
 
 function updateDisplays() {
@@ -96,15 +97,22 @@ function updateDisplays() {
             console.log("XA4A")
             console.log(response);
             var selected = document.querySelector(".input-info").innerText;
-            console.log('Selected=',selected);
+            console.log('Selected=', selected);
             selected = selected.split('] ');
+            console.log('Selected split=', selected[0].substring(1));
+
             for (var key in response) {
-                document.getElementById(`Cam${key}`).src = "data:image/jpeg;base64,"+response[key]["Frame"];
+                document.getElementById(`Cam${key}`).src = "data:image/jpeg;base64," + response[key]["Frame"];
                 //Do stuff where key would be 0 and value would be the object
-                if (key == selected[0])
-                    document.getElementByClassName("video-input").src = response[key]["Frame"] ;
+                if (key == selected[0].substring(1)) {
+                    console.log('after if');
+                    document.getElementById("img-input").src = "data:image/jpeg;base64," + response[key]["Frame"];
+                }
                 console.log('Key =', key);
                 console.log('Value=', response[key]);
+
+                //vectors
+                document.getElementById(`Vector${key}`).innerHTML = `${response[key]["pEtalonAvg"].substring(0, 5)} | ${response[key]["pStaticAvg"].substring(0, 5)}`
             }
 
         },
@@ -148,16 +156,31 @@ function getAlarmList() {
     });
 }
 
+let cardsR = document.querySelectorAll('.card')
+var selectedIDR = null;
+for (let card of cardsR) {
+    card.oncontextmenu = function (e) {
+        rightClick(e);
+        selectedIDR = card.innerText;
+        selectedIDR = selectedIDR.split('] ');
+        selectedIDR = selectedIDR[0].substring(1);
+        console.log('Final selectedIDR=', selectedIDR);
+    }
+}
+
 function deleteInput() {
     $.ajax({
         type: "POST",
-        url: "/delete",
-        data: $('').serialize(),
+        url: "/CameraDeleteById",
+        data: { 'Id': selectedIDR, 'Hard': 'True' },
         type: 'POST',
         success: function (response) {
+            document.location.reload();//Refresh Page
+            console.log('success');
             console.log(response);
         },
         error: function (error) {
+            console.log('error')
             console.log(error);
         }
     });

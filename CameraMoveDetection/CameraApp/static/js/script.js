@@ -1,7 +1,7 @@
 //Sidenav Warnings
 //Я потом нормально сделаю, честно..
 function openNav() {
-  document.querySelector(".warnings-container").style.width = "65%";    
+  document.querySelector(".warnings-container").style.width = "65%";
 }
 function closeNav() {
   document.querySelector(".warnings-container").style.width = "0";
@@ -50,9 +50,9 @@ let tests = document.querySelectorAll('.input-name')
 
 //Right Click Menu
 //Open menu when click on card
-for (let card of cards) {
-  card.oncontextmenu = rightClick;
-}
+// for (let card of cards) {
+//   card.oncontextmenu = rightClick;
+// }
 
 //Hide menu when click on page
 document.onclick = hideMenu;
@@ -115,39 +115,39 @@ for (let button of buttons) {
 // let inputName = document.getElementById('name')
 // let inputSource = document.getElementById('source')
 // let addButton = document.getElementById('add-input')
- //let inputname = document.getelementbyid('name')
- //let inputsource = document.getelementbyid('source')
- //let addbutton = document.getelementbyid('add-input')
+//let inputname = document.getelementbyid('name')
+//let inputsource = document.getelementbyid('source')
+//let addbutton = document.getelementbyid('add-input')
 
- //inputname.onkeyup = function () {
- //  document.getelementbyid('input-name').textcontent = inputname.value;
- //}
- //inputsource.onkeyup = function () {
- //  document.getelementbyid('input-video').src = inputsource.value
- //}
- //addbutton.onclick = function () {
- //  let clone = document.getelementbyid('example-card').clonenode(true)
- //  clone.removeattribute('id')
- //  document.queryselector('.cards').append(clone)
-  
- //  console.log('new card created')
- //}
+//inputname.onkeyup = function () {
+//  document.getelementbyid('input-name').textcontent = inputname.value;
+//}
+//inputsource.onkeyup = function () {
+//  document.getelementbyid('input-video').src = inputsource.value
+//}
+//addbutton.onclick = function () {
+//  let clone = document.getelementbyid('example-card').clonenode(true)
+//  clone.removeattribute('id')
+//  document.queryselector('.cards').append(clone)
+
+//  console.log('new card created')
+//}
 
 let open_modal = document.querySelectorAll('.open_modal');
 let close_modal = document.getElementById('close_modal');
 let modal = document.getElementById('modal');
 let body = document.getElementsByTagName('body')[0];
 for (let i = 0; i < open_modal.length; i++) {
-    open_modal[i].onclick = function () { // клик на открытие
-        modal.classList.add('modal_vis'); // добавляем видимость окна
-        modal.classList.remove('bounceOutDown'); // удаляем эффект закрытия
-        body.classList.add('body_block'); // убираем прокрутку
-    };
+  open_modal[i].onclick = function () { // клик на открытие
+    modal.classList.add('modal_vis'); // добавляем видимость окна
+    modal.classList.remove('bounceOutDown'); // удаляем эффект закрытия
+    body.classList.add('body_block'); // убираем прокрутку
+  };
 }
 close_modal.onclick = function () { // клик на закрытие
-    modal.classList.add('bounceOutDown'); // добавляем эффект закрытия
-    window.setTimeout(function () { // удаляем окно через полсекунды (чтобы увидеть эффект закрытия).
-        modal.classList.remove('modal_vis');
-        body.classList.remove('body_block'); // возвращаем прокрутку
-    }, 500);
+  modal.classList.add('bounceOutDown'); // добавляем эффект закрытия
+  window.setTimeout(function () { // удаляем окно через полсекунды (чтобы увидеть эффект закрытия).
+    modal.classList.remove('modal_vis');
+    body.classList.remove('body_block'); // возвращаем прокрутку
+  }, 500);
 };
