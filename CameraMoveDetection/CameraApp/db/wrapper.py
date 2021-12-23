@@ -1,5 +1,6 @@
 from flask import Flask, jsonify
 from flask_sqlalchemy import SQLAlchemy
+from sqlalchemy import and_, or_, not_,text
 from sqlalchemy.exc import IntegrityError
 import json
 #from sqlalchemy.types import Text
@@ -100,7 +101,39 @@ class DBApi():
 			return ls
 		except IntegrityError as e:
 				return "Something wrong with DB"
+
+
+
+
+
+
+
+
+	def SignalsGetSpecific(CameraID,TimeStamp):
+		try:#Signal.CameraID==CameraID and 
+			resultFromDB = db.session.query(Signal).filter(Signal.TimeStamp==(TimeStamp),Signal.CameraId==(CameraID))
+			#Signal.query.filter(int(CameraID))
+			#query = db.session.query(Signal).filter(User.CameraID.like(int(CameraID)),User.TimeStamp.like(TimeStamp))
+			#db.session.query(Signal).filter(Signal.TimeStamp==TimeStamp|Signal.CameraID==CameraID).all()
+			#Signal.query.filter(Signal.TimeStamp==TimeStamp).all()
+			lsa = []
+			for i in resultFromDB:
+				lsa.append(i.dict())   #.latest(datetime.strptime(TimeStamp, "%d-%m-%Y %H:%M:%S")))
+			return lsa
+		except IntegrityError as e:
+				return "Something wrong with DB"
 	
+
+
+
+
+
+
+
+
+
+
+
 	def CamerasInsert(name='',url='',isMovingBorder='',isMovedBorder=''):
 		try:
 			db.session.add(Camera(

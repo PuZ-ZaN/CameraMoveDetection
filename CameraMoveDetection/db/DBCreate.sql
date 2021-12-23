@@ -20,7 +20,7 @@ GO
 
 create table Signal(
 	[CameraId] [int] foreign key references dbo.Camera NOT NULL,
-	[TimeStamp] datetime not null,
+	[SmallTimeStamp] datetime not null,
 	[isMoved] bit Default 0 not null,
 	[isMoving] bit Default 0 not null,
 	[Image] text not null,

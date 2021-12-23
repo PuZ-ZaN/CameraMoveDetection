@@ -25,7 +25,7 @@ class SmartThreadPool:
         if len(self.__threads.keys()) == self.__max_avaiable_cpu:
             raise MaxThreadsCountReachedException("Unable to create threads more than CPU threads")
         thread_uid = self.__uid + ':' + str(self.__thread_count)
-        self.__threads_pulse[thread_uid] = str(datetime.now())
+        self.__threads_pulse[thread_uid] = str(datetime.now())#пульс из треда не доступен удоли
         t_kwargs['err_list'] = self.__threads_err
         t_kwargs['host_id'] = thread_uid
         t_kwargs['host_pulse'] = self.__threads_pulse

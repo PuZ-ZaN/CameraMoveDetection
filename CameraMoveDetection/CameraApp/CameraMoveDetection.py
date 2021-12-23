@@ -11,54 +11,57 @@ import sys
 from .History import History
 import base64
 #from .SmartThreadPool import ThreadSafeDict
-
+"""
+Считает 2 вектора смещения камеры: относительно эталона и static'а
+Эталон - смещаемый каждые N кадров кадр
+Static - не меняется, первый кадр видео
+"""
 def CalculatePhaseCorrelate(CameraID = "", 
 							Url = "", 
 							IsMovedBorder = 100, 
 							IsMovingBorder = 100, 
 							callbackUrl=r"http://localhost:5555/SignalAdd",
+							sendImageUrl=r"http://localhost:5555/SendImage",
+							etalonChangeEveryNFps = 500, 
+							ServerUpdateNFrames = 10,
+							etalonHistoryLen=50, 
+							staticHistoryLen=700,
 							err_list = {}, 
 							host_id = '', 
 							host_pulse = {}, 
-							etalonChangeEveryNFps = 500, 
-							etalonHistoryLen=50, 
-							staticHistoryLen=700,
-							u={}
 							):
 	try:
-		#u = ThreadSafeDict()
-
+		print(f"BEBIN {CameraID} {Url}")
 		camera = VideoStream(Url).start()
-		time.sleep(1.0)
-
+		#time.sleep(1.0) #задержка, возможно она не нужна
 		prev_gray = None
 		prevGrayStatic = None
 		fpsCounter = 0
-		_secs_counter = 0
-		elapsedSecs = 0
+		#_secs_counter = 0
+		#elapsedSecs = 0
 		pEtalonHistory = History(etalonHistoryLen)
 		pStaticHistory = History(staticHistoryLen)
 		pEtalonAvg = 0
 		pStaticAvg = 0
-		_prev_time = time.time()
+		#_prev_time = time.time()
 		Frame = None
 		imGray = None
 		vectorPEtalon = None
 		vectorPStatic = None
 		while (True):
 			try:
-				Frame = camera.read()#grab the Frame from the threaded video file stream
+				#возьмем кадр
+				Frame = camera.read()
 				if(Frame is None):
 					break
-				u[0]=fpsCounter
-				if(fpsCounter/60==0):
-					retval, buffer = cv2.imencode('.jpg', Frame)
-					u[CameraID]=base64.b64encode(buffer)
-					print(u)
-					#print(requests.post("http://localhost:5555/NudesSend",data = {"CameraId":CameraID,"Image":jpg_as_text})) 
-					
 
-				imGray = cv2.cvtColor(Frame.astype('float32'), cv2.COLOR_BGR2GRAY)#convert it to grayscale (while still retaining 3 channels)
+				if(fpsCounter%ServerUpdateNFrames==0):
+					retval, buffer = cv2.imencode('.jpg', Frame)
+					jpg_as_text = base64.b64encode(buffer)
+					requests.post(sendImageUrl,data={'CameraID' : CameraID,'Frame':jpg_as_text})
+				
+				#конвертнем в серый
+				imGray = cv2.cvtColor(Frame.astype('float32'), cv2.COLOR_BGR2GRAY)
 
 				if(prev_gray is None):
 					prev_gray = imGray
@@ -66,32 +69,30 @@ def CalculatePhaseCorrelate(CameraID = "",
 				if(prevGrayStatic is None):
 					prevGrayStatic=imGray
 
-				#Calculate functionality
-
+				#Вычислим средние значения векторов смещения за HistoryLen (см. агрументы) кадров
 				pEtalon = cv2.phaseCorrelate(imGray, prev_gray)
 				pStatic = cv2.phaseCorrelate(imGray,prevGrayStatic)
 				vectorPEtalon = sqrt(pEtalon[0][0] ** 2 + pEtalon[0][1] ** 2)
 				vectorPStatic = sqrt(pStatic[0][0] ** 2 + pStatic[0][1] ** 2)
 				pEtalonHistory.append(vectorPEtalon)
 				pStaticHistory.append(vectorPStatic)
-
 				pEtalonAvg = pEtalonHistory.avgCalc()
 				pStaticAvg = pStaticHistory.avgCalc()
 				
-				#gray update functionality
+				#host_pulse[host_id]=f"fpsCounter: {fpsCounter} Etalon:{pEtalonAvg} Static:{pStaticAvg}"
+				#Обновим эталонный кадр каждые N fps (см. агрументы)
 				fpsCounter+=1
 				if etalonChangeEveryNFps!=0 and fpsCounter % etalonChangeEveryNFps == 0:
 					prev_gray = imGray
 
-				thisTime = time.time()
-				_diffTime = thisTime - _prev_time
-				_secs_counter +=_diffTime
-				_prev_time = thisTime
+				#вычислим fps
+				#thisTime = time.time()
+				#_diffTime = thisTime - _prev_time
+				#_secs_counter +=_diffTime
+				#_prev_time = thisTime
 
-				if _diffTime != 0.0:
-					elapsedSecs = round(1 / _diffTime,2)
-				else:
-					elapsedSecs = 0
+				#if _diffTime != 0.0:
+				#	elapsedSecs += round(1 / _diffTime,2)
 
 				IsMoving = pEtalonAvg > IsMovingBorder
 				IsMoved = pStaticAvg > IsMovedBorder
@@ -105,6 +106,7 @@ def CalculatePhaseCorrelate(CameraID = "",
 						'IsMoved':str(IsMoved),
 						'Frame':jpg_as_text
 						})
+					print("SEE DATABASE SIGNALS!!!")
 					err_list[host_id] = f"CameraID {CameraID} saying {r}"
 			except Exception as e:
 				err_list[host_id] = e#traceback.format_exc()
