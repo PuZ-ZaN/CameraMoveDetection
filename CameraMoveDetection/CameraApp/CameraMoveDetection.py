@@ -30,7 +30,7 @@ def CalculatePhaseCorrelate(CameraID = "",
 							err_list = {}, 
 							host_id = '', 
 							host_pulse = {}, 
-							activity_flag: ReferenceObject = None
+							activity_flag: ReferenceObject[bool] = None
 							):
 	try:
 		print(f"BEBIN {CameraID} {Url}")

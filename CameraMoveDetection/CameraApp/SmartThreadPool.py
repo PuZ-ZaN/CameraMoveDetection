@@ -90,14 +90,14 @@ class SmartThreadPool:
     def threads_pulses(self):
         return self.__threads_pulse
 
-class ReferenceObject:
+class ReferenceObject(Generic[_T]):
     __value = None
     __instance_predicate = lambda a, b: True #TODO починить 
 
-    def __init__(self, _value: Generic[_T], _instance_predicate : Callable[[Any], bool] = None) -> None:
+    def __init__(self, _value: _T, _instance_predicate : Callable[[_T], bool] = None) -> None:
         self.__value = _value 
 
-    def set_value(self, _value: Generic[_T]) -> None:
+    def set_value(self, _value: _T) -> None:
         if ((not self.__instance_predicate is None) and self.__instance_predicate(_value)):
             self.__value = _value;
 
